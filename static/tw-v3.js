@@ -2625,23 +2625,23 @@
                     break;
                 case "chunks":
 
-                    var g = (data = data.chunks)["length"];
+                    var g = (data = data.chunks).length;
                     for (s = 0; s < g; s += 6) {
                         var p = (w = 20 * data[s]) + "," + (M = 10 * data[s + 1]);
-                        if (we["has"](p))
-                            if ((E = we["get"](p))["coords"] = [w, M],
-                                data[s + 4] && (E["protected"] = !0),
+                        if (we.has(p))
+                            if ((E = we.get(p)).coords = [w, M],
+                                data[s + 4] && (E.protected = true),
                                 data[s + 5] != null && (E.textProtected = "string" == typeof data[s + 5] ? Array.from(data[s + 5]) : data[s + 5]),
                                 0 !== data[s + 2]) {
-                                for (St(p, !0),
-                                    E["txt"] = Array["from"](data[s + 2]),
+                                for (St(p, true),
+                                    E.txt = Array.from(data[s + 2]),
                                     /*E.clr = Array["from"](a[s + 3])*/
                                     E.clr = respectRGB(data[s + 3]),
                                     f = 0; f < 200; f++) {
-                                    let v = E["clr"][f];
+                                    let v = E.clr[f];
                                     if (v.codePointAt(0) !== 91) {
 
-                                        E["clr"][f] = v.codePointAt(0) - ue;
+                                        E.clr[f] = v.codePointAt(0) - ue;
 
                                     } else if (v.codePointAt(0) === 91) {
 
@@ -2655,7 +2655,7 @@
                                         let b = (read() << 6) | read();
                                         let dm = read();
 
-                                        E["clr"][f] = [r, green, b, dm];
+                                        E.clr[f] = [r, green, b, dm];
                                     }
 
 
@@ -2663,25 +2663,25 @@
 
 
                             } else
-                                E.txt = _e["slice"](),
-                                    E.clr = et["slice"](),
+                                E.txt = _e.slice(),
+                                    E.clr = et.slice(),
                                     E.textProtected = "string" == typeof data[s + 5] ? Array.from(data[s + 5]) : data[s + 5],
-                                    E.empty = !0
+                                    E.empty = true
                     }
-                    var b = $t["length"];
+                    var b = $t.length;
                     for (s = 0; s < b; s += 2) {
                         var w, M, E;
                         p = (w = 20 * $t[s]) + "," + (M = 10 * $t[s + 1]),
-                            we.has(p) && null == (E = we["get"](p))["txt"] && we["set"](p, {
+                            we.has(p) && null == (E = we.get(p)).txt && we.set(p, {
                                 txt: _e.slice(),
                                 clr: et.slice(),
-                                empty: !0,
+                                empty: true,
                                 coords: [w, M]
                             })
                     };
 
-                    Gt = !1,
-                        ge = !0;
+                    Gt = false,
+                        ge = true;
                     window.w.emit("chunks", {
                         chunks: data.chunks
                     })
@@ -2690,8 +2690,8 @@
                     var S = data.p;
 
                     p = S[0],
-                        we["has"](p) && (we.get(p)["protected"] = S[1],
-                            It(p, !0));
+                        we.has(p) && (we.get(p).protected = S[1],
+                            It(p, true));
 
                     window.w.emit("protect", {
                         cell: p,
@@ -2713,7 +2713,7 @@
                     var cellIdx = tileY * 20 + tileX;
                     var chunkKey = (20 * chunkX) + "," + (10 * chunkY);
 
-                    if (!we["has"](chunkKey)) {
+                    if (!we.has(chunkKey)) {
                         we.set(chunkKey, {
                             coords: [20 * chunkX, 10 * chunkY],
                             txt: _e.slice(),
@@ -2723,24 +2723,24 @@
                         });
                     }
                     var chunk = we.get(chunkKey);
-                    if (!chunk["textProtected"]) {
-                        chunk["textProtected"] = new Array(200).fill("0");
-                    } else if (typeof chunk["textProtected"] === "string") {
-                        chunk["textProtected"] = Array.from(chunk["textProtected"]);
-                        if (typeof chunk["txt"] === "string") {
-                            chunk["txt"] = Array.from(chunk["txt"]);
+                    if (!chunk.textProtected) {
+                        chunk.textProtected = new Array(200).fill("0");
+                    } else if (typeof chunk.textProtected === "string") {
+                        chunk.textProtected = Array.from(chunk.textProtected);
+                        if (typeof chunk.txt === "string") {
+                            chunk.txt = Array.from(chunk.txt);
                         }
-                        if (typeof chunk["clr"] === "string") {
-                            chunk["clr"] = respectRGB(chunk["clr"]);
+                        if (typeof chunk.clr === "string") {
+                            chunk.clr = respectRGB(chunk.clr);
                         }
                     }
 
-                    chunk["textProtected"][cellIdx] = cellProtected ? "1" : "0";
+                    chunk.textProtected[cellIdx] = cellProtected ? "1" : "0";
 
-                    chunk["empty"] = zt(chunkKey);
-                    St(chunkKey, !1),
-                        It(chunkKey, !0);
-                    ge = !0;
+                    chunk.empty = zt(chunkKey);
+                    St(chunkKey, false),
+                        It(chunkKey, true);
+                    ge = true;
                     window.w.emit("textprotect", {
                         cell: cellCoords,
                         protected: cellProtected
@@ -2750,20 +2750,20 @@
                     !function (e, n, r, a) {
                         for (var o = t, i = n; i <= a; i++)
                             for (var c = e; c <= r; c++) {
-                                var l = 20 * Math["floor"](c / 20)
-                                    , u = 10 * Math["floor"](i / 10)
+                                var l = 20 * Math.floor(c / 20)
+                                    , u = 10 * Math.floor(i / 10)
                                     , s = l + "," + u;
-                                if (we["has"](s)) {
-                                    var d = we["get"](s);
-                                    if (null != d["txt"]) {
+                                if (we.has(s)) {
+                                    var d = we.get(s);
+                                    if (null != d.txt) {
                                         var f = c - l + 20 * (i - u);
-                                        d["txt"][f] = " ",
+                                        d.txt[f] = " ",
                                             d.clr[f] = 0,
                                             St(s, Dt(f))
                                     }
                                 }
                             }
-                        ge = !0
+                        ge = true
                         window.w.emit("clear", {
                             x1: e,
                             y1: n,
@@ -2797,8 +2797,8 @@
                     null != I.l &&
                         (
                             A.l = I.l,
-                            clientOptions["smoothcursors"]["checked"] ||
-                            (A["rawx"] = A.l[0], A["rawy"] = A.l[1])
+                            clientOptions.smoothcursors.checked ||
+                            (A.rawx = A.l[0], A.rawy = A.l[1])
                         ),
                         null != I.c &&
                         (A.c = I.c),
@@ -2806,7 +2806,7 @@
                         (A.n = I.n),
                         null != I.dn &&
                         (A.dn = I.dn),
-                        ge = !0,
+                        ge = true,
                         On();
 
                     break;
@@ -2903,72 +2903,72 @@
                     }
                     break;
                 case "rc":
-                    Pe["delete"](data.rc),
-                        ge = !0,
+                    Pe.delete(data.rc),
+                        ge = true,
                         On();
                     window.w.emit('cursorleft', data.rc);
                     break;
                 case "ro":
                     var B = data.ro;
-                    wallSettings["readOnly"].checked = B,
+                    wallSettings.readOnly.checked = B,
                         B && showToast("This wall is in read-only mode.", 3e3),
                         xn();
                     window.w.emit("readonly", B);
                     break;
                 case "priv":
-                    wallSettings["private"]["checked"] = data["priv"],
+                    wallSettings.private.checked = data.priv,
                         function () {
                             var e = t;
                             if (null != Y)
-                                for (var n = 0; n < Y["length"]; n += 2)
+                                for (var n = 0; n < Y.length; n += 2)
                                     if (Y[n] == subwall)
-                                        return Y[n + 1] = wallSettings["private"]["checked"],
+                                        return Y[n + 1] = wallSettings.private.checked,
                                             void Ln(Y)
                         }();
                     break;
                 case "ch":
                     var F = data.ch;
-                    wallSettings["hideCursors"].checked = F,
-                        m || (clientOptions["showothercurs"]["disabled"] = F,
-                            clientOptions["showothercurs"].checked = !F && "false" != localStorage.getItem("showothercurs")),
-                        ge = !0;
+                    wallSettings.hideCursors.checked = F,
+                        m || (clientOptions.showothercurs.disabled = F,
+                            clientOptions.showothercurs.checked = !F && "false" != localStorage.getItem("showothercurs")),
+                        ge = true;
                     window.w.emit("hidecursors", F);
                     break;
                 case "dc":
                     var P = data.dc;
-                    wallSettings["disableChat"]["checked"] = P,
-                        clientOptions["showchat"].disabled = P,
-                        P ? (clientOptions["showchat"]["checked"] = !1,
-                            hn["classList"]["add"]("hidden")) : (clientOptions["showchat"]["checked"] = "false" != localStorage["getItem"]("showchat"),
-                                clientOptions.showchat.checked && hn["classList"].remove("hidden"));
+                    wallSettings.disableChat.checked = P,
+                        clientOptions.showchat.disabled = P,
+                        P ? (clientOptions.showchat.checked = false,
+                            hn.classList.add("hidden")) : (clientOptions.showchat.checked = "false" != localStorage.getItem("showchat"),
+                                clientOptions.showchat.checked && hn.classList.remove("hidden"));
                     window.w.emit("disablechat", P);
                     break;
                 case "dcl":
-                    var L = data["dcl"];
-                    wallSettings["disableColour"]["checked"] = L,
-                        hr(!!L || clientOptions["disablecolour"]["checked"]);
+                    var L = data.dcl;
+                    wallSettings.disableColour.checked = L,
+                        hr(!!L || clientOptions.disablecolour.checked);
                     window.w.emit("disablecolor", L);
                     break;
                 case "db":
                     var O = data.db;
-                    wallSettings["disableBraille"]["checked"] = O;
+                    wallSettings.disableBraille.checked = O;
                     window.w.emit("disablebraille", O);
                     break;
                 case "un":
                     var un = data.un;
-                    wallSettings["unlisted"]["checked"] = un;
+                    wallSettings.unlisted.checked = un;
                     window.w.emit("unlisted", un);
                     break;
                 case "nsfw":
                     var nsfw = data.nsfw
-                    wallSettings["nsfw"]["checked"] = nsfw;
+                    wallSettings.nsfw.checked = nsfw;
                     window.w.emit("nsfw", nsfw);
                     if (nsfw)
                         2 == j || m ? null : warn_nsfw();
                     break;
                 case "regonly":
                     var regonly = data.regonly
-                    wallSettings["regonly"]["checked"] = regonly;
+                    wallSettings.regonly.checked = regonly;
                     window.w.emit("regonly", regonly);
                     if (regonly && !je) {
                         showToast("This wall is for registered users only. Please log in or register to access.", 5000);
@@ -2991,7 +2991,7 @@
                     break;*/
                 case "webhook":
                     var webhook = data.webhook;
-                    wallSettings["webhook"]["checked"] = webhook[0];
+                    wallSettings.webhook.checked = webhook[0];
                     var api_key = document.getElementById("api_key");
                     if (webhook[0]) {
                         api_key.style.display = "block";
@@ -3002,16 +3002,16 @@
                     }
                     break;
                 case "l":
-                    U = !0,
-                        document.getElementById("l")["checked"] = !0,
+                    U = true,
+                        document.getElementById("l").checked = true,
                         xn();
                     break;
                 case "perms":
-                    j = data["perms"],
-                        wallSettingsElement["style"]["display"] = 2 == j || 1 == j ? "block" : "none",
+                    j = data.perms,
+                        wallSettingsElement.style.display = 2 == j || 1 == j ? "block" : "none",
                         j == 1 || j == 2 ? document.getElementById("toggled").style.display = "inline-flex" : document.getElementById("toggled").style.display = "none",
-                        2 == j ? (addMembersElement["style"]["display"] = "block",
-                            deleteWallElement.style.display = "block") : (addMembersElement["style"]["display"] = "none"),
+                        2 == j ? (addMembersElement.style.display = "block",
+                            deleteWallElement.style.display = "block") : (addMembersElement.style.display = "none"),
                         wallSettings["readOnly"]["disabled"] =
                         wallSettings["private"].disabled =
                         wallSettings["hideCursors"].disabled =
