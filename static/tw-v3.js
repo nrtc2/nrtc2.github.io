@@ -1695,93 +1695,93 @@
             document.getElementById("deleteaccount").addEventListener("click", (function (e) {
                 var t = n;
                 if (e.isTrusted) {
-                    var r = document["getElementById"]("deletepassword");
-                    0 != r.value["length"] ? (vn(!0),
+                    var r = document.getElementById("deletepassword");
+                    0 != r.value.length ? (vn(true),
                         server.send(Or({
-                            deleteaccount: r["value"]
+                            deleteaccount: r.value
                         }))) : showToast("Please type your password.", 3e3)
                 }
             }
             )),
-            wallSettings["protect"]["addEventListener"]("click", (function (e) {
-                wallSettings["protect"].classList.toggle("enabled")
-                Ve = wallSettings["protect"].classList.contains("enabled"),
-                    ge = !0
+            wallSettings.protect.addEventListener("click", (function (e) {
+                wallSettings.protect.classList.toggle("enabled")
+                Ve = wallSettings.protect.classList.contains("enabled"),
+                    ge = true
             }
             )),
-            wallSettings["clear"]["addEventListener"]("click", (function (e) {
+            wallSettings.clear.addEventListener("click", (function (e) {
                 var t = n;
-                wallSettings["clear"].classList.toggle("enabled")
-                Ze = wallSettings["clear"].classList.contains("enabled")
+                wallSettings.clear.classList.toggle("enabled")
+                Ze = wallSettings.clear.classList.contains("enabled")
                 ge = !0
             }
             )),
-            wallSettings["readOnly"]["addEventListener"]("click", (function (e) {
+            wallSettings.readOnly.addEventListener("click", (function (e) {
                 var t = n;
                 server.send(Or({
-                    ro: e["target"]["checked"]
+                    ro: e.target.checked
                 }))
             }
             )),
-            wallSettings.private["addEventListener"]("click", (function (e) {
-                var t = n;
-                server["send"](Or({
-                    priv: e["target"]["checked"]
-                }))
-            }
-            )),
-            wallSettings["hideCursors"].addEventListener("click", (function (e) {
-                var t = n;
-                server["send"](Or({
-                    ch: e.target["checked"]
-                }))
-            }
-            )),
-            wallSettings.disableChat["addEventListener"]("click", (function (e) {
+            wallSettings.private.addEventListener("click", (function (e) {
                 var t = n;
                 server.send(Or({
-                    dc: e["target"]["checked"]
+                    priv: e.target.checked
                 }))
             }
             )),
-            wallSettings["disableColour"]["addEventListener"]("click", (function (e) {
+            wallSettings.hideCursors.addEventListener("click", (function (e) {
                 var t = n;
-                server["send"](Or({
-                    dcl: e["target"].checked
+                server.send(Or({
+                    ch: e.target.checked
                 }))
             }
             )),
-            wallSettings["disableBraille"]["addEventListener"]("click", (function (e) {
+            wallSettings.disableChat.addEventListener("click", (function (e) {
                 var t = n;
-                server["send"](Or({
-                    db: e["target"]["checked"]
+                server.send(Or({
+                    dc: e.target.checked
                 }))
             }
             )),
-            wallSettings["unlisted"]["addEventListener"]("click", (function (e) {
+            wallSettings.disableColour.addEventListener("click", (function (e) {
                 var t = n;
-                server["send"](Or({
+                server.send(Or({
+                    dcl: e.target.checked
+                }))
+            }
+            )),
+            wallSettings.disableBraille.addEventListener("click", (function (e) {
+                var t = n;
+                server.send(Or({
+                    db: e.target.checked
+                }))
+            }
+            )),
+            wallSettings.unlisted.addEventListener("click", (function (e) {
+                var t = n;
+                server.send(Or({
                     un: e.target.checked
                 }))
             }
             )),
-            wallSettings["nsfw"]["addEventListener"]("click", (function (e) {
+            wallSettings.nsfw.addEventListener("click", (function (e) {
                 var t = n;
-                server["send"](Or({
+                server.send(Or({
                     nsfw: e.target.checked
                 }))
             }
             )),
-            wallSettings["regonly"]["addEventListener"]("click", (function (e) {
+            wallSettings.regonly.addEventListener("click", (function (e) {
                 var t = n;
-                server["send"](Or({
+                server.send(Or({
                     regonly: e.target.checked
                 }))
             }
             )),
-            wallSettings["webhook"]["addEventListener"]("click", (function (e) {
+            wallSettings.webhook.addEventListener("click", (function (e) {
                 var t = n;
-                server["send"](Or({
+                server.send(Or({
                     webhook: e.target.checked
                 }))
             }
@@ -1806,107 +1806,107 @@
                     updateUndoRedoUI();
                 }
             }),
-            document["getElementById"]("addmemberbtn")["addEventListener"]("click", (function (e) {
+            document.getElementById("addmemberbtn").addEventListener("click", (function (e) {
                 var t = n;
-                e["preventDefault"](),
-                    document["getElementById"]("optionsmenu");
-                var r = document["getElementById"]("inputmember")
-                    , o = document["getElementById"]("memberlist")
+                e.preventDefault(),
+                    document.getElementById("optionsmenu");
+                var r = document.getElementById("inputmember")
+                    , o = document.getElementById("memberlist")
                     , i = r.value.toLowerCase();
-                r["value"] = "",
+                r.value = "",
                     (i.length = function (e) {
-                        for (var n = t, r = document["getElementById"]("memberlist"), a = 0; a < r["childElementCount"]; a++)
-                            if (r.children[a]["innerText"] == e)
-                                return !0;
-                        return !1
-                    }(i) || i == je) || (mn["test"](i) ? o.childElementCount >= 20 ? showToast("You cannot add more than 20 members.", 3e3) : server["send"](Or({
+                        for (var n = t, r = document.getElementById("memberlist"), a = 0; a < r.childElementCount; a++)
+                            if (r.children[a].innerText == e)
+                                return true;
+                        return false
+                    }(i) || i == je) || (mn.test(i) ? o.childElementCount >= 20 ? showToast("You cannot add more than 20 members.", 3e3) : server.send(Or({
                         addmem: i
                     })) : showToast("Username is invalid.", 3e3))
             }
             )),
-            deleteWallElement["addEventListener"]("click", (function (e) {
+            deleteWallElement.addEventListener("click", (function (e) {
                 var t = n
-                    , r = document["getElementById"]("deletewallconfirm");
+                    , r = document.getElementById("deletewallconfirm");
                 if (null == r) {
-                    var o = document["createElement"]("br");
-                    return e["target"]["parentNode"].insertBefore(o, e.target["nextSibling"]),
-                        (r = document["createElement"]("input")).type = "text",
-                        r["placeholder"] = "type 'confirm' here",
-                        r["maxLength"] = 7,
+                    var o = document.createElement("br");
+                    return e.target.parentNode.insertBefore(o, e.target.nextSibling),
+                        (r = document.createElement("input")).type = "text",
+                        r.placeholder = "type 'confirm' here",
+                        r.maxLength = 7,
                         r.id = "deletewallconfirm",
-                        o.parentNode["insertBefore"](r, o["nextSibling"]),
+                        o.parentNode.insertBefore(r, o.nextSibling),
                         void r.focus()
                 }
-                "confirm" == r["value"].toLowerCase() ? (r.parentElement["removeChild"](r.previousSibling),
-                    r.parentNode["removeChild"](r),
-                    server["send"](Or({
+                "confirm" == r.value.toLowerCase() ? (r.parentElement.removeChild(r.previousSibling),
+                    r.parentNode.removeChild(r),
+                    server.send(Or({
                         dw: 0
                     })),
                     Cn("textwall", "main"),
                     showToast("Deleting wall...", 3e3)) : showToast("Please type 'confirm' in the text box if you would like to delete your wall.", 3e3)
             }
             )),
-            document["getElementById"]("l")["addEventListener"]("click", (function (e) {
+            document.getElementById("l").addEventListener("click", (function (e) {
                 var t = n;
-                m && server["send"](Or({
-                    l: e["target"]["checked"]
+                m && server.send(Or({
+                    l: e.target.checked
                 }))
             }
             )),
-            document["getElementById"]("refresh").addEventListener("click", (function () {
+            document.getElementById("refresh").addEventListener("click", (function () {
                 var e = n;
                 if (m) {
-                    document["getElementById"]("admintable")["innerHTML"] = "";
-                    var t = !1;
-                    for (const n of Pe["keys"]())
+                    document.getElementById("admintable").innerHTML = "";
+                    var t = false;
+                    for (const n of Pe.keys())
                         dn(n),
-                            t = !0;
+                            t = true;
                     if (t) {
                         var r = document.getElementById("optionsmenu");
-                        r["scrollTop"] = r["scrollHeight"]
+                        r.scrollTop = r.scrollHeight
                     }
                 }
             }
             )),
-            document["getElementById"]("sendalert")["addEventListener"]("click", (function () {
+            document.getElementById("sendalert").addEventListener("click", (function () {
                 var e = n
-                    , t = document["getElementById"]("alerttext")["value"];
-                m && 0 != t["length"] && server.send(Or({
+                    , t = document.getElementById("alerttext").value;
+                m && 0 != t.length && server.send(Or({
                     alert: t
                 }))
             }
             )),
-            document["getElementById"]("reload")["addEventListener"]("click", (function () {
-                m && server["send"](Or({
-                    reload: !0
+            document.getElementById("reload").addEventListener("click", (function () {
+                m && server.send(Or({
+                    reload: true
                 }))
             }
             )),
-            document["getElementById"]("delete").addEventListener("click", (function () {
+            document.getElementById("delete").addEventListener("click", (function () {
                 var e = n;
                 if (m) {
-                    var t = document["getElementById"]("deletename").value;
-                    0 != t["length"] && server["send"](Or({
+                    var t = document.getElementById("deletename").value;
+                    0 != t.length && server.send(Or({
                         aaa: t
                     }))
                 }
             }
             )),
-            document.getElementById("free")["addEventListener"]("click", (function () {
+            document.getElementById("free").addEventListener("click", (function () {
                 var e = n;
                 if (m) {
-                    var t = document["getElementById"]("freename")["value"];
-                    0 != t["length"] && server["send"](Or({
+                    var t = document.getElementById("freename").value;
+                    0 != t.length && server.send(Or({
                         aaaa: t
                     }))
                 }
             }
             )),
-            b["setAttribute"]("id", "textarea"),
+            b.setAttribute("id", "textarea"),
             textArea.setAttribute("id", "clipboard");
         var mn = /^[\w.-]+$/;
-        const hn = document["getElementById"]("chat")
-            , yn = document["getElementById"]("unread");
+        const hn = document.getElementById("chat")
+            , yn = document.getElementById("unread");
         function gn() {
             Array.from(document.getElementsByClassName("chatbox")).forEach(chatbox => {
                 chatbox.scrollTop = chatbox.scrollHeight;
@@ -1932,19 +1932,19 @@
             }));
         }
         function bn(e) {
-            var r = document["getElementById"]("chatmsg");
+            var r = document.getElementById("chatmsg");
             gn();
 
-            if (Xe + 300 > performance["now"]()) return;
+            if (Xe + 300 > performance.now()) return;
 
-            if (/^\s*$/["test"](r["value"])) {
-                r["value"] = "";
+            if (/^\s*$/.test(r.value)) {
+                r.value = "";
             } else {
                 window.w.chat.send(r.value.substr(0, 255), selectedChatTab);
                 sendTyping(false);
                 lastTypingPacket = 0;
 
-                Xe = performance["now"]();
+                Xe = performance.now();
                 r.value = "";
                 r.focus();
             }
@@ -2061,13 +2061,13 @@
         function xn() {
 
             var e = n
-                , t = document["getElementsByClassName"]("msgcontainer")[0];
-            wallSettings["readOnly"].checked && 0 == j || U && "" == je ? t["classList"].add("hidden") : t["classList"]["remove"]("hidden")
+                , t = document.getElementsByClassName("msgcontainer")[0];
+            wallSettings.readOnly.checked && 0 == j || U && "" == je ? t.classList.add("hidden") : t.classList.remove("hidden")
         }
         function wn(e) {
             var t = n;
-            e["preventDefault"](),
-                Cn(e.target["innerText"]["toLowerCase"](), "main") && Zn(0, 0)
+            e.preventDefault(),
+                Cn(e.target.innerText.toLowerCase(), "main") && Zn(0, 0)
         }
         function Mn(e, t, r) {
             var a = n;
