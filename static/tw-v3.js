@@ -1,6 +1,6 @@
 !function (e) {
     window.unreadAmount = 0;
-    function t() { }
+    function t() { return 0 }
     !function (e) {
         var n = t;
         class fontRender {
@@ -24,7 +24,7 @@
                         null != r && r())
                 }
                     ,
-                    XMLReq.open("GET", e, !0),
+                    XMLReq.open("GET", e, true),
                     XMLReq.send(null)
             }
             parseFont(e) {
@@ -122,7 +122,7 @@
             canvasElement.height = Math.round(window.innerHeight * v),
             canvasElement.style.width = window.innerWidth + "px",
             canvasElement.style.height = window.innerHeight + "px",
-            canvasGetContext.imageSmoothingEnabled = !1;
+            canvasGetContext.imageSmoothingEnabled = false;
         var renderChunkAmount = localStorage.getItem("rca") || (rot && rot.value && parseInt(rot.value)) || 100;
         const S = "#FFFFFF"
             , I = "#EBEBEB";
@@ -807,7 +807,7 @@
                                                         g.italic = L,
                                                         Ut(g, e, S, w, M, y, p)) : jt(e, S, w, M, y),
                                                     x >= 18 && (s[x - 20 + 20 * b] = [S, O, F, P, L],
-                                                        d = !0)
+                                                        d = true)
                                             }
 
 
@@ -820,7 +820,7 @@
                             if (c.edge = d ? s : void 0,
                                 o) {
                                 var R = f[0] + 20 + "," + f[1];
-                                chunks.has(R) && null != chunks.get(R).txt && It(R, !1)
+                                chunks.has(R) && null != chunks.get(R).txt && It(R, false)
                             }
                         }(a.img.getContext("2d", {
                             alpha: false
@@ -842,7 +842,7 @@
             }
         }
         function zt(e) {
-            for (var t = n, r = chunks.get(e), a = !0, o = 0; o < 200; o++)
+            for (var t = n, r = chunks.get(e), a = true, o = 0; o < 200; o++)
                 if (!Qn(r.txt[o], Zr(r.clr[o])[1])) {
                     a = false;
                     break
@@ -1213,7 +1213,7 @@
                     e.isTrusted) {
                     if ("insertLineBreak" != e.inputType)
                         return "deleteContentBackward" == e.inputType ? (cur.x -= 1,
-                            Vn(" ", 0, !1, !0) ||
+                            Vn(" ", 0, false, true) ||
                             void nr()) : void (null != e.data && "" != e.data && "insertFromPaste" != e.inputType && (nr(),
                                 Array.from(e.data).length > 1 ? pasteCanvas(e.data) : Vn(e.data, 1)));
                     cr()
@@ -1293,7 +1293,7 @@
                     pe = o[0],
                         window.color = pe,
                         le(o[1]),
-                        Vn(t[2], 1, !1),
+                        Vn(t[2], 1, false),
                         pe = n,
                         window.color = pe,
                         le(a)
@@ -1362,7 +1362,7 @@
                                 canvasElement.style.cursor = "text",
                                 e.preventDefault()),
                                 teleportElement.classList.remove("open"),
-                                ie(!1),
+                                ie(false),
                                 nr();
                             break;
                         case 107:
@@ -1713,7 +1713,7 @@
                 var t = n;
                 wallSettings.clear.classList.toggle("enabled")
                 Ze = wallSettings.clear.classList.contains("enabled")
-                ge = !0
+                ge = true
             }
             )),
             wallSettings.readOnly.addEventListener("click", (function (e) {
@@ -2222,7 +2222,7 @@
 
         function Cn(e, t) {
             var r = n;
-            return !(wall == e && subwall == t || K || (K = !0,
+            return !(wall == e && subwall == t || K || (K = true,
                 e = e.toLowerCase(),
                 t = t.toLowerCase(),
                 clearInterval(he),
@@ -2547,7 +2547,7 @@
                         maxy: i[3]
                     },
                         Jt(cur.x, cur.y) || teleport(0, 0),
-                        ge = !0;
+                        ge = true;
 
                     break;
                 case "j":
@@ -2719,7 +2719,7 @@
                             txt: _e.slice(),
                             clr: et.slice(),
                             textProtected: new Array(200).fill("0"),
-                            empty: !0
+                            empty: true
                         });
                     }
                     var chunk = chunks.get(chunkKey);
@@ -3054,12 +3054,12 @@
                 case "noreg":
                     showToast("Registration is closed.", 3e3),
                         window.w.emit("regclosed", data.noreg);
-                    vn(!1);
+                    vn(false);
                     break;
                 case "wrongpass":
                     showToast("Password is incorrect.", 3e3),
                         window.w.emit("passfail", data.wrongpass);
-                    vn(!1);
+                    vn(false);
                     break;
                 case "accbanned":
                     const banInfo = data.accbanned;
@@ -3549,7 +3549,7 @@
                         else if (h < 240) [r, g, b] = [0, x, c];
                         else if (h < 300) [r, g, b] = [x, 0, c];
                         else[r, g, b] = [c, 0, x];
-                        mr([Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)], !0);
+                        mr([Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)], true);
                     })()
             );
             var d, f, v, h, y, g, p, b, x, w, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = s.clr[A], B = Zr(T), F = B[0], P = B[1], L = s.txt[A];
@@ -3632,7 +3632,7 @@
                         let h = (window.cH = ((window.cH || 0) + (clientOptions.hueSpeed?.value ? parseFloat(clientOptions.hueSpeed.value) : 2)) % 360),
                             X = (1 - Math.abs((h / 60) % 2 - 1)),
                             [r, g, b] = h < 60 ? [1, X, 0] : h < 120 ? [X, 1, 0] : h < 180 ? [0, 1, X] : h < 240 ? [0, X, 1] : h < 300 ? [X, 0, 1] : [1, 0, X];
-                        mr([r * 255, g * 255, b * 255].map(Math.round), !0);
+                        mr([r * 255, g * 255, b * 255].map(Math.round), true);
                     })()
             );
             var d, f, v, h, y, g, p, b, x, w, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = s["clr"][A], B = Zr(T), F = B[0], P = B[1], L = s.txt[A];
@@ -4078,7 +4078,7 @@
         }
         function dr() {
             var e = n;
-            ie(!1),
+            ie(false),
                 teleportElement.classList.contains("open") ? (teleportElement.classList.remove("open"),
                     en()) : (teleportElement.classList.add("open"),
                         2 == lr && ur(0),
@@ -4164,7 +4164,7 @@
 
         let total = colorHexs.length + rgbse.length;
 
-        if (colList.children.length > 0) server = !0;
+        if (colList.children.length > 0) server = true;
         sr();
 
         function hr(e) {
@@ -4706,7 +4706,7 @@
                         0 == Ee.size || performance.now() >= l)
                         break
                 }
-                ge = !0
+                ge = true
             }
             window.requestAnimationFrame(e)
         }
@@ -5038,7 +5038,7 @@
                                 var n = l;
                                 let r = function (e) {
                                     var n = t;
-                                    let r = !0
+                                    let r = true
                                         , a = e.length;
                                     for (let t = 0; t < a; t++)
                                         if (e.charCodeAt(t) > 127) {
@@ -5257,13 +5257,13 @@
                 }
                 function l(t) {
                     let n = 0
-                        , r = !0;
+                        , r = true;
                     for (; t-- > 0;)
                         if (r) {
                             let t = e[i++];
                             n += 127 & t,
                                 128 & t && (n -= 128),
-                                r = !1
+                                r = false
                         } else
                             n *= 256,
                                 n += e[i++];
