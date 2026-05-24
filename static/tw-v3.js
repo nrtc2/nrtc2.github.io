@@ -7,7 +7,7 @@
             constructor(e, n) {
                 var r = t;
                 this.charMap = new Map,
-                    thisscale = 1,
+                    this.scale = 1,
                     this.spaceMissingCharacters = false,
                     this.forceSharpPixels = false,
                     this.bold = false,
@@ -128,7 +128,7 @@
             , I = "#EBEBEB";
         var C = S
             , A = I
-            , T = Xr(A, 10);
+            , T = adjustColorBrightness(A, 10);
         const primaryColorSelect = document.getElementById("primary")
             , secondaryColorSelect = document.getElementById("secondary")
             , whiteTextCheckBox = document.getElementById("themetext")
@@ -321,13 +321,13 @@
             var e = n;
             for (ne = 0; ne < colorHexs.length; ne++)
                 try {
-                    me[ne] = Yr(colorHexs[ne], .2);
+                    me[ne] = hexToRGBA(colorHexs[ne], .2);
                 } catch (t) {
                     me[ne] = "rgba(128, 128, 128, 0.2)";
                 }
             me[colorHexs["length"]] = "rgba(255, 255, 255, 0.2)"
         }();
-        var he, ye, ge, pe = 0, be = Yr(colorHexs[pe], .2), xe = false, we = new Map, Me = [], ke = [], Ee = new Map, Se = new Worker("/static/ping.js"), Ie = false, cur = {
+        var he, ye, ge, pe = 0, be = hexToRGBA(colorHexs[pe], .2), xe = false, we = new Map, Me = [], ke = [], Ee = new Map, Se = new Worker("/static/ping.js"), Ie = false, cur = {
             x: 0,
             y: 0,
             rawx: 0,
@@ -460,7 +460,7 @@
                 j = 0,
                 wallSettingsElement.style.display = "none",
                 server.readyState != server.OPEN || t || (wallSettings.private.checked && Cn("textwall", "main"),
-                    server.send(Or({
+                    server.send(serialize_Uint8Array({
                         logout: 0
                     })),
                     Re = true),
@@ -881,7 +881,7 @@
             for (var t = n, r = innerWidth / innerHeight, a = [], o = qe.coords.x, i = 2 * qe.coords.y * r, c = 0; c < e.length; c += 2) {
                 var l = e[c] + 10
                     , u = 2 * (e[c + 1] + 5) * r
-                    , s = Math.sqrt(Jr(o - l) + Jr(i - u));
+                    , s = Math.sqrt(squareNum(o - l) + squareNum(i - u));
                 a.push([s, c])
             }
             return a.sort(Vt),
@@ -916,7 +916,7 @@
                             parseInt(renderChunkAmount || (rot.value || 100)) == ++d)
                             break
                     }
-                    d > 0 && (server.send(Or({
+                    d > 0 && (server.send(serialize_Uint8Array({
                         r: $t
                     })),
                         Gt = true,
@@ -943,10 +943,10 @@
                 var r = 20 * Math.floor(cur.x / 20)
                     , o = 10 * Math.floor(cur.y / 10)
                     , c = r + "," + o;
-                we.has(c) && (Ve && server.send(Or({
+                we.has(c) && (Ve && server.send(serialize_Uint8Array({
                     p: c
                 })),
-                    Ze && (tn ? tn = false : server.send(Or({
+                    Ze && (tn ? tn = false : server.send(serialize_Uint8Array({
                         c: [r, o, r + 19, o + 9]
                     }))),
                     textArea.focus())
@@ -957,18 +957,18 @@
             return e.target.parentElement.parentElement.dataset.id
         }
         function an(e) {
-            m && server.send(Or({
+            m && server.send(serialize_Uint8Array({
                 i: rn(e)
             }))
         }
         function on(e) {
             var t = n;
-            m && server.send(Or({
+            m && server.send(serialize_Uint8Array({
                 a: [rn(e), e.target.checked]
             }))
         }
         function cn(e) {
-            m && server.send(Or({
+            m && server.send(serialize_Uint8Array({
                 aa: rn(e)
             }))
         }
@@ -1575,7 +1575,7 @@
                     , r = 0 == t || t.startsWith("~") ? {
                         x: 0,
                         y: 0
-                    } : Lr(t);
+                    } : getSeed(t);
                 document.getElementById("tpx").value = r.x,
                     document.getElementById("tpy").value = -r.y
             }
@@ -1642,7 +1642,7 @@
                         , o = document.getElementById("loginpass");
                     mn.test(r.value) ? 0 != r.value.length ? 0 != o.value.length ? (vn(true),
                         document.getElementById("accbanned").innerText = "",
-                        server.send(Or({
+                        server.send(serialize_Uint8Array({
                             login: [r.value, o.value]
                         }))) : showToast("Please type your password.", 3e3) : showToast("Please type your username.", 3e3) : showToast("Username is invalid.", 3e3)
                 }
@@ -1655,7 +1655,7 @@
                         , o = document.getElementById("password")
                         , i = document.getElementById("password2");
                     mn.test(r.value) ? 0 != r.value.length ? 0 != o.value.length ? o.value == i.value ? (vn(true),
-                        server.send(Or({
+                        server.send(serialize_Uint8Array({
                             register: [r.value, o.value]
                         }))) : showToast("Passwords do not match.", 3e3) : showToast("Please type a password.", 3e3) : showToast("Please type a username.", 3e3) : showToast("Username is invalid.", 3e3)
                 }
@@ -1671,7 +1671,7 @@
                     var r = document.getElementById("chngusername")
                         , o = document.getElementById("chngeusrpass");
                     mn.test(r.value) ? 0 != r.value.length ? je != r.value ? 0 != o.value.length ? (vn(true),
-                        server.send(Or({
+                        server.send(serialize_Uint8Array({
                             namechange: [r.value, o.value]
                         }))) : showToast("Please type your password.", 3e3) : showToast("You have typed in your current username.", 3e3) : showToast("Please type a new username.", 3e3) : showToast("Username is invalid.", 3e3)
                 }
@@ -1685,7 +1685,7 @@
                         , o = document.getElementById("newpass")
                         , i = document.getElementById("newpass2");
                     0 != r.value.length ? 0 != o.value.length ? 0 != i.value.length ? o.value == i.value ? (vn(true),
-                        server.send(Or({
+                        server.send(serialize_Uint8Array({
                             passchange: [r.value, o.value]
                         }))) : showToast("New passwords do not match.", 3e3) : showToast("Please type your new password again.", 3e3) : showToast("Please type your new password.", 3e3) : showToast("Please type your password.", 3e3)
                 }
@@ -1697,7 +1697,7 @@
                 if (e.isTrusted) {
                     var r = document.getElementById("deletepassword");
                     0 != r.value.length ? (vn(true),
-                        server.send(Or({
+                        server.send(serialize_Uint8Array({
                             deleteaccount: r.value
                         }))) : showToast("Please type your password.", 3e3)
                 }
@@ -1718,70 +1718,70 @@
             )),
             wallSettings.readOnly.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     ro: e.target.checked
                 }))
             }
             )),
             wallSettings.private.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     priv: e.target.checked
                 }))
             }
             )),
             wallSettings.hideCursors.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     ch: e.target.checked
                 }))
             }
             )),
             wallSettings.disableChat.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     dc: e.target.checked
                 }))
             }
             )),
             wallSettings.disableColour.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     dcl: e.target.checked
                 }))
             }
             )),
             wallSettings.disableBraille.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     db: e.target.checked
                 }))
             }
             )),
             wallSettings.unlisted.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     un: e.target.checked
                 }))
             }
             )),
             wallSettings.nsfw.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     nsfw: e.target.checked
                 }))
             }
             )),
             wallSettings.regonly.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     regonly: e.target.checked
                 }))
             }
             )),
             wallSettings.webhook.addEventListener("click", (function (e) {
                 var t = n;
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     webhook: e.target.checked
                 }))
             }
@@ -1819,7 +1819,7 @@
                             if (r.children[a].innerText == e)
                                 return true;
                         return false
-                    }(i) || i == je) || (mn.test(i) ? o.childElementCount >= 20 ? showToast("You cannot add more than 20 members.", 3e3) : server.send(Or({
+                    }(i) || i == je) || (mn.test(i) ? o.childElementCount >= 20 ? showToast("You cannot add more than 20 members.", 3e3) : server.send(serialize_Uint8Array({
                         addmem: i
                     })) : showToast("Username is invalid.", 3e3))
             }
@@ -1839,7 +1839,7 @@
                 }
                 "confirm" == r.value.toLowerCase() ? (r.parentElement.removeChild(r.previousSibling),
                     r.parentNode.removeChild(r),
-                    server.send(Or({
+                    server.send(serialize_Uint8Array({
                         dw: 0
                     })),
                     Cn("textwall", "main"),
@@ -1848,7 +1848,7 @@
             )),
             document.getElementById("l").addEventListener("click", (function (e) {
                 var t = n;
-                m && server.send(Or({
+                m && server.send(serialize_Uint8Array({
                     l: e.target.checked
                 }))
             }
@@ -1871,13 +1871,13 @@
             document.getElementById("sendalert").addEventListener("click", (function () {
                 var e = n
                     , t = document.getElementById("alerttext").value;
-                m && 0 != t.length && server.send(Or({
+                m && 0 != t.length && server.send(serialize_Uint8Array({
                     alert: t
                 }))
             }
             )),
             document.getElementById("reload").addEventListener("click", (function () {
-                m && server.send(Or({
+                m && server.send(serialize_Uint8Array({
                     reload: true
                 }))
             }
@@ -1886,7 +1886,7 @@
                 var e = n;
                 if (m) {
                     var t = document.getElementById("deletename").value;
-                    0 != t.length && server.send(Or({
+                    0 != t.length && server.send(serialize_Uint8Array({
                         aaa: t
                     }))
                 }
@@ -1896,7 +1896,7 @@
                 var e = n;
                 if (m) {
                     var t = document.getElementById("freename").value;
-                    0 != t.length && server.send(Or({
+                    0 != t.length && server.send(serialize_Uint8Array({
                         aaaa: t
                     }))
                 }
@@ -1925,7 +1925,7 @@
         function sendTyping(isTyping) {
             var channel = window.selectedChatTab === 1 ? "global" : "world";
 
-            server.send(Or({
+            server.send(serialize_Uint8Array({
                 type: "type",
                 typing: isTyping,
                 chatChannel: channel
@@ -2038,7 +2038,7 @@
             var chatData = { msg: [e, channel] };
             window.w.emit("chatBefore", chatData);
 
-            server.send(Or({ msg: chatData.msg, channel: chatData.channel }));
+            server.send(serialize_Uint8Array({ msg: chatData.msg, channel: chatData.channel }));
             Xe = performance.now();
         }
         document.getElementById("chatmsg").addEventListener("input", function (e) {
@@ -2132,7 +2132,7 @@
             pingInterval = setInterval(() => {
                 if (server && server.readyState === WebSocket.OPEN) {
                     NKe = performance.now();
-                    server.send(Or({ ping: true }));
+                    server.send(serialize_Uint8Array({ ping: true }));
                 } else {
                     Acn(true);
                 }
@@ -2180,7 +2180,7 @@
                 document.getElementById("connecting2").innerText = "",
                 document.getElementById("admin").style.display = "none",
                 "" == je && null != localStorage.getItem("username") && null != localStorage.getItem("token") && (vn(true),
-                    server.send(Or({
+                    server.send(serialize_Uint8Array({
                         token: [localStorage.getItem("username"), localStorage.getItem("token")]
                     })));
             var t = "textwall"
@@ -2230,7 +2230,7 @@
                 nr(),
                 pn(),
                 Yt = null,
-                server.send(Or({
+                server.send(serialize_Uint8Array({
                     j: [e, t]
                 })),
                 Xn(),
@@ -2518,7 +2518,7 @@
         function Tn(e) {
             var t = n
                 , buffer = new Uint8Array(e.data).buffer
-                , data = Rr(new Uint8Array(buffer));
+                , data = deserialize_Uint8Array(new Uint8Array(buffer));
             switch (Object.keys(data)[0]) {
                 case "rs":
                     var rs = data.rs
@@ -3205,7 +3205,7 @@
         function Pn(e) {
             var t = n
                 , r = e.target.innerText;
-            server.send(Or({
+            server.send(serialize_Uint8Array({
                 rmmem: r
             })),
                 e.target.remove()
@@ -3346,7 +3346,7 @@
                 Nn && (function (e) {
                     var n = t;
                     if (e.touches.length > 1) {
-                        var r = Math.sqrt(Jr(e.touches[0].pageX - e.touches[1].pageX) + Jr(e.touches[0].pageY - e.touches[1].pageY));
+                        var r = Math.sqrt(squareNum(e.touches[0].pageX - e.touches[1].pageX) + squareNum(e.touches[0].pageY - e.touches[1].pageY));
                         0 != jn && setZoom(clampedValue - (jn - r) / 300, true),
                             Dn = void 0,
                             jn = r
@@ -4100,7 +4100,7 @@
                     Cn(o, i),
                     teleport(0, 0)
             } else {
-                var c = Lr(e);
+                var c = getSeed(e);
                 teleport(c.x, c.y),
                     Cn("textwall", "main"),
                     0 == c.x && 0 == c.y ? $n() : history.pushState({}, null, e)
@@ -4138,7 +4138,7 @@
             pe = e;
             window.color = pe;
             if (typeof e === "number" && e < colorHexs.length) {
-                be = xe && e === 0 ? "rgba(255,255,255,0.6)" : Yr(colorHexs[e], 0.6);
+                be = xe && e === 0 ? "rgba(255,255,255,0.6)" : hexToRGBA(colorHexs[e], 0.6);
                 newEl = document.querySelector(`.swatch-p[data-index='${e}']`);
             }
             else if (typeof e === "number" && e >= colorHexs.length) {
@@ -4200,7 +4200,7 @@
                     C = primaryColorSelect.value,
                     A = secondaryColorSelect.value,
                     L.classList.remove("hidden")) : L.classList.add("hidden"),
-                T = Xr(A, 10),
+                T = adjustColorBrightness(A, 10),
                 !noSave && localStorage.setItem("theme", N),
                 ge = true,
                 en(),
@@ -4211,7 +4211,7 @@
             var t = n;
             e.target == primaryColorSelect ? (C = primaryColorSelect.value,
                 Sn()) : e.target == secondaryColorSelect && (A = secondaryColorSelect.value,
-                    T = Xr(A, 10),
+                    T = adjustColorBrightness(A, 10),
                     Sn(true)),
                 localStorage.setItem("customtheme", JSON.stringify({
                     primary: primaryColorSelect.value,
@@ -4260,7 +4260,7 @@
                     Re && (t.n = clientOptions.anonymous.checked);
                     De && (t.p = [qe.coords.x, qe.coords.y]);
 
-                    server.send(Or({ ce: t }));
+                    server.send(serialize_Uint8Array({ ce: t }));
                     Le = Oe = Re = De = false;
                 }
 
@@ -4277,7 +4277,7 @@
                         }
                         tA.push([i, c, l, u, s]);
                     }
-                    server.send(Or({ e: tA }));
+                    server.send(serialize_Uint8Array({ e: tA }));
                 }
             }
         }
@@ -4556,84 +4556,84 @@
             , kr = performance.now() + 1e3;
         window.requestAnimationFrame((function e() {
             var t = n
-                , r = Math["min"](Math["ceil"](performance["now"]() - wr), 100);
+                , r = Math.min(Math.ceil(performance.now() - wr), 100);
 
             if (wr = performance.now(),
                 (r < Mr || wr > kr) && (Mr = r,
-                    kr = performance["now"]() + 1e3),
+                    kr = performance.now() + 1e3),
                 null != Qe) {
-                ge = !0,
-                    Mn(qe["offset"].x + Qe.dx, qe["offset"].y + Qe.dy, !0),
-                    0 == Qe.dx && 0 == Qe.dy && Mn(qe.offset.x, qe["offset"].y);
+                ge = true,
+                    Mn(qe.offset.x + Qe.dx, qe.offset.y + Qe.dy, true),
+                    0 == Qe.dx && 0 == Qe.dy && Mn(qe.offset.x, qe.offset.y);
                 for (var a = 0; a < r; a++)
                     Qe.dx *= .993,
                         Qe.dy *= .993;
-                Math["abs"](Qe.dx) <= .3 && (Qe.dx = 0),
+                Math.abs(Qe.dx) <= .3 && (Qe.dx = 0),
                     Math.abs(Qe.dy) <= .3 && (Qe.dy = 0),
                     0 == Qe.dy && 0 == Qe.dx && (Qe = null)
             }
-            if (clientOptions["smoothcursors"]["checked"]) {
-                cur.rawx = xr(cur["rawx"], cur.x, r),
-                    cur.rawy = xr(cur["rawy"], cur.y, r);
+            if (clientOptions.smoothcursors.checked) {
+                cur.rawx = xr(cur.rawx, cur.x, r),
+                    cur.rawy = xr(cur.rawy, cur.y, r);
                 var o = bt(20);
                 for (const e of curs.values())
-                    null == e["rawx"] || null == e["rawy"] || xt(e.l, o) || (e["rawx"] = xr(e["rawx"], e.l[0], r),
-                        e["rawy"] = xr(e["rawy"], e.l[1], r))
+                    null == e.rawx || null == e.rawy || xt(e.l, o) || (e.rawx = xr(e.rawx, e.l[0], r),
+                        e.rawy = xr(e.rawy, e.l[1], r))
             }
             if (0 != Ne.length) {
-                for (var c = 0; c < Ne["length"]; c++)
+                for (var c = 0; c < Ne.length; c++)
                     if (Ne[c][2] < .01)
-                        Ne["splice"](c, 1);
+                        Ne.splice(c, 1);
                     else
                         for (a = 0; a < r; a++)
                             Ne[c][2] *= .995;
-                ge = !0
+                ge = true
             }
             if (ge && (function () {
                 var e = t;
-                canvasGetContext["setTransform"](1, 0, 0, 1, 0, 0),
-                    canvasGetContext["fillStyle"] = A,
-                    canvasGetContext["fillRect"](0, 0, canvasElement["width"], canvasElement["height"]),
-                    canvasGetContext["translate"](Math.ceil(qe["offset"].x), Math["ceil"](qe.offset.y));
+                canvasGetContext.setTransform(1, 0, 0, 1, 0, 0),
+                    canvasGetContext.fillStyle = A,
+                    canvasGetContext.fillRect(0, 0, canvasElement.width, canvasElement.height),
+                    canvasGetContext.translate(Math.ceil(qe.offset.x), Math.ceil(qe.offset.y));
                 const r = 10 * v
                     , a = 20 * v
-                    , o = Math["round"](5 * v);
+                    , o = Math.round(5 * v);
                 var i, c, l, u, s = bt(20), f = bt(d);
-                for (const t of we["keys"]())
-                    xt(h = wt(t), s) ? xt(h, f) && delete we.get(t)["img"] : pt(t, h);
-                if (clientOptions["showothercurs"]["checked"] && (!wallSettings.hideCursors["checked"] || m)) {
+                for (const t of we.keys())
+                    xt(h = wt(t), s) ? xt(h, f) && delete we.get(t).img : pt(t, h);
+                if (clientOptions.showothercurs.checked && (!wallSettings.hideCursors.checked || m)) {
                     gt(canvasGetContext);
                     for (const t of curs.values()) {
                         var h = t.l;
                         if (!xt(h, s)) {
                             var y = Math.round(10 * t.rawx * v)
-                                , g = Math.round(20 * t["rawy"] * v);
-                            t["highlighted"] && (canvasGetContext["fillStyle"] = "rgba(239, 255, 71, 0.5)",
-                                canvasGetContext["roundRect"](y - 2 * v, g - 2 * v, Math["ceil"](r) + 4 * v, Math.round(a) + 4 * v, [2 * v]));
+                                , g = Math.round(20 * t.rawy * v);
+                            t["highlighted"] && (canvasGetContext.fillStyle = "rgba(239, 255, 71, 0.5)",
+                                canvasGetContext.roundRect(y - 2 * v, g - 2 * v, Math.ceil(r) + 4 * v, Math.round(a) + 4 * v, [2 * v]));
                             var p = t.c;
-                            var anonIdShow = clientOptions["anonIdShow"].checked;
-                            var displayNameShow = clientOptions["displayNames"].checked;
-                            clientOptions.disablecolour["checked"] && (p = 0),
-                                0 == p && xe && (p = colorHexs["length"]);
+                            var anonIdShow = clientOptions.anonIdShow.checked;
+                            var displayNameShow = clientOptions.displayNames.checked;
+                            clientOptions.disablecolour.checked && (p = 0),
+                                0 == p && xe && (p = colorHexs.length);
                             if (rgb888(p)) {
-                                canvasGetContext["fillStyle"] = gst(p);
+                                canvasGetContext.fillStyle = gst(p);
                             } else {
-                                canvasGetContext["fillStyle"] = gst(colorHexs[p], 0.2) || "rgba(255,255,255,0.2)";
+                                canvasGetContext.fillStyle = gst(colorHexs[p], 0.2) || "rgba(255,255,255,0.2)";
                             };
-                            clientOptions.roundCursors["checked"] ?
-                                (ge = !0, canvasGetContext.beginPath(),
+                            clientOptions.roundCursors.checked ?
+                                (ge = true, canvasGetContext.beginPath(),
                                     canvasGetContext.lineWidth = 2 * v,
                                     kt(y, g, r, a, 2 * v),
                                     canvasGetContext.fill()) :
-                                (ge = !0, kt(y, g, r, a)),
-                                !clientOptions["shownametags"]["checked"] || (i = h,
+                                (ge = true, kt(y, g, r, a)),
+                                !clientOptions.shownametags.checked || (i = h,
                                     c = void 0,
                                     l = void 0,
                                     u = void 0,
                                     c = n,
-                                    l = 20 * Math["floor"](i[0] / 20) + "," + 10 * Math.floor(i[1] / 10),
+                                    l = 20 * Math.floor(i[0] / 20) + "," + 10 * Math.floor(i[1] / 10),
 
-                                    (u = we["get"](l)) && u.protected && 0 == j) || Mt(
+                                    (u = we.get(l)) && u.protected && 0 == j) || Mt(
                                         t.n != ""
                                             ? (displayNameShow ? t.dn : t.n)
                                             : (anonIdShow ? `(${t.id || 0})` : ""),
@@ -4642,83 +4642,83 @@
                         }
                     }
                 }
-                for (var b = 0; b < Ne["length"]; b++) {
-                    0 == (p = Ne[b][3]) && xe && (p = colorHexs["length"]),
-                        canvasGetContext["fillStyle"] = rgb888(p) ? gst(p) : me[p];
+                for (var b = 0; b < Ne.length; b++) {
+                    0 == (p = Ne[b][3]) && xe && (p = colorHexs.length),
+                        canvasGetContext.fillStyle = rgb888(p) ? gst(p) : me[p];
                     var x = 10 * Ne[b][0] * v
                         , w = 20 * Ne[b][1] * v;
-                    if (clientOptions["showothercurs"]["checked"] && m) {
+                    if (clientOptions.showothercurs.checked && m) {
                         var M = curs.get(Ne[b][4]);
-                        null != M && M["highlighted"] && (canvasGetContext.lineWidth = 3 * v,
-                            canvasGetContext["strokeStyle"] = rgb888(p) ? gst(p) : colorHexs[p],
-                            canvasGetContext["beginPath"](),
-                            canvasGetContext["moveTo"](Math["round"](10 * M["rawx"] * v + r / 2), Math["round"](20 * M["rawy"] * v + a)),
-                            canvasGetContext["lineTo"](Math["round"](x + r / 2), Math.round(w + a)),
+                        null != M && M.highlighted && (canvasGetContext.lineWidth = 3 * v,
+                            canvasGetContext.strokeStyle = rgb888(p) ? gst(p) : colorHexs[p],
+                            canvasGetContext.beginPath(),
+                            canvasGetContext.moveTo(Math.round(10 * M.rawx * v + r / 2), Math.round(20 * M.rawy * v + a)),
+                            canvasGetContext.lineTo(Math.round(x + r / 2), Math.round(w + a)),
                             canvasGetContext.stroke())
                     }
 
-                    canvasGetContext["fillRect"](x, w, r, a)
+                    canvasGetContext.fillRect(x, w, r, a)
                 }
-                var anonIdShow = clientOptions['anonIdShow'].checked;
-                if (clientOptions.roundCursors["checked"] ? (canvasGetContext["fillStyle"] = be,
+                var anonIdShow = clientOptions.anonIdShow.checked;
+                if (clientOptions.roundCursors.checked ? (canvasGetContext.fillStyle = be,
                     canvasGetContext.beginPath(),
                     canvasGetContext.lineWidth = 2 * v,
-                    kt(y = Math["round"](10 * cur["rawx"] * v), g = Math["round"](20 * cur["rawy"] * v), r, a, 2 * v),
+                    kt(y = Math["round"](10 * cur.rawx * v), g = Math.round(20 * cur.rawy * v), r, a, 2 * v),
                     canvasGetContext.fill()) :
                     (
-                        canvasGetContext["fillStyle"] = be,
-                        kt(y = Math["round"](10 * cur["rawx"] * v), g = Math["round"](20 * cur["rawy"] * v), r, a)
+                        canvasGetContext.fillStyle = be,
+                        kt(y = Math.round(10 * cur.rawx * v), g = Math.round(20 * cur.rawy * v), r, a)
                     ),
-                    clientOptions["shownametags"].checked && (gt(canvasGetContext),
+                    clientOptions.shownametags.checked && (gt(canvasGetContext),
                         Mt(
-                            (clientOptions["anonymous"]["checked"] || je == "")
+                            (clientOptions.anonymous.checked || je == "")
                                 ? (anonIdShow ? `(${window.w.clientId || 0})` : "")
                                 : (displayNameShow ? window.w.displayNick : je),
                             y, g, o
                         )),
-                    Je && $e["start"] && $e["end"]) {
+                    Je && $e.start && $e.end) {
                     canvasGetContext.fillStyle = "rgba(0,120,212,0.5)",
 
 
-                        y = Math["round"](10 * Math["min"]($e["start"].x, $e.end.x) * v),
-                        g = Math.round(20 * Math.min($e["start"].y, $e["end"].y) * v);
-                    var S = Math.round(10 * Math.max($e["start"].x, $e["end"].x) * v - y + 10 * v)
-                        , I = Math.round(20 * Math["max"]($e["start"].y, $e["end"].y) * v - g + 20 * v);
-                    canvasGetContext["fillRect"](y, g, S, I)
+                        y = Math.round(10 * Math.min($e.start.x, $e.end.x) * v),
+                        g = Math.round(20 * Math.min($e.start.y, $e.end.y) * v);
+                    var S = Math.round(10 * Math.max($e.start.x, $e.end.x) * v - y + 10 * v)
+                        , I = Math.round(20 * Math["max"]($e.start.y, $e.end.y) * v - g + 20 * v);
+                    canvasGetContext.fillRect(y, g, S, I)
 
                 }
                 if (Ve || Ze) {
 
-                    canvasGetContext["fillStyle"] = Ve && Ze ? "rgba(195,219,224,0.5)" : (Ve ? "rgba(204,204,204,0.5)" : "rgba(221,249,255,0.5)")
+                    canvasGetContext.fillStyle = Ve && Ze ? "rgba(195,219,224,0.5)" : (Ve ? "rgba(204,204,204,0.5)" : "rgba(221,249,255,0.5)")
                     var C = 20 * Math.floor(Te.x / 20)
-                        , T = 10 * Math["floor"](Te.y / 10);
+                        , T = 10 * Math.floor(Te.y / 10);
                     canvasGetContext.fillRect(10 * C * v, 20 * T * v, 200 * v, 200 * v)
                 }
-            }(), ge = !1,
+            }(), ge = false,
                 "\n\n\n\n\n\n\n\n\n" != textArea.value && (textArea.value = "\n\n\n\n\n\n\n\n\n"),
-                textArea["selectionEnd"] = 4),
-                0 != Ee["size"]) {
+                textArea.selectionEnd = 4),
+                0 != Ee.size) {
                 for (var l = wr + (Mr - 2); ;) {
                     var u = ke.shift()
-                        , s = Ee["get"](u);
-                    if (Ee["delete"](u),
+                        , s = Ee.get(u);
+                    if (Ee.delete(u),
                         Xt(u, s),
                         0 == Ee.size || performance.now() >= l)
                         break
                 }
                 ge = !0
             }
-            window["requestAnimationFrame"](e)
+            window.requestAnimationFrame(e)
         }
         )),
-            null != localStorage["getItem"]("x") && (cur.x = parseInt(localStorage["getItem"]("x"))),
-            null != localStorage["getItem"]("y") && (cur.y = parseInt(localStorage["getItem"]("y"))),
-            null != localStorage["getItem"]("dec") && le(localStorage["getItem"]("dec")),
-            null != localStorage.getItem("customfont") && (customFontInput["value"] = localStorage["getItem"]("customfont")),
-            null != localStorage.getItem("customfontsize") && (customFontSizeInput.value = localStorage["getItem"]("customfontsize")),
+            null != localStorage.getItem("x") && (cur.x = parseInt(localStorage.getItem("x"))),
+            null != localStorage.getItem("y") && (cur.y = parseInt(localStorage.getItem("y"))),
+            null != localStorage.getItem("dec") && le(localStorage.getItem("dec")),
+            null != localStorage.getItem("customfont") && (customFontInput.value = localStorage.getItem("customfont")),
+            null != localStorage.getItem("customfontsize") && (customFontSizeInput.value = localStorage.getItem("customfontsize")),
             null != localStorage.getItem("rca") && (renderChunkAmount = parseInt(localStorage.getItem("rca"), rot.value = parseInt(localStorage.getItem("rca")))),
-            null != fontProperties[localStorage["getItem"]("font")] && vt(localStorage["getItem"]("font"));
-        const val = localStorage["getItem"]("col");
+            null != fontProperties[localStorage.getItem("font")] && vt(localStorage.getItem("font"));
+        const val = localStorage.getItem("col");
         if (val != null) {
             const parts = val.split(",");
             if (parts.length === 3) {
@@ -4730,36 +4730,36 @@
             mr(0, true);
         }
 
-        var Er = Object["keys"](clientOptions);
-        for (ne = 0; ne < Er["length"]; ne++) {
+        var Er = Object.keys(clientOptions);
+        for (ne = 0; ne < Er.length; ne++) {
             var Sr = Er[ne];
-            null != localStorage.getItem(Sr) && (clientOptions[Sr]["checked"] = "true" == localStorage["getItem"](Sr))
+            null != localStorage.getItem(Sr) && (clientOptions[Sr].checked = "true" == localStorage.getItem(Sr))
         }
-        if (clientOptions["showchat"].checked,
-            clientOptions["disablecolour"]["checked"] && hr(!0),
-            null != localStorage["getItem"]("customtheme")) {
-            var Ir = localStorage.getItem("customtheme");
+        if (clientOptions.showchat.checked,
+            clientOptions.disablecolour.checked && hr(true),
+            null != localStorage.getItem("customtheme")) {
+            var customThemeJSON = localStorage.getItem("customtheme");
             try {
-                var Cr = JSON.parse(Ir);
-                null != Cr["primary"] && (primaryColorSelect["value"] = Cr["primary"]),
-                    null != Cr.secondary && (secondaryColorSelect["value"] = Cr.secondary),
-                    null != Cr["texttheme"] && (whiteTextCheckBox.checked = Cr["texttheme"])
+                var Cr = JSON.parse(customThemeJSON);
+                null != Cr.primary && (primaryColorSelect.value = Cr.primary),
+                    null != Cr.secondary && (secondaryColorSelect.value = Cr.secondary),
+                    null != Cr.texttheme && (whiteTextCheckBox.checked = Cr.texttheme)
             } catch (e) { }
         }
         if (null != localStorage.getItem("theme")) {
-            var Ar = localStorage["getItem"]("theme");
-            changeTheme(0 == Ar || 1 == Ar || 2 == Ar ? Number(Ar) : N)
+            var themeId = localStorage.getItem("theme");
+            changeTheme(0 == themeId || 1 == themeId || 2 == themeId ? Number(themeId) : N)
         }
         var Tr, Br = (Tr = {},
-            window.location["href"]["replace"](/[?&]+([^=&]+)=([^&]*)/gi, (function (e, t, n) {
+            window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (function (e, t, n) {
                 Tr[t] = n
             }
             )),
-            Tr), Fr = !1;
+            Tr), Fr = false;
         function Pr() {
             return fr(location.pathname)
         }
-        function Lr_01(seed) {
+        function getSeed_01(seed) {
             let key = [];
             let s = [];
             let j = 0;
@@ -4801,7 +4801,7 @@
         }
 
 
-        function Lr_02(str) {
+        function getSeed_02(str) {
             let tpl = {
                 maxX: 100000,
                 maxY: 100000,
@@ -4829,15 +4829,15 @@
         }
 
 
-        function Lr(input) {
+        function getSeed(input) {
 
             input = decodeURI((input || "").trim());
             if (!input) return { x: 0, y: 0 };
 
-            let tpl = Lr_02(input);
+            let tpl = getSeed_02(input);
 
             let seed = input;
-            let rand = Lr_01(seed);
+            let rand = getSeed_01(seed);
 
             function axis(max, snap) {
                 let raw = Math.round(2 * max * rand()) - max;
@@ -4849,57 +4849,57 @@
                 y: axis(tpl.maxY, 10)
             };
         }
-        window.w.generateCoords = Lr;
+        window.w.generateCoords = getSeed;
         null != Br.x && (cur.x = parseInt(Br.x),
-            Fr = !0),
+            Fr = true),
             null != Br.y && (cur.y = -1 * parseInt(Br.y),
-                Fr = !0),
-            Br["noui"] && (infoElement["classList"].add("hidden"),
-                hn["style"]["display"] = "none");
-        var Or, Rr, Dr, Nr, jr, Ur, Wr = Pr();
+                Fr = true),
+            Br.noui && (infoElement.classList.add("hidden"),
+                hn.style.display = "none");
+        var serialize_Uint8Array, deserialize_Uint8Array, Dr, Nr, jr, Ur, Wr = Pr();
         if (Wr.length > 0)
-            if (Wr["startsWith"]("~"))
+            if (Wr.startsWith("~"))
                 o = "/" + Wr,
                     Fr || teleport(0, 0);
             else {
-                var Hr = Lr(Wr);
+                var Hr = getSeed(Wr);
                 cur.x = Hr.x,
                     cur.y = Hr.y
             }
         function connect() {
             var e = n;
-            if (null == server || server["readyState"] != WebSocket.CONNECTING && server["readyState"] != WebSocket.OPEN) {
+            if (null == server || server.readyState != WebSocket.CONNECTING && server.readyState != WebSocket.OPEN) {
                 var t = "wss://" + location.host + "/ws";
-                "https:" !== location.protocol && (t = "ws://" + location["host"] + "/ws"),
-                    (server = new WebSocket(t, window.w.currentVersion))["binaryType"] = "arraybuffer",
+                "https:" !== location.protocol && (t = "ws://" + location.host + "/ws"),
+                    (server = new WebSocket(t, window.w.currentVersion)).binaryType = "arraybuffer",
                     server.onmessage = Tn,
-                    server["onclose"] = disconnect,
-                    server["onerror"] = disconnect,
+                    server.onclose = disconnect,
+                    server.onerror = disconnect,
                     server.onopen = In,
-                    document.getElementById("connecting1")["innerText"] = "Connecting...",
-                    document["getElementById"]("connecting2").innerText = "",
+                    document.getElementById("connecting1").innerText = "Connecting...",
+                    document.getElementById("connecting2").innerText = "",
                     document.getElementById("connecting3").innerText = "",
-                    connectingElement["onclick"] = void 0
+                    connectingElement.onclick = void 0
             }
         }
-        function Xr(e, t) {
+        function adjustColorBrightness(e, t) {
             var r = n
-                , a = parseInt(e["substring"](1, 3), 16)
-                , o = parseInt(e["substring"](3, 5), 16)
-                , i = parseInt(e["substring"](5, 7), 16);
-            return a += t,
-                o += t,
-                i += t,
-                a = Math.min(a, 255),
-                o = Math["min"](o, 255),
-                i = Math["min"](i, 255),
-                a = Math["max"](a, 0),
-                o = Math.max(o, 0),
-                i = Math["max"](i, 0),
-                "#" + zr(a.toString(16), 2) + zr(o.toString(16), 2) + zr(i.toString(16), 2)
+                , R = parseInt(e.substring(1, 3), 16)
+                , G = parseInt(e.substring(3, 5), 16)
+                , B = parseInt(e.substring(5, 7), 16);
+            return R += t,
+                G += t,
+                B += t,
+                R = Math.min(R, 255),
+                G = Math.min(G, 255),
+                B = Math.min(B, 255),
+                R = Math.max(R, 0),
+                G = Math.max(G, 0),
+                B = Math.max(B, 0),
+                "#" + padZeroes(R.toString(16), 2) + padZeroes(G.toString(16), 2) + padZeroes(B.toString(16), 2)
         }
-        window.Xr = Xr;
-        function zr(e, t) {
+        window.Xr = adjustColorBrightness;
+        function padZeroes(e, t) {
             for (; e.length < t;)
                 e = "0" + e;
             return e
@@ -4907,31 +4907,31 @@
         function qr(e) {
             return e >= 10240 && e <= 10495
         }
-        function Yr(e, t) {
+        function hexToRGBA(e, t) {
 
             var r = n;
-            var o, i, c;
+            var R, G, B;
 
 
             if (Array.isArray(e) && e.length >= 3) {
-                o = e[0] & 255;
-                i = e[1] & 255;
-                c = e[2] & 255;
+                R = e[0] & 255;
+                G = e[1] & 255;
+                B = e[2] & 255;
             } else {
 
                 if (3 == (e = e.replace("#", "")).length && (e = e[0] + e[0] + e[1] + e[1] + e[2] + e[2]),
-                    6 != e["length"])
+                    6 != e.length)
                     throw new Error("invalid hex length");
-                var a = parseInt(e, 16);
-                o = (16711680 & a) >> 16;
-                i = (65280 & a) >> 8;
-                c = 255 & a;
+                var num = parseInt(e, 16);
+                R = (16711680 & num) >> 16;
+                G = (65280 & num) >> 8;
+                B = 255 & num;
             }
 
-            return t ? "rgba(" + o + ", " + i + ", " + c + ", " + t + ")" : "rgb(" + o + ", " + i + ", " + c + ")"
+            return t ? "rgba(" + R + ", " + G + ", " + B + ", " + t + ")" : "rgb(" + R + ", " + G + ", " + B + ")"
 
         }
-        function Jr(e) {
+        function squareNum(e) {
             return e * e
         }
         function Vr(e, t) {
@@ -4967,23 +4967,23 @@
 
         isNaN(cur.x) && (cur.x = 0),
             isNaN(cur.y) && (cur.y = 0),
-            cur["start"] = cur.x,
+            cur.start = cur.x,
             setTimeout((function () {
                 var e = n;
-                window["history"]["replaceState"]({}, document["title"], location["pathname"])
+                window.history.replaceState({}, document.title, location.pathname)
             }
             ), 0),
             teleport(cur.x, cur.y),
-            null != localStorage.getItem("zoom") && setZoom(JSON["parse"](localStorage["getItem"]("zoom")), !1),
+            null != localStorage.getItem("zoom") && setZoom(JSON.parse(localStorage.getItem("zoom")), false),
             connect(),
-            Or = function (e, r) {
+            serialize_Uint8Array = function (e, r) {
                 var a = n;
-                if (r && r["bdtiple"] && !Array.isArray(e))
+                if (r && r.bdtiple && !Array.isArray(e))
                     throw new Error;
                 const o = 4294967296;
                 let i, c, l = new Uint8Array(128), u = 0;
-                if (r && r["bdtiple"])
-                    for (let t = 0; t < e["length"]; t++)
+                if (r && r.bdtiple)
+                    for (let t = 0; t < e.length; t++)
                         s(e[t]);
                 else
                     s(e);
@@ -5001,7 +5001,7 @@
                         case "number":
                             !function (e) {
                                 var t = l;
-                                if (isFinite(e) && Math["floor"](e) === e)
+                                if (isFinite(e) && Math.floor(e) === e)
                                     if (e >= 0 && e <= 127)
                                         v(e);
                                     else if (e < 0 && e >= -32)
@@ -5039,16 +5039,16 @@
                                 let r = function (e) {
                                     var n = t;
                                     let r = !0
-                                        , a = e["length"];
+                                        , a = e.length;
                                     for (let t = 0; t < a; t++)
-                                        if (e["charCodeAt"](t) > 127) {
-                                            r = !1;
+                                        if (e.charCodeAt(t) > 127) {
+                                            r = false;
                                             break
                                         }
                                     let o = 0
-                                        , i = new Uint8Array(e["length"] * (r ? 1 : 4));
+                                        , i = new Uint8Array(e.length * (r ? 1 : 4));
                                     for (let t = 0; t !== a; t++) {
-                                        let r = e["charCodeAt"](t);
+                                        let r = e.charCodeAt(t);
                                         if (r < 128)
                                             i[o++] = r;
                                         else {
@@ -5073,7 +5073,7 @@
                                     }
                                     return r ? i : i.subarray(0, o)
                                 }(e)
-                                    , a = r["length"];
+                                    , a = r.length;
                                 a <= 31 ? v(160 + a) : m(a <= 255 ? [217, a] : a <= 65535 ? [218, a >>> 8, a] : [219, a >>> 24, a >>> 16, a >>> 8, a]),
                                     m(r)
                             }(e);
@@ -5091,8 +5091,8 @@
                                     m([199, 12, 255, n >>> 24, n >>> 16, n >>> 8, n]),
                                         h(t)
                                 }
-                            }(e) : Array["isArray"](e) ? f(e) : e instanceof Uint8Array || e instanceof Uint8ClampedArray ? function (e) {
-                                let t = e["length"];
+                            }(e) : Array.isArray(e) ? f(e) : e instanceof Uint8Array || e instanceof Uint8ClampedArray ? function (e) {
+                                let t = e.length;
                                 m(t <= 15 ? [196, t] : t <= 65535 ? [197, t >>> 8, t] : [198, t >>> 24, t >>> 16, t >>> 8, t]),
                                     m(e)
                             }(e) : e instanceof Int8Array || e instanceof Int16Array || e instanceof Uint16Array || e instanceof Int32Array || e instanceof Uint32Array || e instanceof Float32Array || e instanceof Float64Array ? f(e) : function (e) {
@@ -5108,9 +5108,9 @@
                             }(e);
                             break;
                         default:
-                            if (n || !r || !r["invalidTypeReplacement"])
+                            if (n || !r || !r.invalidTypeReplacement)
                                 throw new Error;
-                            "function" == typeof r["invalidTypeReplacement"] ? s(r["invalidTypeReplacement"](e), !0) : s(r["invalidTypeReplacement"], !0)
+                            "function" == typeof r.invalidTypeReplacement ? s(r.invalidTypeReplacement(e), true) : s(r.invalidTypeReplacement, true)
                     }
                 }
                 function d(e) {
@@ -5124,8 +5124,8 @@
                 }
                 function v(e) {
                     var t = a;
-                    if (l["length"] < u + 1) {
-                        let e = 2 * l["length"];
+                    if (l.length < u + 1) {
+                        let e = 2 * l.length;
                         for (; e < u + 1;)
                             e *= 2;
                         let n = new Uint8Array(e);
@@ -5137,16 +5137,16 @@
                 }
                 function m(e) {
                     var t = a;
-                    if (l["length"] < u + e.length) {
+                    if (l.length < u + e.length) {
                         let n = 2 * l.length;
-                        for (; n < u + e["length"];)
+                        for (; n < u + e.length;)
                             n *= 2;
                         let r = new Uint8Array(n);
                         r.set(l),
                             l = r
                     }
-                    l["set"](e, u),
-                        u += e["length"]
+                    l.set(e, u),
+                        u += e.length
                 }
                 function h(e) {
                     var t = a;
@@ -5154,25 +5154,25 @@
                     e >= 0 ? (n = e / o,
                         r = e % o) : (e++,
                             n = Math.abs(e) / o,
-                            r = Math["abs"](e) % o,
+                            r = Math.abs(e) % o,
                             n = ~n,
                             r = ~r),
                         m([n >>> 24, n >>> 16, n >>> 8, n, r >>> 24, r >>> 16, r >>> 8, r])
                 }
             }
             ,
-            Rr = function (e, r) {
+            deserialize_Uint8Array = function (e, r) {
                 var a = n;
                 let o, i = 0;
                 if (e instanceof ArrayBuffer && (e = new Uint8Array(e)),
-                    "object" != typeof e || void 0 === e["length"])
+                    "object" != typeof e || void 0 === e.length)
                     throw new Error;
-                if (!e["length"])
+                if (!e.length)
                     throw new Error;
                 if (e instanceof Uint8Array || (e = new Uint8Array(e)),
                     r && r.bdtiple)
-                    for (o = []; i < e["length"];)
-                        o["push"](c());
+                    for (o = []; i < e.length;)
+                        o.push(c());
                 else
                     o = c();
                 return o;
@@ -5191,9 +5191,9 @@
                     if (193 === t)
                         throw new Error;
                     if (194 === t)
-                        return !1;
+                        return false;
                     if (195 === t)
-                        return !0;
+                        return true;
                     if (196 === t)
                         return d(-1, 1);
                     if (197 === t)
@@ -5278,14 +5278,14 @@
                 }
                 function s(t) {
                     var n = a;
-                    let r = new DataView(e.buffer, i + e["byteOffset"], t);
+                    let r = new DataView(e.buffer, i + e.byteOffset, t);
                     return i += t,
-                        4 === t ? r.getFloat32(0, !1) : 8 === t ? r["getFloat64"](0, !1) : void 0
+                        4 === t ? r.getFloat32(0, false) : 8 === t ? r.getFloat64(0, false) : void 0
                 }
                 function d(t, n) {
                     var r = a;
                     t < 0 && (t = u(n));
-                    let o = e["subarray"](i, i + t);
+                    let o = e.subarray(i, i + t);
                     return i += t,
                         o
                 }
@@ -5301,7 +5301,7 @@
                     e < 0 && (e = u(t));
                     let r = [];
                     for (; e-- > 0;)
-                        r["push"](c());
+                        r.push(c());
                     return r
                 }
                 function m(n, r) {
@@ -5331,13 +5331,13 @@
                                         t = (7 & t) << 18 | (63 & e[o++]) << 12 | (63 & e[o++]) << 6 | 63 & e[o++]
                                     }
                                 if (t <= 65535)
-                                    i += String["fromCharCode"](t);
+                                    i += String.fromCharCode(t);
                                 else {
                                     if (!(t <= 1114111))
                                         throw new Error;
                                     t -= 65536,
                                         i += String.fromCharCode(t >> 10 | 55296),
-                                        i += String["fromCharCode"](1023 & t | 56320)
+                                        i += String.fromCharCode(1023 & t | 56320)
                                 }
                             }
                             return i
@@ -5349,16 +5349,16 @@
                         , a = d(e);
                     return 255 === r ? function (e) {
                         var n = t;
-                        if (4 === e["length"]) {
+                        if (4 === e.length) {
                             let t = (e[0] << 24 >>> 0) + (e[1] << 16 >>> 0) + (e[2] << 8 >>> 0) + e[3];
                             return new Date(1e3 * t)
                         }
-                        if (8 === e["length"]) {
+                        if (8 === e.length) {
                             let t = (e[0] << 22 >>> 0) + (e[1] << 14 >>> 0) + (e[2] << 6 >>> 0) + (e[3] >>> 2)
                                 , n = 4294967296 * (3 & e[3]) + (e[4] << 24 >>> 0) + (e[5] << 16 >>> 0) + (e[6] << 8 >>> 0) + e[7];
                             return new Date(1e3 * n + t / 1e6)
                         }
-                        if (12 === e["length"]) {
+                        if (12 === e.length) {
                             let t = (e[0] << 24 >>> 0) + (e[1] << 16 >>> 0) + (e[2] << 8 >>> 0) + e[3];
                             i -= 8;
                             let n = l(8);
@@ -5690,8 +5690,8 @@
         window.w.chat = {};
         window.w.chat.send = aib;
         window.network = {};
-        window.network.binary = Or;
-        window.network.text = Rr;
+        window.network.binary = serialize_Uint8Array;
+        window.network.text = deserialize_Uint8Array;
         window.network.send = function (data) {
             server.send(window.network.binary(data))
         };
