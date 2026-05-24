@@ -232,8 +232,8 @@
             var t, r, a = n;
             if (e) {
                 decorationsElement["style"].display = "flex";
-                var o = (t = Ce.x,
-                    r = Ce.y,
+                var o = (t = cur.x,
+                    r = cur.y,
                 {
                     x: t * (10 * v) / devicePixelRatio + qe.offset.x / devicePixelRatio,
                     y: r * (20 * v) / devicePixelRatio + qe.offset.y / devicePixelRatio
@@ -327,7 +327,7 @@
                 }
             me[colorHexs["length"]] = "rgba(255, 255, 255, 0.2)"
         }();
-        var he, ye, ge, pe = 0, be = Yr(colorHexs[pe], .2), xe = false, we = new Map, Me = [], ke = [], Ee = new Map, Se = new Worker("/static/ping.js"), Ie = false, Ce = {
+        var he, ye, ge, pe = 0, be = Yr(colorHexs[pe], .2), xe = false, we = new Map, Me = [], ke = [], Ee = new Map, Se = new Worker("/static/ping.js"), Ie = false, cur = {
             x: 0,
             y: 0,
             rawx: 0,
@@ -344,7 +344,7 @@
         }, Te = {
             x: 0,
             y: 0
-        }, Be = [], Fe = [], Pe = new Map, Le = true, Oe = true, Re = true, De = false, Ne = [], je = "", nearby = 0, online = 0, coordsElement = document.getElementById("coords"), nearbyElement = document.getElementById("nearby"), Xe = performance.now(), ze = {
+        }, Be = [], Fe = [], curs = new Map, Le = true, Oe = true, Re = true, De = false, Ne = [], je = "", nearby = 0, online = 0, coordsElement = document.getElementById("coords"), nearbyElement = document.getElementById("nearby"), Xe = performance.now(), ze = {
             scale: 1,
             offset: {
                 x: 0,
@@ -929,7 +929,7 @@
             var e, t = n, r = "pathname";
             for (const n of we.keys()) {
                 var a = wt(n);
-                !xt(a, r) || (e = a)[0] > Ce.x - 20 && e[0] < Ce.x + 20 && e[1] > Ce.y - 10 && e[1] < Ce.y + 10 || we.delete(n)
+                !xt(a, r) || (e = a)[0] > cur.x - 20 && e[0] < cur.x + 20 && e[1] > cur.y - 10 && e[1] < cur.y + 10 || we.delete(n)
             }
         }
         function en() {
@@ -940,8 +940,8 @@
         function nn(e) {
             var t = n;
             if (e.isTrusted) {
-                var r = 20 * Math.floor(Ce.x / 20)
-                    , o = 10 * Math.floor(Ce.y / 10)
+                var r = 20 * Math.floor(cur.x / 20)
+                    , o = 10 * Math.floor(cur.y / 10)
                     , c = r + "," + o;
                 we.has(c) && (Ve && server.send(Or({
                     p: c
@@ -975,21 +975,21 @@
         function ln(e) {
             var t = n
                 , r = rn(e)
-                , a = Pe.get(r);
+                , a = curs.get(r);
             null != a && m && (a.highlighted = e.target.checked,
                 ge = true)
         }
         function un(e) {
             var t = n
                 , r = e.target.parentElement.dataset.id
-                , a = Pe.get(r);
+                , a = curs.get(r);
             null != a && m && showToast((a.n || r) + ": (" + a.l[0] + ", " + -a.l[1] + ")", 3e3)
         }
         function sn(e) {
             var t = n
                 , r = e.target.parentElement.dataset.id
-                , a = Pe.get(r);
-            null != a && m && Zn(a.l[0], a.l[1])
+                , a = curs.get(r);
+            null != a && m && teleport(a.l[0], a.l[1])
         }
         function dn(e) {
             var t = n
@@ -1009,7 +1009,7 @@
                 u.addEventListener("click", cn),
                 s.addEventListener("click", an),
                 c.addEventListener("click", ln);
-            var d = Pe.get(e);
+            var d = curs.get(e);
             c.type = "checkbox",
                 c.checked = 1 == d.highlighted,
                 a.appendChild(c);
@@ -1060,10 +1060,10 @@
                                     if (e["pointerId"] == Dn) {
                                         nr();
                                         var r = Wn(e);
-                                        if (Ce.x == r.x && Ce.y == r.y || (Le = true),
-                                            Ce.x = r.x,
-                                            Ce.y = r.y,
-                                            Ce.start = Ce.x,
+                                        if (cur.x == r.x && cur.y == r.y || (Le = true),
+                                            cur.x = r.x,
+                                            cur.y = r.y,
+                                            cur.start = cur.x,
                                             e.altKey) {
                                             var a = rr();
                                             a && (Qn(a[0], Zr(a[1])[1]) ? mr(0) : mr(Zr(a[1])[0]))
@@ -1212,7 +1212,7 @@
                 if (e.preventDefault(),
                     e.isTrusted) {
                     if ("insertLineBreak" != e.inputType)
-                        return "deleteContentBackward" == e.inputType ? (Ce.x -= 1,
+                        return "deleteContentBackward" == e.inputType ? (cur.x -= 1,
                             Vn(" ", 0, !1, !0) ||
                             void nr()) : void (null != e.data && "" != e.data && "insertFromPaste" != e.inputType && (nr(),
                                 Array.from(e.data).length > 1 ? pasteCanvas(e.data) : Vn(e.data, 1)));
@@ -1246,7 +1246,7 @@
                             e.preventDefault();
                             break;
                         case 36:
-                            Ce.x = Ce.start,
+                            cur.x = cur.start,
                                 nr(),
                                 ie(false),
                                 e.preventDefault();
@@ -1265,8 +1265,8 @@
                 if (Be.length > 0) {
                     var n = Be.shift();
 
-                    Ce.x = n[0];
-                    Ce.y = n[1];
+                    cur.x = n[0];
+                    cur.y = n[1];
 
                     var r = pe,
                         a = ce(),
@@ -1285,8 +1285,8 @@
                 var e = fontRender;
                 if (0 != Fe.length) {
                     var t = Fe.shift();
-                    Ce.x = t[0],
-                        Ce.y = t[1];
+                    cur.x = t[0],
+                        cur.y = t[1];
                     var n = pe
                         , a = ce()
                         , o = Zr(t[3]);
@@ -1407,7 +1407,7 @@
             coordsElement.addEventListener("click", (function () {
                 var e = n;
                 history.pushState({}, null, o),
-                    copy(location.protocol + "//" + location.host + o + "?x=" + Ce.x + "&y=" + -Ce.y),
+                    copy(location.protocol + "//" + location.host + o + "?x=" + cur.x + "&y=" + -cur.y),
                     showToast("Copied link.", 1e3),
                     textArea.focus()
             }
@@ -1436,13 +1436,13 @@
 
         document.getElementById("home").addEventListener("click", (function () {
             $n(),
-                Zn(0, 0)
+                teleport(0, 0)
         }
         )),
             document.getElementById("home").addEventListener("contextmenu", (function (e) {
                 var t = n;
                 e.preventDefault(),
-                    Cn("textwall", "main") && Zn(0, 0)
+                    Cn("textwall", "main") && teleport(0, 0)
             }
             )),
             document.getElementById("copy").addEventListener("click", or),
@@ -1463,14 +1463,14 @@
             }
             )),
             document.getElementById("theme").addEventListener("click", (function () {
-                yr()
+                changeTheme()
             }
             )),
             primaryColorSelect.addEventListener("input", gr),
             secondaryColorSelect.addEventListener("input", gr),
             whiteTextCheckBox.addEventListener("change", (function (e) {
                 gr(e),
-                    yr(2)
+                    changeTheme(2)
             }
             )),
             customFontInput.addEventListener("input", (function () {
@@ -1565,7 +1565,7 @@
                 var t = n;
                 e.preventDefault();
                 var r = document.getElementById("tpword");
-                vr(r.value),
+                goto(r.value),
                     r.blur()
             }
             )),
@@ -1587,9 +1587,9 @@
                     , a = document.getElementById("tpy")
                     , i = parseInt(r.value, 10)
                     , c = parseInt(a.value, 10);
-                isNaN(i) && isNaN(c) || (0 !== i && (i = i || Ce.x),
-                    0 !== c && (c = c || Ce.y),
-                    Zn(i = Math.max(Math.min(i, Yt.maxx - 1), Yt.minx), c = Math.max(Math.min(-c, Yt.maxy - 1), Yt.miny)),
+                isNaN(i) && isNaN(c) || (0 !== i && (i = i || cur.x),
+                    0 !== c && (c = c || cur.y),
+                    teleport(i = Math.max(Math.min(i, Yt.maxx - 1), Yt.minx), c = Math.max(Math.min(-c, Yt.maxy - 1), Yt.miny)),
                     history.pushState({}, null, o),
                     teleportElement.classList.remove("open"),
                     r.blur(),
@@ -1599,7 +1599,7 @@
             window.addEventListener("resize", kn),
             window.addEventListener("orientationchange", kn),
             window.addEventListener("popstate", (function () {
-                vr(Pr())
+                goto(Pr())
             }
             )),
             window.addEventListener("focus", (function () {
@@ -1858,7 +1858,7 @@
                 if (m) {
                     document.getElementById("admintable").innerHTML = "";
                     var t = false;
-                    for (const n of Pe.keys())
+                    for (const n of curs.keys())
                         dn(n),
                             t = true;
                     if (t) {
@@ -2067,7 +2067,7 @@
         function wn(e) {
             var t = n;
             e.preventDefault(),
-                Cn(e.target.innerText.toLowerCase(), "main") && Zn(0, 0)
+                Cn(e.target.innerText.toLowerCase(), "main") && teleport(0, 0)
         }
         function Mn(e, t, r) {
             var a = n;
@@ -2235,7 +2235,7 @@
                 })),
                 Xn(),
                 we.clear(),
-                Pe.clear(),
+                curs.clear(),
                 Me = [],
                 0))
         }
@@ -2330,16 +2330,16 @@
         window.w.moveCursor = function (direction, amount, doNotAutoPan) {
             switch (direction) {
                 case "up":
-                    Ce.y -= amount;
+                    cur.y -= amount;
                     break;
                 case "down":
-                    Ce.y += amount;
+                    cur.y += amount;
                     break;
                 case "left":
-                    Ce.x -= amount;
+                    cur.x -= amount;
                     break;
                 case "right":
-                    Ce.x += amount;
+                    cur.x += amount;
                     break;
                 default:
                     throw "Invalid direction";
@@ -2347,15 +2347,15 @@
             }
             nr();
             ie(false);
-            window.w.emit("cursormove", [Ce.x, Ce.y]);
+            window.w.emit("cursormove", [cur.x, cur.y]);
             if (!doNotAutoPan) Hn();
         };
         window.w.moveCursorTo = function (x, y, doNotAutoPan) {
-            Ce.x = x;
-            Ce.y = y;
+            cur.x = x;
+            cur.y = y;
             nr();
             ie(false);
-            window.w.emit("cursormove", [Ce.x, Ce.y]);
+            window.w.emit("cursormove", [cur.x, cur.y]);
             if (!doNotAutoPan) Hn();
         };
         window.w.broadcastReceive = function (force = false) {
@@ -2546,7 +2546,7 @@
                         miny: i[2],
                         maxy: i[3]
                     },
-                        Jt(Ce.x, Ce.y) || Zn(0, 0),
+                        Jt(cur.x, cur.y) || teleport(0, 0),
                         ge = !0;
 
                     break;
@@ -2570,7 +2570,7 @@
                         Je = false,
                         $e = {},
                         canvasElement.style.cursor = "text",
-                        Pe.clear(),
+                        curs.clear(),
                         Me = [],
                         K = false,
                         On(),
@@ -2777,7 +2777,7 @@
 
                     var I = data.cu
                         , C = I.id;
-                    Pe.has(C) || Pe.set(C, {
+                    curs.has(C) || curs.set(C, {
                         c: 0,
                         n: "",
                         dn: "",
@@ -2786,7 +2786,7 @@
                         rawy: 0,
                         id: C
                     });
-                    var A = Pe["get"](C);
+                    var A = curs["get"](C);
                     window.w.emit("cursor", {
                         id: C,
                         n: A.n,
@@ -2903,7 +2903,7 @@
                     }
                     break;
                 case "rc":
-                    Pe.delete(data.rc),
+                    curs.delete(data.rc),
                         ge = true,
                         On();
                     window.w.emit('cursorleft', data.rc);
@@ -3190,7 +3190,7 @@
                 t.href = "/~" + je,
                 t.onclick = function (e) {
                     e.preventDefault(),
-                        vr("~" + je)
+                        goto("~" + je)
                 }
         }
         function Fn(e) {
@@ -3242,7 +3242,7 @@
                     c == subwall && f.classList.add("bold"),
                     f.addEventListener("click", (function (n) {
                         n.preventDefault(),
-                            vr(e)
+                            goto(e)
                     }
                     )),
                     d.appendChild(f),
@@ -3266,7 +3266,7 @@
                         var r = h.value;
                         h.value = "",
                             usernameCheck.test(r) ? (Cn(wall, r),
-                                Zn(0, 0),
+                                teleport(0, 0),
                                 teleportElement.classList.remove("open")) : showToast("Invalid wall name", 2e3)
                     }
                     ))
@@ -3274,7 +3274,7 @@
         }
         function On() {
             var e = n;
-            nearby = Pe.size,
+            nearby = curs.size,
                 nearbyElement.innerText = "" + nearby + "",
                 document.getElementById("chatmsg").placeholder = 0 == nearby ? "chat to nobody" : 1 == nearby ? "chat to 1 other user" : "chat to " + nearby + " other users",
                 y || En()
@@ -3301,23 +3301,23 @@
 
         function Hn() {
             var e = n;
-            coordsElement.innerText = Ce.x + "," + -Ce.y,
-                Ce.x + qe.offset.x / v / 10 <= 0 && Mn(10 * -Ce.x * v, qe.offset.y),
-                Ce.x + qe.offset.x / v / 10 >= window.innerWidth / zoomValue / 10 - 1 && Mn((10 * -Ce.x + window.innerWidth / zoomValue - 10) * v, qe.offset.y),
-                Ce.y + qe.offset.y / v / 20 <= 0 && Mn(qe.offset.x, 20 * -Ce.y * v);
+            coordsElement.innerText = cur.x + "," + -cur.y,
+                cur.x + qe.offset.x / v / 10 <= 0 && Mn(10 * -cur.x * v, qe.offset.y),
+                cur.x + qe.offset.x / v / 10 >= window.innerWidth / zoomValue / 10 - 1 && Mn((10 * -cur.x + window.innerWidth / zoomValue - 10) * v, qe.offset.y),
+                cur.y + qe.offset.y / v / 20 <= 0 && Mn(qe.offset.x, 20 * -cur.y * v);
             var t = window.innerWidth < 750 ? infoElement.clientHeight : 0;
-            Ce.y + qe.offset.y / v / 20 >= (window.innerHeight - t) / zoomValue / 20 - 1 && Mn(qe.offset.x, (20 * -Ce.y + window.innerHeight / zoomValue - 20 - t / zoomValue) * v),
-                Le = Ae.x != Ce.x || Ae.y != Ce.y || Le,
-                Ae.x = Ce.x,
-                Ae.y = Ce.y,
-                clientOptions.smoothcursors.checked || (Ce.rawx = Ce.x,
-                    Ce.rawy = Ce.y),
+            cur.y + qe.offset.y / v / 20 >= (window.innerHeight - t) / zoomValue / 20 - 1 && Mn(qe.offset.x, (20 * -cur.y + window.innerHeight / zoomValue - 20 - t / zoomValue) * v),
+                Le = Ae.x != cur.x || Ae.y != cur.y || Le,
+                Ae.x = cur.x,
+                Ae.y = cur.y,
+                clientOptions.smoothcursors.checked || (cur.rawx = cur.x,
+                    cur.rawy = cur.y),
                 (
                     /*Xn() culprit: clears redos and undos */false),
-                Ce.x < Ce.start && (Ce.start = Ce.x),
+                cur.x < cur.start && (cur.start = cur.x),
                 ge = true,
-                localStorage.setItem("x", Ce.x),
-                localStorage.setItem("y", Ce.y)
+                localStorage.setItem("x", cur.x),
+                localStorage.setItem("y", cur.y)
         }
         function Kn(e, t, r, a) {
 
@@ -3600,8 +3600,8 @@
             var data = {
                 char: e,
                 color: chr.color,
-                x: Ce.x,
-                y: Ce.y,
+                x: cur.x,
+                y: cur.y,
                 bold: chr.bold,
                 italic: chr.italic,
                 underline: chr.underline,
@@ -3609,19 +3609,19 @@
             };
             window.w.emit("writeBefore", data);
             var newColFmt = Array.isArray(data.color) ? colFmt(data.color, decos2) : colFmt(data.color, decos2);
-            Ce.x = data.x;
-            Ce.y = data.y;
+            cur.x = data.x;
+            cur.y = data.y;
             char = data.char;
             var i = (char = Array.from(char)[0]).codePointAt();
             if (wallSettings.disableBraille.checked && qr(i))
                 return 0;
-            var c = 20 * Math.floor(Ce.x / 20)
-                , l = 10 * Math.floor(Ce.y / 10)
+            var c = 20 * Math.floor(cur.x / 20)
+                , l = 10 * Math.floor(cur.y / 10)
                 , u = c + "," + l;
             if (!we.has(u))
                 return 0;
             var s = we.get(u);
-            var A = Ce.x - c + 20 * (Ce.y - l);
+            var A = cur.x - c + 20 * (cur.y - l);
             var cellTextProtected = s.textProtected && s.textProtected[A] === "1";
             if ((s.protected || cellTextProtected || wallSettings.readOnly.checked || U && "" == je) && !m && 0 == j || null == s.txt || K)
                 return U && "" == je && !wallSettings.readOnly.checked && showToast("Please log in before typing.", 3e3),
@@ -3647,14 +3647,14 @@
             return L == e && T == C || Qn(e, I) && Qn(L, P) || (M = P,
                 k = e,
                 E = I,
-                Gn(L) && Gn(k) && (2 & M) == (2 & E) && (1 & M) == (1 & E) && colorMatch) || (r ? (g = Ce.x,
-                    p = Ce.y,
+                Gn(L) && Gn(k) && (2 & M) == (2 & E) && (1 & M) == (1 & E) && colorMatch) || (r ? (g = cur.x,
+                    p = cur.y,
                     b = s.txt[A],
                     x = T,
                     w = o,
                     Fe.unshift([g, p, b, x]),
-                    Fe.length > 1e3 && Fe.pop()) : (d = Ce.x,
-                        f = Ce.y,
+                    Fe.length > 1e3 && Fe.pop()) : (d = cur.x,
+                        f = cur.y,
                         v = s.txt[A],
                         h = T,
                         Be.unshift([d, f, v, h]),
@@ -3667,15 +3667,15 @@
                     It(u, Dt(A))),
                 Hn(),
                 S,
-                Ce.x += t,
+                cur.x += t,
                 updateUndoRedoUI()
         }
-        function Zn(e, t) {
+        function teleport(e, t) {
             var r = n;
             ie(false),
-                Ce.x = e,
-                Ce.y = t,
-                Mn((10 * -Ce.x + window.innerWidth / zoomValue / 2) * v, (20 * -Ce.y + window.innerHeight / zoomValue / 2) * v),
+                cur.x = e,
+                cur.y = t,
+                Mn((10 * -cur.x + window.innerWidth / zoomValue / 2) * v, (20 * -cur.y + window.innerHeight / zoomValue / 2) * v),
                 document.getElementById("tpword").value = "",
                 document.getElementById("tpx").value = 0,
                 document.getElementById("tpy").value = 0,
@@ -3720,9 +3720,9 @@
             }
             return result;
         } function pasteCanvas(e) {
-            if (typeof n === "undefined" || typeof Ce === "undefined") return;
+            if (typeof n === "undefined" || typeof cur === "undefined") return;
 
-            Ce.start = Ce.x;
+            cur.start = cur.x;
 
             if (Ie) return;
             Ie = true;
@@ -3818,12 +3818,12 @@
         }
         function rr() {
             var e = n
-                , t = 20 * Math.floor(Ce.x / 20)
-                , r = 10 * Math.floor(Ce.y / 10)
+                , t = 20 * Math.floor(cur.x / 20)
+                , r = 10 * Math.floor(cur.y / 10)
                 , a = we.get(t + "," + r);
             if (!a || null == a.txt)
                 return false;
-            var o = Ce.x - t + 20 * (Ce.y - r);
+            var o = cur.x - t + 20 * (cur.y - r);
             var color = a.clr[o];
             return [a.txt[o], color]
         };
@@ -3839,10 +3839,10 @@
             canvasElement.style.cursor = "crosshair";
             var regionSelection = new RegionSelection();
             regionSelection.onSelection(function (r, o, i, c) {
-                var l = Ce.x
-                    , u = Ce.y;
-                Ce.x = r,
-                    Ce.y = o;
+                var l = cur.x
+                    , u = cur.y;
+                cur.x = r,
+                    cur.y = o;
                 for (var s = "", d = "", f = false, v = false, h = o; h <= c; h++) {
                     for (var y = r; y <= i; y++) {
                         var g = rr();
@@ -3868,11 +3868,11 @@
                             }
                             Qn(g[0], b) || (0 != b && (v = true),
                                 0 != p && (f = true)),
-                                Ce.x++
+                                cur.x++
                         }
                     }
-                    Ce.x = r,
-                        Ce.y++,
+                    cur.x = r,
+                        cur.y++,
                         s += "\n",
                         d += "�";
 
@@ -3881,8 +3881,8 @@
                     d = d.slice(0, -1),
                     s.startsWith("http") && (f = v = false),
                     clientOptions.copycolour.checked && f || clientOptions.copydecorations.checked && v ? copy(s + x1B + d) : copy(s),
-                    Ce.x = l,
-                    Ce.y = u,
+                    cur.x = l,
+                    cur.y = u,
                     showToast("Copied selection.", 1500);
                 var x = document.getElementById("copyico");
                 x.src = "/static/done.svg",
@@ -3907,8 +3907,8 @@
         }
         function cr() {
             var e = n;
-            Ce.x = Ce.start,
-                Ce.y++,
+            cur.x = cur.start,
+                cur.y++,
                 Hn()
         }
         null == navigator.clipboard.readText && (document.getElementById("paste").style.display = "none");
@@ -4087,7 +4087,7 @@
         function fr(e) {
             return e["replace"](/^\/|\/$/g, "")
         }
-        function vr(e) {
+        function goto(e) {
             var t = n
                 , r = (e = (e = fr(e)).replace(/\~\/*/, "~"))["split"]("/");
             if (e = r.shift(),
@@ -4098,10 +4098,10 @@
                     , i = "main";
                 a.length > 1 && (i = a[1]),
                     Cn(o, i),
-                    Zn(0, 0)
+                    teleport(0, 0)
             } else {
                 var c = Lr(e);
-                Zn(c.x, c.y),
+                teleport(c.x, c.y),
                     Cn("textwall", "main"),
                     0 == c.x && 0 == c.y ? $n() : history.pushState({}, null, e)
             }
@@ -4172,7 +4172,7 @@
                 "0" != colList.children[r].id && (e ? colList.children[r].classList.add("hidden") : colList.children[r].classList.remove("hidden"));
             e && mr(0)
         }
-        function yr(e, noSave = false) {
+        function changeTheme(e, noSave = false) {
             var t = n;
             if (null != e)
                 N = e;
@@ -4187,95 +4187,95 @@
                     case 2:
                         N = 0
                 }
-            0 == N && (xe = !1,
-                document["getElementById"]("themeico")["src"] = "/static/sun.svg",
+            0 == N && (xe = false,
+                document.getElementById("themeico").src = "/static/sun.svg",
                 C = S,
                 A = I),
-                1 == N && (xe = !0,
-                    document["getElementById"]("themeico")["src"] = "/static/moon.svg",
+                1 == N && (xe = true,
+                    document.getElementById("themeico").src = "/static/moon.svg",
                     C = "#000000",
                     A = "#141414"),
                 2 == N ? (xe = whiteTextCheckBox.checked,
-                    document.getElementById("themeico")["src"] = "/static/star.svg",
-                    C = primaryColorSelect["value"],
-                    A = secondaryColorSelect["value"],
-                    L["classList"].remove("hidden")) : L.classList["add"]("hidden"),
+                    document.getElementById("themeico").src = "/static/star.svg",
+                    C = primaryColorSelect.value,
+                    A = secondaryColorSelect.value,
+                    L.classList.remove("hidden")) : L.classList.add("hidden"),
                 T = Xr(A, 10),
                 !noSave && localStorage.setItem("theme", N),
-                ge = !0,
+                ge = true,
                 en(),
                 mr(pe),
                 Sn()
         }
         function gr(e) {
             var t = n;
-            e["target"] == primaryColorSelect ? (C = primaryColorSelect["value"],
+            e.target == primaryColorSelect ? (C = primaryColorSelect.value,
                 Sn()) : e.target == secondaryColorSelect && (A = secondaryColorSelect.value,
                     T = Xr(A, 10),
-                    Sn(!0)),
-                localStorage["setItem"]("customtheme", JSON["stringify"]({
+                    Sn(true)),
+                localStorage.setItem("customtheme", JSON.stringify({
                     primary: primaryColorSelect.value,
-                    secondary: secondaryColorSelect["value"],
-                    texttheme: whiteTextCheckBox["checked"]
+                    secondary: secondaryColorSelect.value,
+                    texttheme: whiteTextCheckBox.checked
                 }))
         }
         function pr(e) {
             var t = n;
-            br(e["target"]["parentElement"].id),
+            br(e.target.parentElement.id),
                 en()
         }
         function br(e, t) {
             var r = n
                 , a = decorationSetting[e];
             a.enabled = null != t ? t : !a.enabled,
-                a["enabled"] ? a.el["classList"]["add"]("enabled") : a.el["classList"]["remove"]("enabled"),
+                a.enabled ? a.el.classList.add("enabled") : a.el.classList.remove("enabled"),
                 localStorage.setItem("dec", ce())
         }
         function xr(e, t, r) {
             var a = n;
-            if (Math["abs"](e - t) > .1) {
+            if (Math.abs(e - t) > .1) {
                 for (var o = 0; o < r; o++)
                     e += (t - e) / 20;
-                return ge = !0,
-                    Math["round"](100 * e) / 100
+                return ge = true,
+                    Math.round(100 * e) / 100
             }
-            return e != t ? (ge = !0,
-                Math["round"](e)) : e
+            return e != t ? (ge = true,
+                Math.round(e)) : e
         }
-        var uP = 200;
+        var flushRate = 200;
         var aB;
 
         function setWriteInterval() {
             if (aB) clearInterval(aB);
-            aB = setInterval(flushWrites, uP);
+            aB = setInterval(flushWrites, flushRate);
         }
         window.flushAmount = 250
         function flushWrites() {
             var e = n;
-            if (server && server["readyState"] == server["OPEN"]) {
+            if (server && server.readyState == server.OPEN) {
                 if ((Le || Oe || Re || De) && we.size !== 0) {
                     var t = {};
-                    Le && (t.l = [Ce.x, Ce.y]);
+                    Le && (t.l = [cur.x, cur.y]);
                     Oe && (t.c = pe);
-                    Re && (t.n = clientOptions["anonymous"]["checked"]);
+                    Re && (t.n = clientOptions.anonymous.checked);
                     De && (t.p = [qe.coords.x, qe.coords.y]);
 
-                    server["send"](Or({ ce: t }));
+                    server.send(Or({ ce: t }));
                     Le = Oe = Re = De = false;
                 }
 
                 if (Me.length > 0) {
-                    var r = Me["splice"](0, window.flushAmount),
+                    var r = Me.splice(0, window.flushAmount),
                         tA = [];
                     e: for (var o = 0; o < r.length; o++) {
                         var [i, c, l, u, s] = r[o];
-                        for (var d = 0; d < tA["length"]; d++) {
+                        for (var d = 0; d < tA.length; d++) {
                             if (tA[d][0] === i && tA[d][1] === c) {
-                                tA[d]["push"](l, u, s);
+                                tA[d].push(l, u, s);
                                 continue e;
                             }
                         }
-                        tA["push"]([i, c, l, u, s]);
+                        tA.push([i, c, l, u, s]);
                     }
                     server.send(Or({ e: tA }));
                 }
@@ -4286,25 +4286,25 @@
             var int = parseInt(newer);
             if (isNaN(int)) int = 200;
             if (int < 0) int = 0;
-            uP = int;
+            flushRate = int;
             setWriteInterval(); // restart interval
         }
-        window.cursors = Pe;
-        window.cursor = Ce;
-        window.writeFlushRate = uP;
+        window.cursors = curs;
+        window.cursor = cur;
+        window.writeFlushRate = flushRate;
         window.flushWrites = flushWrites;
 
 
         window.w.setFlushInterval = setFlushInterval;
-        window.w.changeTheme = function (e, noSave = !1) {
+        window.w.changeTheme = function (e, noSave = false) {
             if (e === undefined) {
-                yr(0)
+                changeTheme(0)
                 return;
             }
-            if (e == "light") yr(0, noSave);
-            else if (e == "dark") yr(1, noSave);
-            else if (e == "custom") yr(2, noSave);
-            else yr(e, noSave);
+            if (e == "light") changeTheme(0, noSave);
+            else if (e == "dark") changeTheme(1, noSave);
+            else if (e == "custom") changeTheme(2, noSave);
+            else changeTheme(e, noSave);
 
 
         }
@@ -4321,38 +4321,38 @@
         window.Tile = {}
         window.Tile.get = function (e, t) {
             var r = n;
-            if (!we["has"](e + "," + t))
+            if (!we.has(e + "," + t))
                 return null;
             var a = we.get(e + "," + t);
             return a
         };
         window.Tile.set = function (e, t, r, a) {
             var o = n;
-            if (!we["has"](e + "," + t))
-                return !1;
+            if (!we.has(e + "," + t))
+                return false;
             var i = we.get(e + "," + t);
-            return i["txt"][r] = a,
-                !0
+            return i.txt[r] = a,
+                true
         }
         window.Tile.exists = function (e, t) {
             var r = n;
-            return we["has"](e + "," + t)
+            return we.has(e + "," + t)
         }
         window.Tile.loaded = function (e, t) {
             return !!Tile.get(e, t)
         }
         window.Tile.delete = function (e, t) {
             var r = n;
-            if (!we["has"](e + "," + t))
-                return !1;
+            if (!we.has(e + "," + t))
+                return false;
             var a = we.get(e + "," + t);
-            return a.protected ? !1 : (we.delete(e + "," + t),
-                !0)
+            return a.protected ? false : (we.delete(e + "," + t),
+                true)
         }
         window.Tile.visible = function (e, t) {
             var r = n;
-            if (!we["has"](e + "," + t))
-                return !1;
+            if (!we.has(e + "," + t))
+                return false;
             var a = we.get(e + "," + t);
             return !xt([e, t], bt(20))
         }
@@ -4391,7 +4391,7 @@
          } */
         window.Tile.saveBlob = function (e, t) {
             var r = n;
-            if (!we["has"](e + "," + t)) return null;
+            if (!we.has(e + "," + t)) return null;
 
             var tile = we.get(e + "," + t);
             if (!tile || !tile.img) return null;
@@ -4418,35 +4418,35 @@
             }, 'image/png');
         };
 
-        window.w.goto = vr;
-        window.w.tp = Zn;
-        window.w.cursors = Pe;
-        window.w.redraw = () => ge = !0;
+        window.w.goto = goto;
+        window.w.tp = teleport;
+        window.w.cursors = curs;
+        window.w.redraw = () => ge = true;
         window.w.renderChunkAmount = renderChunkAmount;
-        window.w.setRenderChunkAmount = function (e) { renderChunkAmount = parseInt(e, 0); ge = !0 };
+        window.w.setRenderChunkAmount = function (e) { renderChunkAmount = parseInt(e, 0); ge = true };
         window.w.getTheme = function () { return { mode: N, primary: C, secondary: A, texttheme: whiteTextCheckBox.checked }; };
         window.getChar = function (e, t, r = 0, a = 0) {
             if (e === undefined || t === undefined || r === undefined || a === undefined) {
                 [e, t, r, a] = window.cursorCoords;
             }
 
-            const Xq = Tile.get(e, t);
-            if (!Xq) return null;
+            const tile = Tile.get(e, t);
+            if (!tile) return null;
 
-            const Md = 20;
-            const Fh = 10;
+            const _20 = 20;
+            const _10 = 10;
 
             if (r < 0) {
-                e -= Math.ceil(Math.abs(r) / Md);
-                r = (r % Md + Md) % Md;
+                e -= Math.ceil(Math.abs(r) / _20);
+                r = (r % _20 + _20) % _20;
             }
             if (a < 0) {
-                t -= Math.ceil(Math.abs(a) / Fh);
-                a = (a % Fh + Fh) % Fh;
+                t -= Math.ceil(Math.abs(a) / _10);
+                a = (a % _10 + _10) % _10;
             }
 
-            const Tp = a * Md + r;
-            return Xq.txt[Tp];
+            const Tp = a * _20 + r;
+            return tile.txt[Tp];
         };
 
         window.getCharColor = function (e, t, r = 0, a = 0) {
@@ -4454,34 +4454,34 @@
                 [e, t, r, a] = window.cursorCoords;
             }
 
-            const Vz = Tile.get(e, t);
-            if (!Vz) return null;
+            const tile = Tile.get(e, t);
+            if (!tile) return null;
 
-            const Rn = 20;
-            const Bw = 10;
+            const _20 = 20;
+            const _10 = 10;
 
             if (r < 0) {
-                e -= Math.ceil(Math.abs(r) / Rn);
-                r = (r % Rn + Rn) % Rn;
+                e -= Math.ceil(Math.abs(r) / _20);
+                r = (r % _20 + _20) % _20;
             }
             if (a < 0) {
-                t -= Math.ceil(Math.abs(a) / Bw);
-                a = (a % Bw + Bw) % Bw;
+                t -= Math.ceil(Math.abs(a) / _10);
+                a = (a % _10 + _10) % _10;
             }
 
-            const Kf = a * Rn + r;
-            return Vz.clr[Kf] % 31;
+            const Kf = a * _20 + r;
+            return tile.clr[Kf] % 31;
         };
 
         window.getCharDecoration = function (e) {
 
-            const Lj = Math.floor(e / 31);
+            const decoId = Math.floor(e / 31);
             return {
 
-                bold: (Lj & 8) == 8,
-                italic: (Lj & 4) == 4,
-                underline: (Lj & 2) == 2,
-                strike: (Lj & 1) == 1
+                bold: (decoId & 8) == 8,
+                italic: (decoId & 4) == 4,
+                underline: (decoId & 2) == 2,
+                strike: (decoId & 1) == 1
             };
         };
 
@@ -4490,39 +4490,39 @@
                 [e, t, r, a] = window.cursorCoords;
             }
 
-            const Qm = Tile.get(e, t);
-            if (!Qm) return null;
+            const tile = Tile.get(e, t);
+            if (!tile) return null;
 
-            const Nw = 20;
-            const Xv = 10;
+            const _20 = 20;
+            const _10 = 10;
 
             if (r < 0) {
-                e -= Math.ceil(Math.abs(r) / Nw);
-                r = (r % Nw + Nw) % Nw;
+                e -= Math.ceil(Math.abs(r) / _20);
+                r = (r % _20 + _20) % _20;
             }
             if (a < 0) {
-                t -= Math.ceil(Math.abs(a) / Xv);
-                a = (a % Xv + Xv) % Xv;
+                t -= Math.ceil(Math.abs(a) / _10);
+                a = (a % _10 + _10) % _10;
             }
 
-            const Pd = a * Nw + r;
-            const Uf = Qm.txt[Pd];
-            const Jy = Qm.clr[Pd];
-            const Gh = Jy % 31;
+            const Pd = a * _20 + r;
+            const char = tile.txt[Pd];
+            const clr = tile.clr[Pd];
+            const color = clr % 31;
             return {
                 tileCoords: [e, t, r, a],
-                char: Uf,
-                color: Gh,
-                deco: getCharDecoration(Jy)
+                char: char,
+                color: color,
+                deco: getCharDecoration(clr)
             };
         };
 
         window.getCharInfoXY = function (e, t) {
-            const Rd = Math.floor(e / 20) * 20;
-            const Bs = Math.floor(t / 10) * 10;
-            const Qp = e % 20;
-            const Lk = t % 10;
-            return getCharInfo(Rd, Bs, Qp, Lk);
+            const tileX = Math.floor(e / 20) * 20;
+            const tileY = Math.floor(t / 10) * 10;
+            const charX = e % 20;
+            const charY = t % 10;
+            return getCharInfo(tileX, tileY, charX, charY);
         };
 
 
@@ -4536,13 +4536,13 @@
         Object.defineProperty(window, "cursorCoords", {
             get: function () {
                 var e = n;
-                const [tileX, tileY, offsetX, offsetY] = XYtoTile(Ce.x, Ce.y);
+                const [tileX, tileY, offsetX, offsetY] = XYtoTile(cur.x, cur.y);
                 return [tileX, tileY, offsetX, offsetY];
             }
         });
         Object.defineProperty(window, "cursorCoordsXY", {
             get: function () {
-                return [Ce.x, Ce.y];
+                return [cur.x, cur.y];
             }
         });
         window.getTileCoordsFromMouseCoords = function (e) {
@@ -4553,7 +4553,7 @@
         setWriteInterval();
         var wr = performance.now()
             , Mr = 100
-            , kr = performance["now"]() + 1e3;
+            , kr = performance.now() + 1e3;
         window.requestAnimationFrame((function e() {
             var t = n
                 , r = Math["min"](Math["ceil"](performance["now"]() - wr), 100);
@@ -4573,10 +4573,10 @@
                     0 == Qe.dy && 0 == Qe.dx && (Qe = null)
             }
             if (clientOptions["smoothcursors"]["checked"]) {
-                Ce.rawx = xr(Ce["rawx"], Ce.x, r),
-                    Ce.rawy = xr(Ce["rawy"], Ce.y, r);
+                cur.rawx = xr(cur["rawx"], cur.x, r),
+                    cur.rawy = xr(cur["rawy"], cur.y, r);
                 var o = bt(20);
-                for (const e of Pe.values())
+                for (const e of curs.values())
                     null == e["rawx"] || null == e["rawy"] || xt(e.l, o) || (e["rawx"] = xr(e["rawx"], e.l[0], r),
                         e["rawy"] = xr(e["rawy"], e.l[1], r))
             }
@@ -4603,7 +4603,7 @@
                     xt(h = wt(t), s) ? xt(h, f) && delete we.get(t)["img"] : pt(t, h);
                 if (clientOptions["showothercurs"]["checked"] && (!wallSettings.hideCursors["checked"] || m)) {
                     gt(canvasGetContext);
-                    for (const t of Pe.values()) {
+                    for (const t of curs.values()) {
                         var h = t.l;
                         if (!xt(h, s)) {
                             var y = Math.round(10 * t.rawx * v)
@@ -4648,7 +4648,7 @@
                     var x = 10 * Ne[b][0] * v
                         , w = 20 * Ne[b][1] * v;
                     if (clientOptions["showothercurs"]["checked"] && m) {
-                        var M = Pe.get(Ne[b][4]);
+                        var M = curs.get(Ne[b][4]);
                         null != M && M["highlighted"] && (canvasGetContext.lineWidth = 3 * v,
                             canvasGetContext["strokeStyle"] = rgb888(p) ? gst(p) : colorHexs[p],
                             canvasGetContext["beginPath"](),
@@ -4663,11 +4663,11 @@
                 if (clientOptions.roundCursors["checked"] ? (canvasGetContext["fillStyle"] = be,
                     canvasGetContext.beginPath(),
                     canvasGetContext.lineWidth = 2 * v,
-                    kt(y = Math["round"](10 * Ce["rawx"] * v), g = Math["round"](20 * Ce["rawy"] * v), r, a, 2 * v),
+                    kt(y = Math["round"](10 * cur["rawx"] * v), g = Math["round"](20 * cur["rawy"] * v), r, a, 2 * v),
                     canvasGetContext.fill()) :
                     (
                         canvasGetContext["fillStyle"] = be,
-                        kt(y = Math["round"](10 * Ce["rawx"] * v), g = Math["round"](20 * Ce["rawy"] * v), r, a)
+                        kt(y = Math["round"](10 * cur["rawx"] * v), g = Math["round"](20 * cur["rawy"] * v), r, a)
                     ),
                     clientOptions["shownametags"].checked && (gt(canvasGetContext),
                         Mt(
@@ -4711,8 +4711,8 @@
             window["requestAnimationFrame"](e)
         }
         )),
-            null != localStorage["getItem"]("x") && (Ce.x = parseInt(localStorage["getItem"]("x"))),
-            null != localStorage["getItem"]("y") && (Ce.y = parseInt(localStorage["getItem"]("y"))),
+            null != localStorage["getItem"]("x") && (cur.x = parseInt(localStorage["getItem"]("x"))),
+            null != localStorage["getItem"]("y") && (cur.y = parseInt(localStorage["getItem"]("y"))),
             null != localStorage["getItem"]("dec") && le(localStorage["getItem"]("dec")),
             null != localStorage.getItem("customfont") && (customFontInput["value"] = localStorage["getItem"]("customfont")),
             null != localStorage.getItem("customfontsize") && (customFontSizeInput.value = localStorage["getItem"]("customfontsize")),
@@ -4748,7 +4748,7 @@
         }
         if (null != localStorage.getItem("theme")) {
             var Ar = localStorage["getItem"]("theme");
-            yr(0 == Ar || 1 == Ar || 2 == Ar ? Number(Ar) : N)
+            changeTheme(0 == Ar || 1 == Ar || 2 == Ar ? Number(Ar) : N)
         }
         var Tr, Br = (Tr = {},
             window.location["href"]["replace"](/[?&]+([^=&]+)=([^&]*)/gi, (function (e, t, n) {
@@ -4850,9 +4850,9 @@
             };
         }
         window.w.generateCoords = Lr;
-        null != Br.x && (Ce.x = parseInt(Br.x),
+        null != Br.x && (cur.x = parseInt(Br.x),
             Fr = !0),
-            null != Br.y && (Ce.y = -1 * parseInt(Br.y),
+            null != Br.y && (cur.y = -1 * parseInt(Br.y),
                 Fr = !0),
             Br["noui"] && (infoElement["classList"].add("hidden"),
                 hn["style"]["display"] = "none");
@@ -4860,11 +4860,11 @@
         if (Wr.length > 0)
             if (Wr["startsWith"]("~"))
                 o = "/" + Wr,
-                    Fr || Zn(0, 0);
+                    Fr || teleport(0, 0);
             else {
                 var Hr = Lr(Wr);
-                Ce.x = Hr.x,
-                    Ce.y = Hr.y
+                cur.x = Hr.x,
+                    cur.y = Hr.y
             }
         function connect() {
             var e = n;
@@ -4965,15 +4965,15 @@
             ];
         }
 
-        isNaN(Ce.x) && (Ce.x = 0),
-            isNaN(Ce.y) && (Ce.y = 0),
-            Ce["start"] = Ce.x,
+        isNaN(cur.x) && (cur.x = 0),
+            isNaN(cur.y) && (cur.y = 0),
+            cur["start"] = cur.x,
             setTimeout((function () {
                 var e = n;
                 window["history"]["replaceState"]({}, document["title"], location["pathname"])
             }
             ), 0),
-            Zn(Ce.x, Ce.y),
+            teleport(cur.x, cur.y),
             null != localStorage.getItem("zoom") && setZoom(JSON["parse"](localStorage["getItem"]("zoom")), !1),
             connect(),
             Or = function (e, r) {
