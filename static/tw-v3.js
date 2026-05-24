@@ -3012,33 +3012,33 @@
                         j == 1 || j == 2 ? document.getElementById("toggled").style.display = "inline-flex" : document.getElementById("toggled").style.display = "none",
                         2 == j ? (addMembersElement.style.display = "block",
                             deleteWallElement.style.display = "block") : (addMembersElement.style.display = "none"),
-                        wallSettings["readOnly"]["disabled"] =
-                        wallSettings["private"].disabled =
-                        wallSettings["hideCursors"].disabled =
-                        wallSettings.disableChat["disabled"] =
-                        wallSettings["disableColour"]["disabled"] =
-                        wallSettings["disableBraille"].disabled =
-                        wallSettings["unlisted"].disabled = 
-                        wallSettings["regonly"].disabled =
-                        wallSettings["webhook"].disabled =
-                        wallSettings["nsfw"].disabled = !(2 == j || m),
+                        wallSettings.readOnly.disabled =
+                        wallSettings.private.disabled =
+                        wallSettings.hideCursors.disabled =
+                        wallSettings.disableChat.disabled =
+                        wallSettings.disableColour.disabled =
+                        wallSettings.disableBraille.disabled =
+                        wallSettings.unlisted.disabled = 
+                        wallSettings.regonly.disabled =
+                        wallSettings.webhook.disabled =
+                        wallSettings.nsfw.disabled = !(2 == j || m),
 
-                        m && (deleteWallElement["style"]["display"] = "textwall" != wall || K ? "block" : "none"),
-                        0 == j && (Ve = !1,
-                            Ze = !1),
-                        ge = !0,
+                        m && (deleteWallElement.style.display = "textwall" != wall || K ? "block" : "none"),
+                        0 == j && (Ve = false,
+                            Ze = false),
+                        ge = true,
                         xn();
                     window.w.emit("perms", j);
                     break;
                 case "addmem":
-                    Fn(data["addmem"]),
-                        optionsmenu.scrollTop = optionsmenu["clientHeight"];
-                    window.w.emit("memberadded", data["addmem"]);
+                    Fn(data.addmem),
+                        optionsmenu.scrollTop = optionsmenu.clientHeight;
+                    window.w.emit("memberadded", data.addmem);
                     break;
                 case "ml":
                     for (memberList = data.ml,
-                        document["getElementById"]("memberlist")["innerHTML"] = "",
-                        s = 0; s < memberList["length"]; s++)
+                        document.getElementById("memberlist").innerHTML = "",
+                        s = 0; s < memberList.length; s++)
                         Fn(memberList[s]);
                     window.w.emit("memberlist", memberList);
                     break;
@@ -3048,21 +3048,21 @@
                     break;
                 case "nametaken":
                     showToast("Username is already in use.", 3e3),
-                        vn(!1);
-                    window.w.emit("nametaken", data["nametaken"]);
+                        vn(false);
+                    window.w.emit("nametaken", data.nametaken);
                     break;
                 case "noreg":
                     showToast("Registration is closed.", 3e3),
-                        window.w.emit("regclosed", data["noreg"]);
+                        window.w.emit("regclosed", data.noreg);
                     vn(!1);
                     break;
                 case "wrongpass":
                     showToast("Password is incorrect.", 3e3),
-                        window.w.emit("passfail", data["wrongpass"]);
+                        window.w.emit("passfail", data.wrongpass);
                     vn(!1);
                     break;
                 case "accbanned":
-                    const banInfo = data["accbanned"];
+                    const banInfo = data.accbanned;
                     let expiryDate;
 
                     if (banInfo.expiresAt === 0) {
@@ -3082,26 +3082,26 @@
 
                     document.getElementById("accbanned").innerText = message;
 
-                    vn(!1);
+                    vn(false);
                     if (localStorage.getItem("token")) {
                         localStorage.removeItem("token");
                         localStorage.removeItem("username");
                     }
 
-                    vn(!1);
-                    Re = !0;
-                    dt(!0, !0);
+                    vn(false);
+                    Re = true;
+                    dt(true, true);
 
                     window.w.emit("accbanned", banInfo);
                     break;
                 case "loginfail":
                     showToast("Username/Password is incorrect.", 3e3),
-                        vn(!1);
-                    window.w.emit("loginfail", data["loginfail"]);
+                        vn(false);
+                    window.w.emit("loginfail", data.loginfail);
                     break;
                 case "tokenfail":
-                    vn(!1),
-                        localStorage["removeItem"]("username"),
+                    vn(false),
+                        localStorage.removeItem("username"),
                         localStorage.removeItem("token");
                     window.w.emit("tokenfail", data.tokenfail);
                     break;
@@ -3110,52 +3110,52 @@
                     showToast("Your token has been invalidated.", 3000);
                     break;
                 case "namechanged":
-                    vn(!1),
+                    vn(false),
                         showToast("Your username is now: " + (je = data.namechanged), 3e3),
-                        localStorage["setItem"]("username", je),
+                        localStorage.setItem("username", je),
                         Bn(),
-                        ge = !0,
-                        Re = !0;
+                        ge = true,
+                        Re = true;
                     window.w.emit("namechanged", data.namechanged);
                     break;
                 case "passchanged":
                     showToast("Password has been changed.", 3e3),
-                        vn(!1);
+                        vn(false);
                     window.w.emit("passchanged", data["passchanged"]);
                     break;
                 case "accountdeleted":
                     showToast("Your account has been deleted.", 3e3),
-                        vn(!1),
-                        Re = !0,
-                        dt(!0, !0);
-                    window.w.emit("accountdeleted", data["accountdeleted"]);
+                        vn(false),
+                        Re = true,
+                        dt(true, true);
+                    window.w.emit("accountdeleted", data.accountdeleted);
                     break;
                 case "cool":
                     showToast("Rate limit", 3e3),
-                        vn(!1);
+                        vn(false);
                     break;
                 case "token":
-                    vn(!1);
-                    var R = data["token"];
+                    vn(false);
+                    var R = data.token;
                     je = R[0],
-                        localStorage["setItem"]("username", je),
-                        localStorage["setItem"]("token", R[1]),
-                        document["getElementById"]("login")["style"]["display"] = "none",
-                        document["getElementById"]("register")["style"]["display"] = "none",
-                        document["getElementById"]("loggedin").style["display"] = "block",
+                        localStorage.setItem("username", je),
+                        localStorage.setItem("token", R[1]),
+                        document.getElementById("login").style.display = "none",
+                        document.getElementById("register").style.display = "none",
+                        document.getElementById("loggedin").style.display = "block",
                         Bn(),
-                        ge = !0,
-                        Re = !0;
+                        ge = true,
+                        Re = true;
                     window.w.emit("token", je);
                     break;
                 case "admin":
 
-                    data["admin"] ? (m = !0,
-                        document["getElementById"]("admin").style.display = "block") : (m = !1,
-                            document.getElementById("admin")["style"].display = "none");
+                    data.admin ? (m = true,
+                        document.getElementById("admin").style.display = "block") : (m = false,
+                            document.getElementById("admin").style.display = "none");
                     break;
                 case "t":
-                    document["getElementById"]("t").value = data.t
+                    document.getElementById("t").value = data.t
                     break;
                 case "typing":
                     var typingInfo = data.typing;
@@ -3185,116 +3185,116 @@
         }
         function Bn() {
             var e = n
-                , t = document["getElementById"]("name");
-            t["innerText"] = je,
-                t["href"] = "/~" + je,
-                t["onclick"] = function (e) {
+                , t = document.getElementById("name");
+            t.innerText = je,
+                t.href = "/~" + je,
+                t.onclick = function (e) {
                     e.preventDefault(),
                         vr("~" + je)
                 }
         }
         function Fn(e) {
             var t = n
-                , r = document["getElementById"]("memberlist")
-                , a = document["createElement"]("div");
-            a["classList"]["add"]("member"),
-                a["innerText"] = e,
-                a["addEventListener"]("click", Pn),
+                , r = document.getElementById("memberlist")
+                , a = document.createElement("div");
+            a.classList.add("member"),
+                a.innerText = e,
+                a.addEventListener("click", Pn),
                 r.appendChild(a)
         }
         function Pn(e) {
             var t = n
-                , r = e["target"]["innerText"];
+                , r = e.target.innerText;
             server.send(Or({
                 rmmem: r
             })),
-                e["target"].remove()
+                e.target.remove()
         }
         function Ln(e) {
-            for (var t = n, r = {}, a = [], o = !1, i = 0; i < e["length"]; i += 2) {
+            for (var t = n, r = {}, a = [], o = false, i = 0; i < e["length"]; i += 2) {
                 var c = e[i]
                     , l = e[i + 1];
-                "main" == c ? o = !0 : a.push(c),
+                "main" == c ? o = true : a.push(c),
                     r[c] = l
             }
-            a["sort"](),
-                o && a["unshift"]("main"),
-                wallListElement["innerHTML"] = "",
-                wallListElement["appendChild"](document["createElement"]("hr"));
-            var u = document["createElement"]("span");
-            u["innerText"] = wall + "'s walls:",
-                wallListElement["appendChild"](u);
-            var s = wallListElement.appendChild(document["createElement"]("ul"));
-            for (s.classList["add"]("walllist"),
+            a.sort(),
+                o && a.unshift("main"),
+                wallListElement.innerHTML = "",
+                wallListElement.appendChild(document.createElement("hr"));
+            var u = document.createElement("span");
+            u.innerText = wall + "'s walls:",
+                wallListElement.appendChild(u);
+            var s = wallListElement.appendChild(document.createElement("ul"));
+            for (s.classList.add("walllist"),
                 i = 0; i < a.length; i++) {
                 l = r[c = a[i]];
-                var d = s["appendChild"](document["createElement"]("li"))
-                    , f = document["createElement"]("a")
+                var d = s.appendChild(document.createElement("li"))
+                    , f = document.createElement("a")
                     , v = document.createElement("img");
-                l ? (v["src"] = "/static/lock.svg",
-                    v["alt"] = v["title"] = "Private") : (v["src"] = "/static/lock_open.svg",
-                        v["alt"] = v.title = "Public");
+                l ? (v.src = "/static/lock.svg",
+                    v.alt = v.title = "Private") : (v.src = "/static/lock_open.svg",
+                        v.alt = v.title = "Public");
                 const e = "~" + wall + ("main" == c ? "" : "/" + c);
-                f["appendChild"](v),
-                    f["appendChild"](document["createTextNode"](e)),
-                    f.href = "/" + f["innerText"],
-                    f["classList"].add("buttonlink"),
-                    c == subwall && f["classList"]["add"]("bold"),
-                    f["addEventListener"]("click", (function (n) {
-                        n["preventDefault"](),
+                f.appendChild(v),
+                    f.appendChild(document.createTextNode(e)),
+                    f.href = "/" + f.innerText,
+                    f.classList.add("buttonlink"),
+                    c == subwall && f.classList.add("bold"),
+                    f.addEventListener("click", (function (n) {
+                        n.preventDefault(),
                             vr(e)
                     }
                     )),
                     d.appendChild(f),
-                    s["appendChild"](d)
+                    s.appendChild(d)
             }
-            if (wall == je["toLowerCase"]()) {
-                var m = wallListElement["appendChild"](document["createElement"]("form"));
-                m.style["display"] = "flex",
-                    m.style["justifyContent"] = "space-between";
-                var h = m.appendChild(document["createElement"]("input"));
+            if (wall == je.toLowerCase()) {
+                var m = wallListElement.appendChild(document.createElement("form"));
+                m.style.display = "flex",
+                    m.style.justifyContent = "space-between";
+                var h = m.appendChild(document.createElement("input"));
                 h.type = "text",
-                    h["placeholder"] = "Create a new wall",
-                    h["maxLength"] = 24,
-                    h["style"].width = "100%";
-                var y = m["appendChild"](document["createElement"]("input"));
-                y["type"] = "submit",
-                    y["value"] = "Create",
+                    h.placeholder = "Create a new wall",
+                    h.maxLength = 24,
+                    h.style.width = "100%";
+                var y = m.appendChild(document.createElement("input"));
+                y.type = "submit",
+                    y.value = "Create",
                     y.addEventListener("click", (function (e) {
                         var n = t;
                         e.preventDefault();
-                        var r = h["value"];
+                        var r = h.value;
                         h.value = "",
-                            usernameCheck["test"](r) ? (Cn(wall, r),
+                            usernameCheck.test(r) ? (Cn(wall, r),
                                 Zn(0, 0),
-                                teleportElement.classList["remove"]("open")) : showToast("Invalid wall name", 2e3)
+                                teleportElement.classList.remove("open")) : showToast("Invalid wall name", 2e3)
                     }
                     ))
             }
         }
         function On() {
             var e = n;
-            nearby = Pe["size"],
-                nearbyElement["innerText"] = "" + nearby + "",
-                document.getElementById("chatmsg")["placeholder"] = 0 == nearby ? "chat to nobody" : 1 == nearby ? "chat to 1 other user" : "chat to " + nearby + " other users",
+            nearby = Pe.size,
+                nearbyElement.innerText = "" + nearby + "",
+                document.getElementById("chatmsg").placeholder = 0 == nearby ? "chat to nobody" : 1 == nearby ? "chat to 1 other user" : "chat to " + nearby + " other users",
                 y || En()
         }
         function Rn(e) {
             var t = n;
-            Ge["unshift"]([e.clientX * v / zoomValue, e.clientY * v / zoomValue, performance["now"]()]),
-                Ge.length > 4 && Ge["pop"]()
+            Ge.unshift([e.clientX * v / zoomValue, e.clientY * v / zoomValue, performance.now()]),
+                Ge.length > 4 && Ge.pop()
         }
-        var Dn, Nn = !1, jn = 0;
+        var Dn, Nn = false, jn = 0;
         function Un(e) {
             var t = n;
-            e["isTrusted"] && (e["preventDefault"](),
-                e["pointerId"] == Dn && (Dn = void 0))
+            e.isTrusted && (e.preventDefault(),
+                e.pointerId == Dn && (Dn = void 0))
         }
         function Wn(e) {
             var t = n;
             return {
-                x: Math["floor"]((e.pageX * devicePixelRatio - qe["offset"].x) / (10 * v)),
-                y: Math["floor"]((e["pageY"] * devicePixelRatio - qe["offset"].y) / (20 * v))
+                x: Math.floor((e.pageX * devicePixelRatio - qe.offset.x) / (10 * v)),
+                y: Math.floor((e.pageY * devicePixelRatio - qe.offset.y) / (20 * v))
             }
         }
 
