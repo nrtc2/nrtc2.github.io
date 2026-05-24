@@ -1215,7 +1215,7 @@
                         return "deleteContentBackward" == e.inputType ? (Ce.x -= 1,
                             Vn(" ", 0, !1, !0) ||
                             void nr()) : void (null != e.data && "" != e.data && "insertFromPaste" != e.inputType && (nr(),
-                                Array.from(e.data).length > 1 ? pasteTrigger(e.data) : Vn(e.data, 1)));
+                                Array.from(e.data).length > 1 ? pasteCanvas(e.data) : Vn(e.data, 1)));
                     cr()
                 }
             }
@@ -1379,14 +1379,14 @@
             )),
             textArea.addEventListener("paste", (function (e) {
                 var t = n;
-                e.isTrusted && pasteTrigger((e.clipboardData || window.clipboardData).getData("text"))
+                e.isTrusted && pasteCanvas((e.clipboardData || window.clipboardData).getData("text"))
             }
             )),
             textArea.addEventListener("copy", (function (e) {
                 var t = n
                     , r = rr();
                 if (r) {
-                    ar(r[0]),
+                    copy(r[0]),
                         e.preventDefault(),
                         e.clipboardData || showToast("Copied character.", 1e3);
                     var a = document.getElementById("copyico");
@@ -1407,7 +1407,7 @@
             coordsElement.addEventListener("click", (function () {
                 var e = n;
                 history.pushState({}, null, o),
-                    ar(location.protocol + "//" + location.host + o + "?x=" + Ce.x + "&y=" + -Ce.y),
+                    copy(location.protocol + "//" + location.host + o + "?x=" + Ce.x + "&y=" + -Ce.y),
                     showToast("Copied link.", 1e3),
                     textArea.focus()
             }
@@ -1450,7 +1450,7 @@
                 var e = n;
                 navigator.clipboard.readText().then((function (t) {
                     var n = e;
-                    pasteTrigger(t);
+                    pasteCanvas(t);
                     var r = document.getElementById("pasteico");
                     r.src = "/static/done.svg",
                         setTimeout((function () {
@@ -3302,29 +3302,29 @@
         function Hn() {
             var e = n;
             coordsElement.innerText = Ce.x + "," + -Ce.y,
-                Ce.x + qe["offset"].x / v / 10 <= 0 && Mn(10 * -Ce.x * v, qe["offset"].y),
-                Ce.x + qe["offset"].x / v / 10 >= window["innerWidth"] / zoomValue / 10 - 1 && Mn((10 * -Ce.x + window.innerWidth / zoomValue - 10) * v, qe["offset"].y),
-                Ce.y + qe.offset.y / v / 20 <= 0 && Mn(qe["offset"].x, 20 * -Ce.y * v);
-            var t = window["innerWidth"] < 750 ? infoElement.clientHeight : 0;
-            Ce.y + qe["offset"].y / v / 20 >= (window["innerHeight"] - t) / zoomValue / 20 - 1 && Mn(qe["offset"].x, (20 * -Ce.y + window["innerHeight"] / zoomValue - 20 - t / zoomValue) * v),
+                Ce.x + qe.offset.x / v / 10 <= 0 && Mn(10 * -Ce.x * v, qe.offset.y),
+                Ce.x + qe.offset.x / v / 10 >= window.innerWidth / zoomValue / 10 - 1 && Mn((10 * -Ce.x + window.innerWidth / zoomValue - 10) * v, qe.offset.y),
+                Ce.y + qe.offset.y / v / 20 <= 0 && Mn(qe.offset.x, 20 * -Ce.y * v);
+            var t = window.innerWidth < 750 ? infoElement.clientHeight : 0;
+            Ce.y + qe.offset.y / v / 20 >= (window.innerHeight - t) / zoomValue / 20 - 1 && Mn(qe.offset.x, (20 * -Ce.y + window.innerHeight / zoomValue - 20 - t / zoomValue) * v),
                 Le = Ae.x != Ce.x || Ae.y != Ce.y || Le,
                 Ae.x = Ce.x,
                 Ae.y = Ce.y,
-                clientOptions["smoothcursors"]["checked"] || (Ce["rawx"] = Ce.x,
+                clientOptions.smoothcursors.checked || (Ce.rawx = Ce.x,
                     Ce.rawy = Ce.y),
                 (
                     /*Xn() culprit: clears redos and undos */false),
-                Ce.x < Ce["start"] && (Ce.start = Ce.x),
-                ge = !0,
-                localStorage["setItem"]("x", Ce.x),
-                localStorage["setItem"]("y", Ce.y)
+                Ce.x < Ce.start && (Ce.start = Ce.x),
+                ge = true,
+                localStorage.setItem("x", Ce.x),
+                localStorage.setItem("y", Ce.y)
         }
         function Kn(e, t, r, a) {
 
             var o = n;
-            clientOptions["disablecolour"].checked && (r = 0),
+            clientOptions.disablecolour.checked && (r = 0),
                 r = Zr(r)[0],
-                xt([e, t], bt(20)) || Ne["push"]([e, t, clientOptions["showFeedback"].checked ? .1 : 0, r, a])
+                xt([e, t], bt(20)) || Ne.push([e, t, clientOptions.showFeedback.checked ? .1 : 0, r, a])
         }
 
         function Xn() {
@@ -3333,39 +3333,39 @@
         }
         canvasElement.addEventListener("touchstart", (function (e) {
             var t = n;
-            2 === e["touches"]["length"] && (Nn = !0,
+            2 === e.touches.length && (Nn = true,
                 Dn = void 0,
                 jn = 0,
-                textArea["blur"]())
+                textArea.blur())
         }
         ), {
-            passive: !0
+            passive: true
         }),
-            canvasElement["addEventListener"]("touchmove", (function (e) {
+            canvasElement.addEventListener("touchmove", (function (e) {
                 var r = n;
                 Nn && (function (e) {
                     var n = t;
                     if (e.touches.length > 1) {
-                        var r = Math["sqrt"](Jr(e.touches[0]["pageX"] - e.touches[1]["pageX"]) + Jr(e.touches[0]["pageY"] - e["touches"][1]["pageY"]));
-                        0 != jn && setZoom(clampedValue - (jn - r) / 300, !0),
+                        var r = Math.sqrt(Jr(e.touches[0].pageX - e.touches[1].pageX) + Jr(e.touches[0].pageY - e.touches[1].pageY));
+                        0 != jn && setZoom(clampedValue - (jn - r) / 300, true),
                             Dn = void 0,
                             jn = r
                     }
                 }(e),
-                    textArea["blur"]())
+                    textArea.blur())
             }
             ), {
-                passive: !0
+                passive: true
             }),
-            canvasElement["addEventListener"]("touchend", (function (e) {
+            canvasElement.addEventListener("touchend", (function (e) {
                 Nn && (Dn = void 0,
                     jn = 0,
-                    Nn = !1,
-                    textArea["blur"]())
+                    Nn = false,
+                    textArea.blur())
             }
             ));
         var zn = 0
-            , qn = performance["now"]()
+            , qn = performance.now()
             , Yn = 0;
         const Jn = [4, 5, 7, 8, 9, 18, 11, 20, 13, 28, 15];
         window.prsCol = function (title) {
@@ -3497,8 +3497,8 @@
 
             var Ce = { x: coordX, y: coordY }
             var o = n;
-            if (ie(!1),
-                performance["now"]() - qn >= 15 && (qn = performance.now(),
+            if (ie(false),
+                performance.now() - qn >= 15 && (qn = performance.now(),
                     zn = 0),
                 !e || zn >= 3)
                 return 0;
@@ -3520,21 +3520,21 @@
             Ce.y = data.y;
             char = data.char;
             var i = char.codePointAt();
-            if (wallSettings["disableBraille"]["checked"] && qr(i))
+            if (wallSettings.disableBraille.checked && qr(i))
                 return 0;
-            var c = 20 * Math["floor"](Ce.x / 20)
-                , l = 10 * Math["floor"](Ce.y / 10)
+            var c = 20 * Math.floor(Ce.x / 20)
+                , l = 10 * Math.floor(Ce.y / 10)
                 , u = c + "," + l;
-            if (!we["has"](u))
+            if (!we.has(u))
                 return 0;
-            var s = we["get"](u);
+            var s = we.get(u);
             var A = Ce.x - c + 20 * (Ce.y - l);
-            var cellTextProtected = s["textProtected"] && s["textProtected"][A] === "1";
-            if ((s.protected || cellTextProtected || wallSettings["readOnly"]["checked"] || U && "" == je) && !m && 0 == j || null == s["txt"] || K)
-                return U && "" == je && !wallSettings["readOnly"]["checked"] && showToast("Please log in before typing.", 3e3),
+            var cellTextProtected = s.textProtected && s.textProtected[A] === "1";
+            if ((s.protected || cellTextProtected || wallSettings.readOnly.checked || U && "" == je) && !m && 0 == j || null == s.txt || K)
+                return U && "" == je && !wallSettings.readOnly.checked && showToast("Please log in before typing.", 3e3),
                     0;
 
-            clientOptions.rainbow["checked"] && !r && (
+            clientOptions.rainbow.checked && !r && (
                 clientOptions.rainbowMode.value === "legacy" ? (mr(Jn[Yn]), ++Yn == Jn.length && (Yn = 0)) :
                     (() => {
                         let h = (window.cH = ((window.cH || 0) + (clientOptions.hueSpeed?.value ? parseFloat(clientOptions.hueSpeed.value) : 2)) % 360);
@@ -3552,7 +3552,7 @@
                         mr([Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)], !0);
                     })()
             );
-            var d, f, v, h, y, g, p, b, x, w, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = s["clr"][A], B = Zr(T), F = B[0], P = B[1], L = s.txt[A];
+            var d, f, v, h, y, g, p, b, x, w, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = s.clr[A], B = Zr(T), F = B[0], P = B[1], L = s.txt[A];
             var colorMatch = false;
             if (Array.isArray(F) && Array.isArray(data.color)) {
                 colorMatch = F[0] === data.color[0] && F[1] === data.color[1] && F[2] === data.color[2];
@@ -3566,17 +3566,17 @@
                 E = I,
                 Gn(L) && Gn(k) && (2 & M) == (2 & E) && (1 & M) == (1 & E) && colorMatch) || (r ? (g = Ce.x,
                     p = Ce.y,
-                    b = s["txt"][A],
+                    b = s.txt[A],
                     x = T,
                     w = o,
                     Fe.unshift([g, p, b, x]),
-                    Fe["length"] > 1e3 && Fe["pop"]()) : (d = Ce.x,
+                    Fe.length > 1e3 && Fe.pop()) : (d = Ce.x,
                         f = Ce.y,
-                        v = s["txt"][A],
+                        v = s.txt[A],
                         h = T,
                         Be.unshift([d, f, v, h]),
-                        Be["length"] > 1e3 && Be["pop"]()),
-                    s["txt"][A] = char,
+                        Be.length > 1e3 && Be.pop()),
+                    s.txt[A] = char,
 
                     s.clr[A] = C,
                     Me.push([c / 20, l / 10, char.codePointAt(), A, C]),
@@ -3590,8 +3590,8 @@
         function Vn(e, t, r) {
 
             var o = n;
-            if (ie(!1),
-                performance["now"]() - qn >= 15 && (qn = performance.now(),
+            if (ie(false),
+                performance.now() - qn >= 15 && (qn = performance.now(),
                     zn = 0),
                 !e || zn >= 3)
                 return 0;
@@ -3612,21 +3612,21 @@
             Ce.x = data.x;
             Ce.y = data.y;
             char = data.char;
-            var i = (char = Array.from(char)[0])["codePointAt"]();
-            if (wallSettings["disableBraille"]["checked"] && qr(i))
+            var i = (char = Array.from(char)[0]).codePointAt();
+            if (wallSettings.disableBraille.checked && qr(i))
                 return 0;
-            var c = 20 * Math["floor"](Ce.x / 20)
-                , l = 10 * Math["floor"](Ce.y / 10)
+            var c = 20 * Math.floor(Ce.x / 20)
+                , l = 10 * Math.floor(Ce.y / 10)
                 , u = c + "," + l;
-            if (!we["has"](u))
+            if (!we.has(u))
                 return 0;
-            var s = we["get"](u);
+            var s = we.get(u);
             var A = Ce.x - c + 20 * (Ce.y - l);
-            var cellTextProtected = s["textProtected"] && s["textProtected"][A] === "1";
-            if ((s.protected || cellTextProtected || wallSettings["readOnly"]["checked"] || U && "" == je) && !m && 0 == j || null == s["txt"] || K)
-                return U && "" == je && !wallSettings["readOnly"]["checked"] && showToast("Please log in before typing.", 3e3),
+            var cellTextProtected = s.textProtected && s.textProtected[A] === "1";
+            if ((s.protected || cellTextProtected || wallSettings.readOnly.checked || U && "" == je) && !m && 0 == j || null == s.txt || K)
+                return U && "" == je && !wallSettings.readOnly.checked && showToast("Please log in before typing.", 3e3),
                     0;
-            clientOptions.rainbow["checked"] && !r && (
+            clientOptions.rainbow.checked && !r && (
                 clientOptions.rainbowMode.value === "legacy" ? (mr(Jn[Yn]), ++Yn == Jn.length && (Yn = 0)) :
                     (() => {
                         let h = (window.cH = ((window.cH || 0) + (clientOptions.hueSpeed?.value ? parseFloat(clientOptions.hueSpeed.value) : 2)) % 360),
@@ -3649,17 +3649,17 @@
                 E = I,
                 Gn(L) && Gn(k) && (2 & M) == (2 & E) && (1 & M) == (1 & E) && colorMatch) || (r ? (g = Ce.x,
                     p = Ce.y,
-                    b = s["txt"][A],
+                    b = s.txt[A],
                     x = T,
                     w = o,
                     Fe.unshift([g, p, b, x]),
-                    Fe["length"] > 1e3 && Fe["pop"]()) : (d = Ce.x,
+                    Fe.length > 1e3 && Fe.pop()) : (d = Ce.x,
                         f = Ce.y,
-                        v = s["txt"][A],
+                        v = s.txt[A],
                         h = T,
                         Be.unshift([d, f, v, h]),
-                        Be["length"] > 1e3 && Be["pop"]()),
-                    s["txt"][A] = char,
+                        Be.length > 1e3 && Be.pop()),
+                    s.txt[A] = char,
 
                     s.clr[A] = C,
                     Me.push([c / 20, l / 10, char.codePointAt(), A, C]),
@@ -3672,13 +3672,13 @@
         }
         function Zn(e, t) {
             var r = n;
-            ie(!1),
+            ie(false),
                 Ce.x = e,
                 Ce.y = t,
-                Mn((10 * -Ce.x + window.innerWidth / zoomValue / 2) * v, (20 * -Ce.y + window["innerHeight"] / zoomValue / 2) * v),
-                document["getElementById"]("tpword")["value"] = "",
-                document["getElementById"]("tpx").value = 0,
-                document["getElementById"]("tpy")["value"] = 0,
+                Mn((10 * -Ce.x + window.innerWidth / zoomValue / 2) * v, (20 * -Ce.y + window.innerHeight / zoomValue / 2) * v),
+                document.getElementById("tpword").value = "",
+                document.getElementById("tpx").value = 0,
+                document.getElementById("tpy").value = 0,
                 nr(),
                 Hn(),
                 _t()
@@ -3693,8 +3693,8 @@
         function Qn(e, t) {
             return Gn(e) && 0 == (2 & t) && 0 == (1 & t)
         }
-        const _n = Math["log"](5 / 3) / 1e3;
-        var er = !1;
+        const _n = Math.log(5 / 3) / 1e3;
+        var er = false;
         function rgbTokenize(e) {
             // e: array
             // ["[", "r", "r", "g", "g", "b", "b", "d", "]", "a"] becomes ["[rrggbbd]", "a"]
@@ -3719,7 +3719,7 @@
                 }
             }
             return result;
-        } function pasteTrigger(e) {
+        } function pasteCanvas(e) {
             if (typeof n === "undefined" || typeof Ce === "undefined") return;
 
             Ce.start = Ce.x;
@@ -3814,25 +3814,25 @@
         }
 
         function nr() {
-            Ie = !1
+            Ie = false
         }
         function rr() {
             var e = n
-                , t = 20 * Math["floor"](Ce.x / 20)
-                , r = 10 * Math["floor"](Ce.y / 10)
-                , a = we["get"](t + "," + r);
-            if (!a || null == a["txt"])
-                return !1;
+                , t = 20 * Math.floor(Ce.x / 20)
+                , r = 10 * Math.floor(Ce.y / 10)
+                , a = we.get(t + "," + r);
+            if (!a || null == a.txt)
+                return false;
             var o = Ce.x - t + 20 * (Ce.y - r);
-            var color = a["clr"][o];
-            return [a["txt"][o], color]
+            var color = a.clr[o];
+            return [a.txt[o], color]
         };
-        function ar(e) {
+        function copy(e) {
             var t = n;
-            navigator.clipboard ? navigator["clipboard"]["writeText"](e) : (b["value"] = e,
-                b["focus"](),
-                b["select"](),
-                document["execCommand"]("copy"))
+            navigator.clipboard ? navigator.clipboard.writeText(e) : (b.value = e,
+                b.focus(),
+                b.select(),
+                document.execCommand("copy"))
         }
         function or(e) {
             var t = n;
@@ -3843,7 +3843,7 @@
                     , u = Ce.y;
                 Ce.x = r,
                     Ce.y = o;
-                for (var s = "", d = "", f = !1, v = !1, h = o; h <= c; h++) {
+                for (var s = "", d = "", f = false, v = false, h = o; h <= c; h++) {
                     for (var y = r; y <= i; y++) {
                         var g = rr();
 
@@ -3866,29 +3866,29 @@
                             } else if (clientOptions.copydecorations.checked) {
                                 d += String.fromCharCode(ue + Vr(0, b));
                             }
-                            Qn(g[0], b) || (0 != b && (v = !0),
-                                0 != p && (f = !0)),
+                            Qn(g[0], b) || (0 != b && (v = true),
+                                0 != p && (f = true)),
                                 Ce.x++
                         }
                     }
                     Ce.x = r,
                         Ce.y++,
                         s += "\n",
-                        d += "ï¿½";
+                        d += "�";
 
                 }
-                s = s["slice"](0, -1),
-                    d = d["slice"](0, -1),
-                    s["startsWith"]("http") && (f = v = !1),
-                    clientOptions["copycolour"]["checked"] && f || clientOptions["copydecorations"]["checked"] && v ? ar(s + x1B + d) : ar(s),
+                s = s.slice(0, -1),
+                    d = d.slice(0, -1),
+                    s.startsWith("http") && (f = v = false),
+                    clientOptions.copycolour.checked && f || clientOptions.copydecorations.checked && v ? copy(s + x1B + d) : copy(s),
                     Ce.x = l,
                     Ce.y = u,
                     showToast("Copied selection.", 1500);
-                var x = document["getElementById"]("copyico");
+                var x = document.getElementById("copyico");
                 x.src = "/static/done.svg",
                     setTimeout((function () {
                         var e = t;
-                        x["src"] = "/static/copy.svg"
+                        x.src = "/static/copy.svg"
                     }
                     ), 1e3)
             });
@@ -3899,19 +3899,19 @@
             var r = n;
             clearTimeout(p),
                 toastElement.innerText = e,
-                toastElement["classList"]["add"]("toasting"),
+                toastElement.classList.add("toasting"),
                 p = setTimeout((function () {
-                    toastElement["classList"].remove("toasting")
+                    toastElement.classList.remove("toasting")
                 }
                 ), t)
         }
         function cr() {
             var e = n;
-            Ce.x = Ce["start"],
+            Ce.x = Ce.start,
                 Ce.y++,
                 Hn()
         }
-        null == navigator["clipboard"]["readText"] && (document["getElementById"]("paste").style["display"] = "none");
+        null == navigator.clipboard.readText && (document.getElementById("paste").style.display = "none");
         var lr = 0;
         function convertCSSToRGB(css) {
             const m = css.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i);
@@ -4052,9 +4052,9 @@
                 }
             }
 
-            if (groups["__end"]) {
-                for (var e = 0; e < groups["__end"].length; e++) {
-                    var obj = groups["__end"][e];
+            if (groups.__end) {
+                for (var e = 0; e < groups.__end.length; e++) {
+                    var obj = groups.__end[e];
                     var aEl2 = document.createElement("div");
                     aEl2.classList.add("colour", "swatch-a");
                     aEl2.dataset.addonIndex = obj.i;
@@ -4079,22 +4079,22 @@
         function dr() {
             var e = n;
             ie(!1),
-                teleportElement["classList"]["contains"]("open") ? (teleportElement.classList["remove"]("open"),
-                    en()) : (teleportElement["classList"]["add"]("open"),
+                teleportElement.classList.contains("open") ? (teleportElement.classList.remove("open"),
+                    en()) : (teleportElement.classList.add("open"),
                         2 == lr && ur(0),
-                        document.getElementById("tpword")["focus"]())
+                        document.getElementById("tpword").focus())
         }
         function fr(e) {
             return e["replace"](/^\/|\/$/g, "")
         }
         function vr(e) {
             var t = n
-                , r = (e = (e = fr(e))["replace"](/\~\/*/, "~"))["split"]("/");
-            if (e = r["shift"](),
-                r["length"] > 0 && (e += "/" + r["shift"]()),
-                (e = (e = fr(e))["toLowerCase"]())["startsWith"]("~") && "~main" != e) {
-                var a = e["split"]("/")
-                    , o = a[0]["replace"]("~", "")
+                , r = (e = (e = fr(e)).replace(/\~\/*/, "~"))["split"]("/");
+            if (e = r.shift(),
+                r.length > 0 && (e += "/" + r.shift()),
+                (e = (e = fr(e)).toLowerCase()).startsWith("~") && "~main" != e) {
+                var a = e.split("/")
+                    , o = a[0].replace("~", "")
                     , i = "main";
                 a.length > 1 && (i = a[1]),
                     Cn(o, i),
@@ -4103,9 +4103,9 @@
                 var c = Lr(e);
                 Zn(c.x, c.y),
                     Cn("textwall", "main"),
-                    0 == c.x && 0 == c.y ? $n() : history["pushState"]({}, null, e)
+                    0 == c.x && 0 == c.y ? $n() : history.pushState({}, null, e)
             }
-            teleportElement["classList"]["remove"]("open")
+            teleportElement.classList.remove("open")
         }
 
 
@@ -4169,10 +4169,10 @@
 
         function hr(e) {
             for (var t = n, r = 0; r < colList.children.length; r++)
-                "0" != colList["children"][r].id && (e ? colList["children"][r]["classList"].add("hidden") : colList["children"][r].classList.remove("hidden"));
+                "0" != colList.children[r].id && (e ? colList.children[r].classList.add("hidden") : colList.children[r].classList.remove("hidden"));
             e && mr(0)
         }
-        function yr(e, noSave = !1) {
+        function yr(e, noSave = false) {
             var t = n;
             if (null != e)
                 N = e;
