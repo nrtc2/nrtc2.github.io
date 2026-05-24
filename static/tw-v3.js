@@ -94,7 +94,7 @@
                 }
             }
         }
-        var a, o = "/";
+        var server, o = "/";
         const textArea = document.getElementById("textarea")
             , connectingElement = document.getElementById("connecting")
             , infoElement = document.getElementById("info")
@@ -238,7 +238,7 @@
                     x: t * (10 * v) / devicePixelRatio + qe.offset.x / devicePixelRatio,
                     y: r * (20 * v) / devicePixelRatio + qe.offset.y / devicePixelRatio
                 });
-                o.x + 15 * v + decorationsElement.clientWidth > window.innerWidth ? decorationsElement.style.left = o.x - decorationsElement.clientWidth - 5 * at + "px" : decorationsElement.style.left = o.x + 15 * at + "px",
+                o.x + 15 * v + decorationsElement.clientWidth > window.innerWidth ? decorationsElement.style.left = o.x - decorationsElement.clientWidth - 5 * zoomValue + "px" : decorationsElement.style.left = o.x + 15 * zoomValue + "px",
                     decorationsElement.style.top = Math.max(o.y - decorationsElement.clientHeight, 0) + "px"
             } else
                 decorationsElement.style.display = "none"
@@ -413,7 +413,7 @@
         clientOptions.hueSpeed.value = localStorage.getItem("hueSpeed") ?? 5;
         clientOptions.rainbowMode.value = localStorage.getItem("rainbowMode") ?? "legacy";
         /* tt["doNotChangeTheme"].checked = !1;*/
-        const nt = {
+        const wallSettings = {
             protect: document.getElementById("protect"),
             clear: document.getElementById("clear"),
             readOnly: document.getElementById("readonly"),
@@ -430,24 +430,24 @@
             _theme: document.getElementById("_theme"),
             webhook: document.getElementById("webhook")
         };
-        var rt = 1
-            , at = 1
-            , ot = document.getElementById("zoom")
+        var clampedValue = 1
+            , zoomValue = 1
+            , zoomElement = document.getElementById("zoom")
             , rot = document.getElementById("fca");
         function setZoom(e, t) {
             var r = n;
-            rt = e < .5 ? .5 : e > 3 ? 3 : e,
-                at = Math.round(100 * rt) / 100,
-                localStorage.setItem("zoom", at),
-                ot.value = 10 * at,
-                t && showToast(Math.round(100 * at) + "% ", 1e3),
+            clampedValue = e < .5 ? .5 : e > 3 ? 3 : e,
+                zoomValue = Math.round(100 * clampedValue) / 100,
+                localStorage.setItem("zoom", zoomValue),
+                zoomElement.value = 10 * zoomValue,
+                t && showToast(Math.round(100 * zoomValue) + "% ", 1e3),
                 kn()
         }
         function rit(e) {
             localStorage.setItem("rca", e.target.value)
         }
         function changeZoom() {
-            setZoom(ot.value / 10, true)
+            setZoom(zoomElement.value / 10, true)
         }
         var registerLinkElement = document.getElementById("registerlink")
             , loginLinkElement = document.getElementById("loginlink")
@@ -459,8 +459,8 @@
                 je = "",
                 j = 0,
                 wallSettingsElement.style.display = "none",
-                a.readyState != a.OPEN || t || (nt.private.checked && Cn("textwall", "main"),
-                    a.send(Or({
+                server.readyState != server.OPEN || t || (wallSettings.private.checked && Cn("textwall", "main"),
+                    server.send(Or({
                         logout: 0
                     })),
                     Re = true),
@@ -556,9 +556,9 @@
             return e = e || 0,
             {
                 minx: -qe.offset.x / v / 10 - e,
-                maxx: -qe.offset.x / v / 10 + window.innerWidth / at / 10 + e - 20,
+                maxx: -qe.offset.x / v / 10 + window.innerWidth / zoomValue / 10 + e - 20,
                 miny: -qe.offset.y / v / 20 - e,
-                maxy: -qe.offset.y / v / 20 + window.innerHeight / at / 20 + e - 10
+                maxy: -qe.offset.y / v / 20 + window.innerHeight / zoomValue / 20 + e - 10
             }
         }
         function xt(e, t) {
@@ -636,7 +636,7 @@
         } catch (e) {
             Tt = false
         }
-        var Bt = RegExp("^[a-zA-Z0-9_-]{1,24}$");
+        var usernameCheck = /^[a-zA-Z0-9_-]{1,24}$/;
         function getCapitalLetter(e) {
             return 65 + Math.floor(26 * e)
         }
@@ -893,7 +893,7 @@
         function Qt() {
             var e = n;
             if (!Gt) {
-                for (var t = -120 - 20 * Math.floor(qe.offset.x / (200 * v)), r = -60 - 10 * Math.floor(qe.offset.y / (200 * v)), o = r, i = Math.floor(window.innerWidth / (10 * at) - qe.offset.x / (10 * v) + 120), c = Math.floor(window.innerHeight / (20 * at) - qe.offset.y / (20 * v) + 60), l = []; t < i;) {
+                for (var t = -120 - 20 * Math.floor(qe.offset.x / (200 * v)), r = -60 - 10 * Math.floor(qe.offset.y / (200 * v)), o = r, i = Math.floor(window.innerWidth / (10 * zoomValue) - qe.offset.x / (10 * v) + 120), c = Math.floor(window.innerHeight / (20 * zoomValue) - qe.offset.y / (20 * v) + 60), l = []; t < i;) {
                     for (; r < c;) {
                         var u = t + "," + r;
                         !we.has(u) && Jt(t, r) && l.push(t, r),
@@ -916,7 +916,7 @@
                             parseInt(renderChunkAmount || (rot.value || 100)) == ++d)
                             break
                     }
-                    d > 0 && (a.send(Or({
+                    d > 0 && (server.send(Or({
                         r: $t
                     })),
                         Gt = true,
@@ -943,10 +943,10 @@
                 var r = 20 * Math.floor(Ce.x / 20)
                     , o = 10 * Math.floor(Ce.y / 10)
                     , c = r + "," + o;
-                we.has(c) && (Ve && a.send(Or({
+                we.has(c) && (Ve && server.send(Or({
                     p: c
                 })),
-                    Ze && (tn ? tn = false : a.send(Or({
+                    Ze && (tn ? tn = false : server.send(Or({
                         c: [r, o, r + 19, o + 9]
                     }))),
                     textArea.focus())
@@ -957,18 +957,18 @@
             return e.target.parentElement.parentElement.dataset.id
         }
         function an(e) {
-            m && a.send(Or({
+            m && server.send(Or({
                 i: rn(e)
             }))
         }
         function on(e) {
             var t = n;
-            m && a.send(Or({
+            m && server.send(Or({
                 a: [rn(e), e.target.checked]
             }))
         }
         function cn(e) {
-            m && a.send(Or({
+            m && server.send(Or({
                 aa: rn(e)
             }))
         }
@@ -1102,8 +1102,8 @@
                         }
                     }
                     else if (Ye) {
-                        var r = e.clientX * devicePixelRatio - qe.start.x / at
-                            , a = e.clientY * devicePixelRatio - qe.start.y / at;
+                        var r = e.clientX * devicePixelRatio - qe.start.x / zoomValue
+                            , a = e.clientY * devicePixelRatio - qe.start.y / zoomValue;
                         qe.offset.x = Math.round(ze.offset.x + r),
                             qe.offset.y = Math.round(ze.offset.y + a),
                             clientOptions.smoothpanning.checked && Rn(e)
@@ -1118,7 +1118,7 @@
             var t = n;
             if (e.isTrusted && (ie(false), !Ye)) {
                 if (e.preventDefault(), e.ctrlKey) {
-                    setZoom(rt - e.deltaY / 1e3, true);
+                    setZoom(clampedValue - e.deltaY / 1e3, true);
                 }
                 else if (e.altKey) {
                     e.preventDefault();
@@ -1215,7 +1215,7 @@
                         return "deleteContentBackward" == e.inputType ? (Ce.x -= 1,
                             Vn(" ", 0, !1, !0) ||
                             void nr()) : void (null != e.data && "" != e.data && "insertFromPaste" != e.inputType && (nr(),
-                                Array.from(e.data).length > 1 ? tr(e.data) : Vn(e.data, 1)));
+                                Array.from(e.data).length > 1 ? pasteTrigger(e.data) : Vn(e.data, 1)));
                     cr()
                 }
             }
@@ -1368,18 +1368,18 @@
                         case 107:
                         case 187:
                             e.ctrlKey && (e.preventDefault(),
-                                setZoom(rt + .1, true));
+                                setZoom(clampedValue + .1, true));
                             break;
                         case 109:
                         case 189:
                             e.ctrlKey && (e.preventDefault(),
-                                setZoom(rt - .1, true))
+                                setZoom(clampedValue - .1, true))
                     }
             }
             )),
             textArea.addEventListener("paste", (function (e) {
                 var t = n;
-                e.isTrusted && tr((e.clipboardData || window.clipboardData).getData("text"))
+                e.isTrusted && pasteTrigger((e.clipboardData || window.clipboardData).getData("text"))
             }
             )),
             textArea.addEventListener("copy", (function (e) {
@@ -1450,7 +1450,7 @@
                 var e = n;
                 navigator.clipboard.readText().then((function (t) {
                     var n = e;
-                    tr(t);
+                    pasteTrigger(t);
                     var r = document.getElementById("pasteico");
                     r.src = "/static/done.svg",
                         setTimeout((function () {
@@ -1500,7 +1500,7 @@
                         break;
                     case clientOptions.disablecolour:
                         localStorage.setItem("disablecolour", r),
-                            nt.disableColour.checked || hr(clientOptions.disablecolour.checked),
+                            wallSettings.disableColour.checked || hr(clientOptions.disablecolour.checked),
                             ge = true,
                             Sn();
                         break;
@@ -1511,277 +1511,277 @@
                     case clientOptions.smoothcursors:
                         localStorage.setItem("smoothcursors", r);
                         break;
-                    case clientOptions["copycolour"]:
-                        localStorage["setItem"]("copycolour", r);
+                    case clientOptions.copycolour:
+                        localStorage.setItem("copycolour", r);
                         break;
-                    case clientOptions["copydecorations"]:
-                        localStorage["setItem"]("copydecorations", r);
+                    case clientOptions.copydecorations:
+                        localStorage.setItem("copydecorations", r);
                         break;
-                    case clientOptions["rainbow"]:
-                        localStorage["setItem"]("rainbow", r);
+                    case clientOptions.rainbow:
+                        localStorage.setItem("rainbow", r);
                         break;
                     case clientOptions.anonymous:
-                        localStorage["setItem"]("anonymous", r),
-                            Re = !0,
-                            ge = !0;
+                        localStorage.setItem("anonymous", r),
+                            Re = true,
+                            ge = true;
                         break;
                     case clientOptions.anonIdShow:
                         ge = true;
                         break;
                     case clientOptions.roundCursors:
                         ge = true,
-                            localStorage["setItem"]("roundCursors", r);
+                            localStorage.setItem("roundCursors", r);
                         break;
                     case clientOptions.displayNames:
                         ge = true,
-                            localStorage["setItem"]("displayNames", r);
+                            localStorage.setItem("displayNames", r);
                         break;
                     case clientOptions.fadeInMsg:
-                        localStorage["setItem"]("fadeInMsg", r);
+                        localStorage.setItem("fadeInMsg", r);
                         break;
                     /* case tt.doNotChangeTheme:
                          localStorage["setItem"]("doNotChangeTheme", r);
                          break;*/
                     case registerLinkElement:
-                        document["getElementById"]("login")["style"]["display"] = "none",
-                            document["getElementById"]("register").style.display = "block";
+                        document.getElementById("login").style.display = "none",
+                            document.getElementById("register").style.display = "block";
                         break;
                     case loginLinkElement:
-                        document["getElementById"]("login")["style"].display = "block",
-                            document["getElementById"]("register")["style"]["display"] = "none";
+                        document.getElementById("login").style.display = "block",
+                            document.getElementById("register").style.display = "none";
                         break;
                     case logoutLinkElement:
-                        dt(!0)
+                        dt(true)
                 }
             }
             )),
-            logoutLinkElement["addEventListener"]("click", dt)
-        document["getElementById"]("closeteleport").addEventListener("click", (function () {
+            logoutLinkElement.addEventListener("click", dt)
+        document.getElementById("closeteleport").addEventListener("click", (function () {
             var e = n;
-            teleportElement.classList["remove"]("open")
+            teleportElement.classList.remove("open")
         }
         )),
-            document.getElementById("tpwordgo")["addEventListener"]("click", (function (e) {
+            document.getElementById("tpwordgo").addEventListener("click", (function (e) {
                 var t = n;
-                e["preventDefault"]();
-                var r = document["getElementById"]("tpword");
-                vr(r["value"]),
+                e.preventDefault();
+                var r = document.getElementById("tpword");
+                vr(r.value),
                     r.blur()
             }
             )),
-            document["getElementById"]("tpword")["addEventListener"]("input", (function () {
+            document.getElementById("tpword").addEventListener("input", (function () {
                 var e = n
-                    , t = document["getElementById"]("tpword").value["replace"](/^\/|\/$/g, "")
-                    , r = 0 == t || t["startsWith"]("~") ? {
+                    , t = document.getElementById("tpword").value.replace(/^\/|\/$/g, "")
+                    , r = 0 == t || t.startsWith("~") ? {
                         x: 0,
                         y: 0
                     } : Lr(t);
-                document["getElementById"]("tpx")["value"] = r.x,
-                    document["getElementById"]("tpy")["value"] = -r.y
+                document.getElementById("tpx").value = r.x,
+                    document.getElementById("tpy").value = -r.y
             }
             )),
-            document["getElementById"]("tpcoordgo").addEventListener("click", (function (e) {
+            document.getElementById("tpcoordgo").addEventListener("click", (function (e) {
                 var t = n;
-                e["preventDefault"]();
-                var r = document["getElementById"]("tpx")
-                    , a = document["getElementById"]("tpy")
-                    , i = parseInt(r["value"], 10)
+                e.preventDefault();
+                var r = document.getElementById("tpx")
+                    , a = document.getElementById("tpy")
+                    , i = parseInt(r.value, 10)
                     , c = parseInt(a.value, 10);
                 isNaN(i) && isNaN(c) || (0 !== i && (i = i || Ce.x),
                     0 !== c && (c = c || Ce.y),
-                    Zn(i = Math["max"](Math["min"](i, Yt.maxx - 1), Yt["minx"]), c = Math["max"](Math["min"](-c, Yt["maxy"] - 1), Yt["miny"])),
-                    history["pushState"]({}, null, o),
-                    teleportElement["classList"]["remove"]("open"),
-                    r["blur"](),
-                    a["blur"]())
+                    Zn(i = Math.max(Math.min(i, Yt.maxx - 1), Yt.minx), c = Math.max(Math.min(-c, Yt.maxy - 1), Yt.miny)),
+                    history.pushState({}, null, o),
+                    teleportElement.classList.remove("open"),
+                    r.blur(),
+                    a.blur())
             }
             )),
-            window["addEventListener"]("resize", kn),
-            window["addEventListener"]("orientationchange", kn),
-            window["addEventListener"]("popstate", (function () {
+            window.addEventListener("resize", kn),
+            window.addEventListener("orientationchange", kn),
+            window.addEventListener("popstate", (function () {
                 vr(Pr())
             }
             )),
             window.addEventListener("focus", (function () {
-                y = !0,
+                y = true,
                     En()
 
             }
             )),
             window.addEventListener("blur", (function () {
-                y = !1,
+                y = false,
                     En()
             }
             )),
-            ot["addEventListener"]("input", changeZoom),
-            ot.addEventListener("change", changeZoom),
-            rot["addEventListener"]("input", rit),
-            Se["addEventListener"]("message", (function (e) {
+            zoomElement.addEventListener("input", changeZoom),
+            zoomElement.addEventListener("change", changeZoom),
+            rot.addEventListener("input", rit),
+            Se.addEventListener("message", (function (e) {
                 var t = n;
-                a && a["readyState"] == a.OPEN && a["send"](e["data"])
+                server && server.readyState == server.OPEN && server.send(e.data)
             }
             )),
-            document["getElementById"]("chatbutton")["addEventListener"]("click", (function () {
+            document.getElementById("chatbutton").addEventListener("click", (function () {
                 var e = n;
-                hn["classList"]["contains"]("open") ? hn["classList"].remove("open") : (hn["classList"]["add"]("open"),
-                    yn["classList"]["remove"]("show"),
+                hn.classList.contains("open") ? hn.classList.remove("open") : (hn.classList.add("open"),
+                    yn.classList.remove("show"),
                     window.unreadAmount = 0,
-                    yn["classList"].remove("show"),
+                    yn.classList.remove("show"),
                     gn())
             }
             )),
-            document["getElementById"]("sendmsg")["addEventListener"]("click", bn),
-            document["getElementById"]("chatmsg")["addEventListener"]("keyup", (function (e) {
-                13 == e["keyCode"] && bn(e)
+            document.getElementById("sendmsg").addEventListener("click", bn),
+            document.getElementById("chatmsg").addEventListener("keyup", (function (e) {
+                13 == e.keyCode && bn(e)
             }
             )),
-            document["getElementById"]("loginbtn")["addEventListener"]("click", (function (e) {
+            document.getElementById("loginbtn").addEventListener("click", (function (e) {
                 var t = n;
                 if (e.isTrusted) {
-                    var r = document["getElementById"]("loginname")
-                        , o = document["getElementById"]("loginpass");
-                    mn.test(r["value"]) ? 0 != r.value.length ? 0 != o.value["length"] ? (vn(!0),
+                    var r = document.getElementById("loginname")
+                        , o = document.getElementById("loginpass");
+                    mn.test(r.value) ? 0 != r.value.length ? 0 != o.value.length ? (vn(true),
                         document.getElementById("accbanned").innerText = "",
-                        a.send(Or({
-                            login: [r["value"], o["value"]]
+                        server.send(Or({
+                            login: [r.value, o.value]
                         }))) : showToast("Please type your password.", 3e3) : showToast("Please type your username.", 3e3) : showToast("Username is invalid.", 3e3)
                 }
             }
             )),
-            document.getElementById("registerbtn")["addEventListener"]("click", (function (e) {
+            document.getElementById("registerbtn").addEventListener("click", (function (e) {
                 var t = n;
                 if (e.isTrusted) {
                     var r = document.getElementById("username")
-                        , o = document["getElementById"]("password")
-                        , i = document["getElementById"]("password2");
-                    mn["test"](r["value"]) ? 0 != r.value.length ? 0 != o["value"]["length"] ? o.value == i["value"] ? (vn(!0),
-                        a["send"](Or({
-                            register: [r["value"], o.value]
+                        , o = document.getElementById("password")
+                        , i = document.getElementById("password2");
+                    mn.test(r.value) ? 0 != r.value.length ? 0 != o.value.length ? o.value == i.value ? (vn(true),
+                        server.send(Or({
+                            register: [r.value, o.value]
                         }))) : showToast("Passwords do not match.", 3e3) : showToast("Please type a password.", 3e3) : showToast("Please type a username.", 3e3) : showToast("Username is invalid.", 3e3)
                 }
             }
             )),
-            document.getElementById("login")["addEventListener"]("submit", fn),
-            document["getElementById"]("register")["addEventListener"]("submit", fn),
+            document.getElementById("login").addEventListener("submit", fn),
+            document.getElementById("register").addEventListener("submit", fn),
 
-            document["getElementById"]("changenameform")["addEventListener"]("submit", fn),
-            document["getElementById"]("submitnamechange").addEventListener("click", (function (e) {
+            document.getElementById("changenameform")["addEventListener"]("submit", fn),
+            document.getElementById("submitnamechange").addEventListener("click", (function (e) {
                 var t = n;
-                if (e["isTrusted"]) {
-                    var r = document["getElementById"]("chngusername")
-                        , o = document["getElementById"]("chngeusrpass");
-                    mn["test"](r.value) ? 0 != r["value"]["length"] ? je != r.value ? 0 != o["value"].length ? (vn(!0),
-                        a["send"](Or({
+                if (e.isTrusted) {
+                    var r = document.getElementById("chngusername")
+                        , o = document.getElementById("chngeusrpass");
+                    mn.test(r.value) ? 0 != r.value.length ? je != r.value ? 0 != o.value.length ? (vn(true),
+                        server.send(Or({
                             namechange: [r.value, o.value]
                         }))) : showToast("Please type your password.", 3e3) : showToast("You have typed in your current username.", 3e3) : showToast("Please type a new username.", 3e3) : showToast("Username is invalid.", 3e3)
                 }
             }
             )),
-            document["getElementById"]("changepassform").addEventListener("submit", fn),
-            document["getElementById"]("submitpasschange")["addEventListener"]("click", (function (e) {
+            document.getElementById("changepassform").addEventListener("submit", fn),
+            document.getElementById("submitpasschange").addEventListener("click", (function (e) {
                 var t = n;
                 if (e.isTrusted) {
-                    var r = document["getElementById"]("oldpass")
-                        , o = document["getElementById"]("newpass")
-                        , i = document["getElementById"]("newpass2");
-                    0 != r["value"]["length"] ? 0 != o["value"].length ? 0 != i["value"].length ? o.value == i["value"] ? (vn(!0),
-                        a["send"](Or({
-                            passchange: [r["value"], o["value"]]
+                    var r = document.getElementById("oldpass")
+                        , o = document.getElementById("newpass")
+                        , i = document.getElementById("newpass2");
+                    0 != r.value.length ? 0 != o.value.length ? 0 != i.value.length ? o.value == i.value ? (vn(true),
+                        server.send(Or({
+                            passchange: [r.value, o.value]
                         }))) : showToast("New passwords do not match.", 3e3) : showToast("Please type your new password again.", 3e3) : showToast("Please type your new password.", 3e3) : showToast("Please type your password.", 3e3)
                 }
             }
             )),
-            document["getElementById"]("delaccountform")["addEventListener"]("submit", fn),
-            document["getElementById"]("deleteaccount")["addEventListener"]("click", (function (e) {
+            document.getElementById("delaccountform").addEventListener("submit", fn),
+            document.getElementById("deleteaccount").addEventListener("click", (function (e) {
                 var t = n;
                 if (e.isTrusted) {
                     var r = document["getElementById"]("deletepassword");
                     0 != r.value["length"] ? (vn(!0),
-                        a.send(Or({
+                        server.send(Or({
                             deleteaccount: r["value"]
                         }))) : showToast("Please type your password.", 3e3)
                 }
             }
             )),
-            nt["protect"]["addEventListener"]("click", (function (e) {
-                nt["protect"].classList.toggle("enabled")
-                Ve = nt["protect"].classList.contains("enabled"),
+            wallSettings["protect"]["addEventListener"]("click", (function (e) {
+                wallSettings["protect"].classList.toggle("enabled")
+                Ve = wallSettings["protect"].classList.contains("enabled"),
                     ge = !0
             }
             )),
-            nt["clear"]["addEventListener"]("click", (function (e) {
+            wallSettings["clear"]["addEventListener"]("click", (function (e) {
                 var t = n;
-                nt["clear"].classList.toggle("enabled")
-                Ze = nt["clear"].classList.contains("enabled")
+                wallSettings["clear"].classList.toggle("enabled")
+                Ze = wallSettings["clear"].classList.contains("enabled")
                 ge = !0
             }
             )),
-            nt["readOnly"]["addEventListener"]("click", (function (e) {
+            wallSettings["readOnly"]["addEventListener"]("click", (function (e) {
                 var t = n;
-                a.send(Or({
+                server.send(Or({
                     ro: e["target"]["checked"]
                 }))
             }
             )),
-            nt.private["addEventListener"]("click", (function (e) {
+            wallSettings.private["addEventListener"]("click", (function (e) {
                 var t = n;
-                a["send"](Or({
+                server["send"](Or({
                     priv: e["target"]["checked"]
                 }))
             }
             )),
-            nt["hideCursors"].addEventListener("click", (function (e) {
+            wallSettings["hideCursors"].addEventListener("click", (function (e) {
                 var t = n;
-                a["send"](Or({
+                server["send"](Or({
                     ch: e.target["checked"]
                 }))
             }
             )),
-            nt.disableChat["addEventListener"]("click", (function (e) {
+            wallSettings.disableChat["addEventListener"]("click", (function (e) {
                 var t = n;
-                a.send(Or({
+                server.send(Or({
                     dc: e["target"]["checked"]
                 }))
             }
             )),
-            nt["disableColour"]["addEventListener"]("click", (function (e) {
+            wallSettings["disableColour"]["addEventListener"]("click", (function (e) {
                 var t = n;
-                a["send"](Or({
+                server["send"](Or({
                     dcl: e["target"].checked
                 }))
             }
             )),
-            nt["disableBraille"]["addEventListener"]("click", (function (e) {
+            wallSettings["disableBraille"]["addEventListener"]("click", (function (e) {
                 var t = n;
-                a["send"](Or({
+                server["send"](Or({
                     db: e["target"]["checked"]
                 }))
             }
             )),
-            nt["unlisted"]["addEventListener"]("click", (function (e) {
+            wallSettings["unlisted"]["addEventListener"]("click", (function (e) {
                 var t = n;
-                a["send"](Or({
+                server["send"](Or({
                     un: e.target.checked
                 }))
             }
             )),
-            nt["nsfw"]["addEventListener"]("click", (function (e) {
+            wallSettings["nsfw"]["addEventListener"]("click", (function (e) {
                 var t = n;
-                a["send"](Or({
+                server["send"](Or({
                     nsfw: e.target.checked
                 }))
             }
             )),
-            nt["regonly"]["addEventListener"]("click", (function (e) {
+            wallSettings["regonly"]["addEventListener"]("click", (function (e) {
                 var t = n;
-                a["send"](Or({
+                server["send"](Or({
                     regonly: e.target.checked
                 }))
             }
             )),
-            nt["webhook"]["addEventListener"]("click", (function (e) {
+            wallSettings["webhook"]["addEventListener"]("click", (function (e) {
                 var t = n;
-                a["send"](Or({
+                server["send"](Or({
                     webhook: e.target.checked
                 }))
             }
@@ -1819,7 +1819,7 @@
                             if (r.children[a]["innerText"] == e)
                                 return !0;
                         return !1
-                    }(i) || i == je) || (mn["test"](i) ? o.childElementCount >= 20 ? showToast("You cannot add more than 20 members.", 3e3) : a["send"](Or({
+                    }(i) || i == je) || (mn["test"](i) ? o.childElementCount >= 20 ? showToast("You cannot add more than 20 members.", 3e3) : server["send"](Or({
                         addmem: i
                     })) : showToast("Username is invalid.", 3e3))
             }
@@ -1839,7 +1839,7 @@
                 }
                 "confirm" == r["value"].toLowerCase() ? (r.parentElement["removeChild"](r.previousSibling),
                     r.parentNode["removeChild"](r),
-                    a["send"](Or({
+                    server["send"](Or({
                         dw: 0
                     })),
                     Cn("textwall", "main"),
@@ -1848,7 +1848,7 @@
             )),
             document["getElementById"]("l")["addEventListener"]("click", (function (e) {
                 var t = n;
-                m && a["send"](Or({
+                m && server["send"](Or({
                     l: e["target"]["checked"]
                 }))
             }
@@ -1871,13 +1871,13 @@
             document["getElementById"]("sendalert")["addEventListener"]("click", (function () {
                 var e = n
                     , t = document["getElementById"]("alerttext")["value"];
-                m && 0 != t["length"] && a.send(Or({
+                m && 0 != t["length"] && server.send(Or({
                     alert: t
                 }))
             }
             )),
             document["getElementById"]("reload")["addEventListener"]("click", (function () {
-                m && a["send"](Or({
+                m && server["send"](Or({
                     reload: !0
                 }))
             }
@@ -1886,7 +1886,7 @@
                 var e = n;
                 if (m) {
                     var t = document["getElementById"]("deletename").value;
-                    0 != t["length"] && a["send"](Or({
+                    0 != t["length"] && server["send"](Or({
                         aaa: t
                     }))
                 }
@@ -1896,7 +1896,7 @@
                 var e = n;
                 if (m) {
                     var t = document["getElementById"]("freename")["value"];
-                    0 != t["length"] && a["send"](Or({
+                    0 != t["length"] && server["send"](Or({
                         aaaa: t
                     }))
                 }
@@ -1925,7 +1925,7 @@
         function sendTyping(isTyping) {
             var channel = window.selectedChatTab === 1 ? "global" : "world";
 
-            a.send(Or({
+            server.send(Or({
                 type: "type",
                 typing: isTyping,
                 chatChannel: channel
@@ -2038,7 +2038,7 @@
             var chatData = { msg: [e, channel] };
             window.w.emit("chatBefore", chatData);
 
-            a.send(Or({ msg: chatData.msg, channel: chatData.channel }));
+            server.send(Or({ msg: chatData.msg, channel: chatData.channel }));
             Xe = performance.now();
         }
         document.getElementById("chatmsg").addEventListener("input", function (e) {
@@ -2062,7 +2062,7 @@
 
             var e = n
                 , t = document["getElementsByClassName"]("msgcontainer")[0];
-            nt["readOnly"].checked && 0 == j || U && "" == je ? t["classList"].add("hidden") : t["classList"]["remove"]("hidden")
+            wallSettings["readOnly"].checked && 0 == j || U && "" == je ? t["classList"].add("hidden") : t["classList"]["remove"]("hidden")
         }
         function wn(e) {
             var t = n;
@@ -2078,14 +2078,14 @@
                 ze["offset"].y = qe["offset"].y;
             var o = qe["coords"].x
                 , i = qe.coords.y;
-            qe["coords"].x = Math["floor"](window.innerWidth / at / 20 - qe["offset"].x / 10 / v),
-                qe["coords"].y = Math["floor"](window["innerHeight"] / at / 40 - qe.offset.y / 20 / v),
+            qe["coords"].x = Math["floor"](window.innerWidth / zoomValue / 20 - qe["offset"].x / 10 / v),
+                qe["coords"].y = Math["floor"](window["innerHeight"] / zoomValue / 40 - qe.offset.y / 20 / v),
                 De = o != qe.coords.x || i != qe["coords"].y
         }
         function kn() {
             var e = n
                 , t = v;
-            if (v = devicePixelRatio * at,
+            if (v = devicePixelRatio * zoomValue,
                 canvasElement["width"] = Math["round"](window.innerWidth * devicePixelRatio),
                 canvasElement.height = Math.round(window["innerHeight"] * devicePixelRatio),
                 canvasElement.style["width"] = Math["round"](canvasElement.width / devicePixelRatio) + "px",
@@ -2096,7 +2096,7 @@
                 ie(!1);
                 var r = Math["floor"]((qe["offset"].x - canvasElement.width / 2) / t)
                     , a = Math["floor"]((qe.offset.y - canvasElement["height"] / 2) / t);
-                Mn((r + window["innerWidth"] / at / 2) * v, (a + window.innerHeight / at / 2) * v),
+                Mn((r + window["innerWidth"] / zoomValue / 2) * v, (a + window.innerHeight / zoomValue / 2) * v),
                     vt(selectedFont)
             }
         }
@@ -2105,7 +2105,7 @@
                 , t = pageTitle;
             "textwall" != W && (t = "~" + W,
                 "main" != H && (t += "/" + H)),
-                null == a || a["readyState"] == a.CLOSED ? document["title"] = pageTitle + " (disconnected)" : document["title"] = y ? "textwall" != W ? t : pageTitle : t + " (" + Ue + " nearby)"
+                null == server || server["readyState"] == server.CLOSED ? document["title"] = pageTitle + " (disconnected)" : document["title"] = y ? "textwall" != W ? t : pageTitle : t + " (" + Ue + " nearby)"
         }
         function Sn(e) {
             var t = n;
@@ -2130,9 +2130,9 @@
             if (pingInterval) clearInterval(pingInterval);
 
             pingInterval = setInterval(() => {
-                if (a && a.readyState === WebSocket.OPEN) {
+                if (server && server.readyState === WebSocket.OPEN) {
                     NKe = performance.now();
-                    a.send(Or({ ping: true }));
+                    server.send(Or({ ping: true }));
                 } else {
                     Acn(true);
                 }
@@ -2180,7 +2180,7 @@
                 document["getElementById"]("connecting2")["innerText"] = "",
                 document["getElementById"]("admin")["style"]["display"] = "none",
                 "" == je && null != localStorage["getItem"]("username") && null != localStorage["getItem"]("token") && (vn(!0),
-                    a["send"](Or({
+                    server["send"](Or({
                         token: [localStorage["getItem"]("username"), localStorage["getItem"]("token")]
                     })));
             var t = "textwall"
@@ -2230,7 +2230,7 @@
                 nr(),
                 pn(),
                 Yt = null,
-                a["send"](Or({
+                server["send"](Or({
                     j: [e, t]
                 })),
                 Xn(),
@@ -2555,7 +2555,7 @@
                     W = l[0],
                         H = l[1],
                         En(),
-                        "textwall" == W && (nt["private"]["disabled"] = !0),
+                        "textwall" == W && (wallSettings["private"]["disabled"] = !0),
                         "textwall" != W ? "main" != H ? (o = "/~" + W + "/" + H,
                             history["pushState"]({}, null, o)) : (o = "/~" + W,
                                 history["pushState"]({}, null, o)) : (o = "/",
@@ -2910,25 +2910,25 @@
                     break;
                 case "ro":
                     var B = a.ro;
-                    nt["readOnly"].checked = B,
+                    wallSettings["readOnly"].checked = B,
                         B && showToast("This wall is in read-only mode.", 3e3),
                         xn();
                     window.w.emit("readonly", B);
                     break;
                 case "priv":
-                    nt["private"]["checked"] = a["priv"],
+                    wallSettings["private"]["checked"] = a["priv"],
                         function () {
                             var e = t;
                             if (null != Y)
                                 for (var n = 0; n < Y["length"]; n += 2)
                                     if (Y[n] == H)
-                                        return Y[n + 1] = nt["private"]["checked"],
+                                        return Y[n + 1] = wallSettings["private"]["checked"],
                                             void Ln(Y)
                         }();
                     break;
                 case "ch":
                     var F = a.ch;
-                    nt["hideCursors"].checked = F,
+                    wallSettings["hideCursors"].checked = F,
                         m || (clientOptions["showothercurs"]["disabled"] = F,
                             clientOptions["showothercurs"].checked = !F && "false" != localStorage.getItem("showothercurs")),
                         ge = !0;
@@ -2936,7 +2936,7 @@
                     break;
                 case "dc":
                     var P = a.dc;
-                    nt["disableChat"]["checked"] = P,
+                    wallSettings["disableChat"]["checked"] = P,
                         clientOptions["showchat"].disabled = P,
                         P ? (clientOptions["showchat"]["checked"] = !1,
                             hn["classList"]["add"]("hidden")) : (clientOptions["showchat"]["checked"] = "false" != localStorage["getItem"]("showchat"),
@@ -2945,30 +2945,30 @@
                     break;
                 case "dcl":
                     var L = a["dcl"];
-                    nt["disableColour"]["checked"] = L,
+                    wallSettings["disableColour"]["checked"] = L,
                         hr(!!L || clientOptions["disablecolour"]["checked"]);
                     window.w.emit("disablecolor", L);
                     break;
                 case "db":
                     var O = a.db;
-                    nt["disableBraille"]["checked"] = O;
+                    wallSettings["disableBraille"]["checked"] = O;
                     window.w.emit("disablebraille", O);
                     break;
                 case "un":
                     var un = a.un;
-                    nt["unlisted"]["checked"] = un;
+                    wallSettings["unlisted"]["checked"] = un;
                     window.w.emit("unlisted", un);
                     break;
                 case "nsfw":
                     var nsfw = a.nsfw
-                    nt["nsfw"]["checked"] = nsfw;
+                    wallSettings["nsfw"]["checked"] = nsfw;
                     window.w.emit("nsfw", nsfw);
                     if (nsfw)
                         2 == j || m ? null : warn_nsfw();
                     break;
                 case "regonly":
                     var regonly = a.regonly
-                    nt["regonly"]["checked"] = regonly;
+                    wallSettings["regonly"]["checked"] = regonly;
                     window.w.emit("regonly", regonly);
                     if (regonly && !je) {
                         showToast("This wall is for registered users only. Please log in or register to access.", 5000);
@@ -2991,7 +2991,7 @@
                     break;*/
                 case "webhook":
                     var webhook = a.webhook;
-                    nt["webhook"]["checked"] = webhook[0];
+                    wallSettings["webhook"]["checked"] = webhook[0];
                     var api_key = document.getElementById("api_key");
                     if (webhook[0]) {
                         api_key.style.display = "block";
@@ -3012,16 +3012,16 @@
                         j == 1 || j == 2 ? document.getElementById("toggled").style.display = "inline-flex" : document.getElementById("toggled").style.display = "none",
                         2 == j ? (addMembersElement["style"]["display"] = "block",
                             deleteWallElement.style.display = "block") : (addMembersElement["style"]["display"] = "none"),
-                        nt["readOnly"]["disabled"] =
-                        nt["private"].disabled =
-                        nt["hideCursors"].disabled =
-                        nt.disableChat["disabled"] =
-                        nt["disableColour"]["disabled"] =
-                        nt["disableBraille"].disabled =
-                        nt["unlisted"].disabled = 
-                        nt["regonly"].disabled =
-                        nt["webhook"].disabled =
-                        nt["nsfw"].disabled = !(2 == j || m),
+                        wallSettings["readOnly"]["disabled"] =
+                        wallSettings["private"].disabled =
+                        wallSettings["hideCursors"].disabled =
+                        wallSettings.disableChat["disabled"] =
+                        wallSettings["disableColour"]["disabled"] =
+                        wallSettings["disableBraille"].disabled =
+                        wallSettings["unlisted"].disabled = 
+                        wallSettings["regonly"].disabled =
+                        wallSettings["webhook"].disabled =
+                        wallSettings["nsfw"].disabled = !(2 == j || m),
 
                         m && (deleteWallElement["style"]["display"] = "textwall" != W || K ? "block" : "none"),
                         0 == j && (Ve = !1,
@@ -3205,7 +3205,7 @@
         function Pn(e) {
             var t = n
                 , r = e["target"]["innerText"];
-            a.send(Or({
+            server.send(Or({
                 rmmem: r
             })),
                 e["target"].remove()
@@ -3265,7 +3265,7 @@
                         e.preventDefault();
                         var r = h["value"];
                         h.value = "",
-                            Bt["test"](r) ? (Cn(W, r),
+                            usernameCheck["test"](r) ? (Cn(W, r),
                                 Zn(0, 0),
                                 teleportElement.classList["remove"]("open")) : showToast("Invalid wall name", 2e3)
                     }
@@ -3281,7 +3281,7 @@
         }
         function Rn(e) {
             var t = n;
-            Ge["unshift"]([e.clientX * v / at, e.clientY * v / at, performance["now"]()]),
+            Ge["unshift"]([e.clientX * v / zoomValue, e.clientY * v / zoomValue, performance["now"]()]),
                 Ge.length > 4 && Ge["pop"]()
         }
         var Dn, Nn = !1, jn = 0;
@@ -3303,10 +3303,10 @@
             var e = n;
             coordsElement.innerText = Ce.x + "," + -Ce.y,
                 Ce.x + qe["offset"].x / v / 10 <= 0 && Mn(10 * -Ce.x * v, qe["offset"].y),
-                Ce.x + qe["offset"].x / v / 10 >= window["innerWidth"] / at / 10 - 1 && Mn((10 * -Ce.x + window.innerWidth / at - 10) * v, qe["offset"].y),
+                Ce.x + qe["offset"].x / v / 10 >= window["innerWidth"] / zoomValue / 10 - 1 && Mn((10 * -Ce.x + window.innerWidth / zoomValue - 10) * v, qe["offset"].y),
                 Ce.y + qe.offset.y / v / 20 <= 0 && Mn(qe["offset"].x, 20 * -Ce.y * v);
             var t = window["innerWidth"] < 750 ? infoElement.clientHeight : 0;
-            Ce.y + qe["offset"].y / v / 20 >= (window["innerHeight"] - t) / at / 20 - 1 && Mn(qe["offset"].x, (20 * -Ce.y + window["innerHeight"] / at - 20 - t / at) * v),
+            Ce.y + qe["offset"].y / v / 20 >= (window["innerHeight"] - t) / zoomValue / 20 - 1 && Mn(qe["offset"].x, (20 * -Ce.y + window["innerHeight"] / zoomValue - 20 - t / zoomValue) * v),
                 Le = Ae.x != Ce.x || Ae.y != Ce.y || Le,
                 Ae.x = Ce.x,
                 Ae.y = Ce.y,
@@ -3347,7 +3347,7 @@
                     var n = t;
                     if (e.touches.length > 1) {
                         var r = Math["sqrt"](Jr(e.touches[0]["pageX"] - e.touches[1]["pageX"]) + Jr(e.touches[0]["pageY"] - e["touches"][1]["pageY"]));
-                        0 != jn && setZoom(rt - (jn - r) / 300, !0),
+                        0 != jn && setZoom(clampedValue - (jn - r) / 300, !0),
                             Dn = void 0,
                             jn = r
                     }
@@ -3520,7 +3520,7 @@
             Ce.y = data.y;
             char = data.char;
             var i = char.codePointAt();
-            if (nt["disableBraille"]["checked"] && qr(i))
+            if (wallSettings["disableBraille"]["checked"] && qr(i))
                 return 0;
             var c = 20 * Math["floor"](Ce.x / 20)
                 , l = 10 * Math["floor"](Ce.y / 10)
@@ -3530,8 +3530,8 @@
             var s = we["get"](u);
             var A = Ce.x - c + 20 * (Ce.y - l);
             var cellTextProtected = s["textProtected"] && s["textProtected"][A] === "1";
-            if ((s.protected || cellTextProtected || nt["readOnly"]["checked"] || U && "" == je) && !m && 0 == j || null == s["txt"] || K)
-                return U && "" == je && !nt["readOnly"]["checked"] && showToast("Please log in before typing.", 3e3),
+            if ((s.protected || cellTextProtected || wallSettings["readOnly"]["checked"] || U && "" == je) && !m && 0 == j || null == s["txt"] || K)
+                return U && "" == je && !wallSettings["readOnly"]["checked"] && showToast("Please log in before typing.", 3e3),
                     0;
 
             clientOptions.rainbow["checked"] && !r && (
@@ -3613,7 +3613,7 @@
             Ce.y = data.y;
             char = data.char;
             var i = (char = Array.from(char)[0])["codePointAt"]();
-            if (nt["disableBraille"]["checked"] && qr(i))
+            if (wallSettings["disableBraille"]["checked"] && qr(i))
                 return 0;
             var c = 20 * Math["floor"](Ce.x / 20)
                 , l = 10 * Math["floor"](Ce.y / 10)
@@ -3623,8 +3623,8 @@
             var s = we["get"](u);
             var A = Ce.x - c + 20 * (Ce.y - l);
             var cellTextProtected = s["textProtected"] && s["textProtected"][A] === "1";
-            if ((s.protected || cellTextProtected || nt["readOnly"]["checked"] || U && "" == je) && !m && 0 == j || null == s["txt"] || K)
-                return U && "" == je && !nt["readOnly"]["checked"] && showToast("Please log in before typing.", 3e3),
+            if ((s.protected || cellTextProtected || wallSettings["readOnly"]["checked"] || U && "" == je) && !m && 0 == j || null == s["txt"] || K)
+                return U && "" == je && !wallSettings["readOnly"]["checked"] && showToast("Please log in before typing.", 3e3),
                     0;
             clientOptions.rainbow["checked"] && !r && (
                 clientOptions.rainbowMode.value === "legacy" ? (mr(Jn[Yn]), ++Yn == Jn.length && (Yn = 0)) :
@@ -3675,7 +3675,7 @@
             ie(!1),
                 Ce.x = e,
                 Ce.y = t,
-                Mn((10 * -Ce.x + window.innerWidth / at / 2) * v, (20 * -Ce.y + window["innerHeight"] / at / 2) * v),
+                Mn((10 * -Ce.x + window.innerWidth / zoomValue / 2) * v, (20 * -Ce.y + window["innerHeight"] / zoomValue / 2) * v),
                 document["getElementById"]("tpword")["value"] = "",
                 document["getElementById"]("tpx").value = 0,
                 document["getElementById"]("tpy")["value"] = 0,
@@ -3719,7 +3719,7 @@
                 }
             }
             return result;
-        } function tr(e) {
+        } function pasteTrigger(e) {
             if (typeof n === "undefined" || typeof Ce === "undefined") return;
 
             Ce.start = Ce.x;
@@ -4164,7 +4164,7 @@
 
         let total = colorHexs.length + rgbse.length;
 
-        if (colList.children.length > 0) a = !0;
+        if (colList.children.length > 0) server = !0;
         sr();
 
         function hr(e) {
@@ -4252,7 +4252,7 @@
         window.flushAmount = 250
         function flushWrites() {
             var e = n;
-            if (a && a["readyState"] == a["OPEN"]) {
+            if (server && server["readyState"] == server["OPEN"]) {
                 if ((Le || Oe || Re || De) && we.size !== 0) {
                     var t = {};
                     Le && (t.l = [Ce.x, Ce.y]);
@@ -4260,7 +4260,7 @@
                     Re && (t.n = clientOptions["anonymous"]["checked"]);
                     De && (t.p = [qe.coords.x, qe.coords.y]);
 
-                    a["send"](Or({ ce: t }));
+                    server["send"](Or({ ce: t }));
                     Le = Oe = Re = De = false;
                 }
 
@@ -4277,7 +4277,7 @@
                         }
                         tA["push"]([i, c, l, u, s]);
                     }
-                    a.send(Or({ e: tA }));
+                    server.send(Or({ e: tA }));
                 }
             }
         }
@@ -4601,7 +4601,7 @@
                 var i, c, l, u, s = bt(20), f = bt(d);
                 for (const t of we["keys"]())
                     xt(h = wt(t), s) ? xt(h, f) && delete we.get(t)["img"] : pt(t, h);
-                if (clientOptions["showothercurs"]["checked"] && (!nt.hideCursors["checked"] || m)) {
+                if (clientOptions["showothercurs"]["checked"] && (!wallSettings.hideCursors["checked"] || m)) {
                     gt(canvasGetContext);
                     for (const t of Pe.values()) {
                         var h = t.l;
@@ -4868,14 +4868,14 @@
             }
         function Kr() {
             var e = n;
-            if (null == a || a["readyState"] != WebSocket.CONNECTING && a["readyState"] != WebSocket.OPEN) {
+            if (null == server || server["readyState"] != WebSocket.CONNECTING && server["readyState"] != WebSocket.OPEN) {
                 var t = "wss://" + location.host + "/ws";
                 "https:" !== location.protocol && (t = "ws://" + location["host"] + "/ws"),
-                    (a = new WebSocket(t, window.w.currentVersion))["binaryType"] = "arraybuffer",
-                    a.onmessage = Tn,
-                    a["onclose"] = An,
-                    a["onerror"] = An,
-                    a.onopen = In,
+                    (server = new WebSocket(t, window.w.currentVersion))["binaryType"] = "arraybuffer",
+                    server.onmessage = Tn,
+                    server["onclose"] = An,
+                    server["onerror"] = An,
+                    server.onopen = In,
                     document.getElementById("connecting1")["innerText"] = "Connecting...",
                     document["getElementById"]("connecting2").innerText = "",
                     document.getElementById("connecting3").innerText = "",
@@ -5632,7 +5632,7 @@
         window.w.typeChar = writeChar;
         window.w.socket = {}
         Object.defineProperty(window.w, "socket", {
-            get: function () { return a }
+            get: function () { return server }
         });
         window.w.clipboard = {
             textarea: null,
@@ -5693,16 +5693,16 @@
         window.network.binary = Or;
         window.network.text = Rr;
         window.network.send = function (data) {
-            a.send(window.network.binary(data))
+            server.send(window.network.binary(data))
         };
         window.network.wsUrl = "wss://" + location.host + "/ws";
         window.w.changeZoom = function (e, t) {
             console.warn("remember, this won't save!");
             var r = n;
-            rt = e < 0 ? 0 : e > 10000 ? 10000 : e,
-                at = Math.round(100 * rt) / 100,
-                ot["value"] = 10 * at,
-                t && showToast(Math["round"](100 * at) + "% ", 1e3),
+            clampedValue = e < 0 ? 0 : e > 10000 ? 10000 : e,
+                zoomValue = Math.round(100 * clampedValue) / 100,
+                zoomElement["value"] = 10 * zoomValue,
+                t && showToast(Math["round"](100 * zoomValue) + "% ", 1e3),
                 kn()
         }
         window.w.changeColor = mr;
