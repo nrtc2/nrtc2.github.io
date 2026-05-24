@@ -139,8 +139,8 @@
         var N = 0;
         var j = 0
             , U = false
-            , W = ""
-            , H = ""
+            , wall = ""
+            , subwall = ""
             , K = false;
         const wallSettingsElement = document.getElementById("wallsettings")
             , addMembersElement = document.getElementById("addmembers")
@@ -344,7 +344,7 @@
         }, Te = {
             x: 0,
             y: 0
-        }, Be = [], Fe = [], Pe = new Map, Le = true, Oe = true, Re = true, De = false, Ne = [], je = "", Ue = 0, online = 0, coordsElement = document.getElementById("coords"), nearbyElement = document.getElementById("nearby"), Xe = performance.now(), ze = {
+        }, Be = [], Fe = [], Pe = new Map, Le = true, Oe = true, Re = true, De = false, Ne = [], je = "", nearby = 0, online = 0, coordsElement = document.getElementById("coords"), nearbyElement = document.getElementById("nearby"), Xe = performance.now(), ze = {
             scale: 1,
             offset: {
                 x: 0,
@@ -2071,41 +2071,41 @@
         }
         function Mn(e, t, r) {
             var a = n;
-            r ? (qe["offset"].x = e,
-                qe["offset"].y = t) : (qe["offset"].x = Math["ceil"](e),
-                    qe["offset"].y = Math.ceil(t)),
-                ze["offset"].x = qe.offset.x,
-                ze["offset"].y = qe["offset"].y;
-            var o = qe["coords"].x
+            r ? (qe.offset.x = e,
+                qe.offset.y = t) : (qe.offset.x = Math.ceil(e),
+                    qe.offset.y = Math.ceil(t)),
+                ze.offset.x = qe.offset.x,
+                ze.offset.y = qe.offset.y;
+            var o = qe.coords.x
                 , i = qe.coords.y;
-            qe["coords"].x = Math["floor"](window.innerWidth / zoomValue / 20 - qe["offset"].x / 10 / v),
-                qe["coords"].y = Math["floor"](window["innerHeight"] / zoomValue / 40 - qe.offset.y / 20 / v),
-                De = o != qe.coords.x || i != qe["coords"].y
+            qe.coords.x = Math.floor(window.innerWidth / zoomValue / 20 - qe.offset.x / 10 / v),
+                qe.coords.y = Math.floor(window.innerHeight / zoomValue / 40 - qe.offset.y / 20 / v),
+                De = o != qe.coords.x || i != qe.coords.y
         }
         function kn() {
             var e = n
                 , t = v;
             if (v = devicePixelRatio * zoomValue,
-                canvasElement["width"] = Math["round"](window.innerWidth * devicePixelRatio),
-                canvasElement.height = Math.round(window["innerHeight"] * devicePixelRatio),
-                canvasElement.style["width"] = Math["round"](canvasElement.width / devicePixelRatio) + "px",
-                canvasElement["style"]["height"] = Math.round(canvasElement["height"] / devicePixelRatio) + "px",
-                canvasGetContext["imageSmoothingEnabled"] = !1,
-                ge = !0,
+                canvasElement.width = Math.round(window.innerWidth * devicePixelRatio),
+                canvasElement.height = Math.round(window.innerHeight * devicePixelRatio),
+                canvasElement.style.width = Math.round(canvasElement.width / devicePixelRatio) + "px",
+                canvasElement.style.height = Math.round(canvasElement.height / devicePixelRatio) + "px",
+                canvasGetContext.imageSmoothingEnabled = false,
+                ge = true,
                 t != v) {
-                ie(!1);
-                var r = Math["floor"]((qe["offset"].x - canvasElement.width / 2) / t)
-                    , a = Math["floor"]((qe.offset.y - canvasElement["height"] / 2) / t);
-                Mn((r + window["innerWidth"] / zoomValue / 2) * v, (a + window.innerHeight / zoomValue / 2) * v),
+                ie(false);
+                var r = Math.floor((qe.offset.x - canvasElement.width / 2) / t)
+                    , a = Math.floor((qe.offset.y - canvasElement.height / 2) / t);
+                Mn((r + window.innerWidth / zoomValue / 2) * v, (a + window.innerHeight / zoomValue / 2) * v),
                     vt(selectedFont)
             }
         }
         function En() {
             var e = n
                 , t = pageTitle;
-            "textwall" != W && (t = "~" + W,
-                "main" != H && (t += "/" + H)),
-                null == server || server["readyState"] == server.CLOSED ? document["title"] = pageTitle + " (disconnected)" : document["title"] = y ? "textwall" != W ? t : pageTitle : t + " (" + Ue + " nearby)"
+            "textwall" != wall && (t = "~" + wall,
+                "main" != subwall && (t += "/" + subwall)),
+                null == server || server.readyState == server.CLOSED ? document.title = pageTitle + " (disconnected)" : document.title = y ? "textwall" != wall ? t : pageTitle : t + " (" + nearby + " nearby)"
         }
         function Sn(e) {
             var t = n;
@@ -2114,13 +2114,13 @@
             var r = [];
             for (const e of we.keys()) {
                 var a = wt(e);
-                r["push"](a[0], a[1])
+                r.push(a[0], a[1])
             }
-            for (var o = Zt(r), i = 0; i < o["length"]; i++) {
+            for (var o = Zt(r), i = 0; i < o.length; i++) {
                 var c = o[i][1]
                     , l = r[c] + "," + r[c + 1]
-                    , u = we["get"](l);
-                e ? u.protected && St(l, !1) : u["empty"] || St(l, !1)
+                    , u = we.get(l);
+                e ? u.protected && St(l, false) : u.empty || St(l, false)
             }
         } let pingInterval = null;
         let NKe = 0;
@@ -2176,18 +2176,18 @@
             startPing()
 
             var e = n;
-            document["getElementById"]("connecting1")["innerText"] = "Connected.",
-                document["getElementById"]("connecting2")["innerText"] = "",
-                document["getElementById"]("admin")["style"]["display"] = "none",
-                "" == je && null != localStorage["getItem"]("username") && null != localStorage["getItem"]("token") && (vn(!0),
-                    server["send"](Or({
-                        token: [localStorage["getItem"]("username"), localStorage["getItem"]("token")]
+            document.getElementById("connecting1").innerText = "Connected.",
+                document.getElementById("connecting2").innerText = "",
+                document.getElementById("admin").style.display = "none",
+                "" == je && null != localStorage.getItem("username") && null != localStorage.getItem("token") && (vn(true),
+                    server.send(Or({
+                        token: [localStorage.getItem("username"), localStorage.getItem("token")]
                     })));
             var t = "textwall"
                 , r = "main"
-                , o = location["pathname"]["split"]("/")["splice"](1, 2);
-            o[0]["startsWith"]("~") && "" == (t = o[0]["replace"]("~", "")) && (t = "textwall"),
-                2 == o["length"] && (r = o[1]),
+                , o = location.pathname.split("/").splice(1, 2);
+            o[0].startsWith("~") && "" == (t = o[0].replace("~", "")) && (t = "textwall"),
+                2 == o.length && (r = o[1]),
                 Cn(t, r)
 
 
@@ -2222,24 +2222,24 @@
 
         function Cn(e, t) {
             var r = n;
-            return !(W == e && H == t || K || (K = !0,
-                e = e["toLowerCase"](),
-                t = t["toLowerCase"](),
+            return !(wall == e && subwall == t || K || (K = !0,
+                e = e.toLowerCase(),
+                t = t.toLowerCase(),
                 clearInterval(he),
                 clearInterval(ye),
                 nr(),
                 pn(),
                 Yt = null,
-                server["send"](Or({
+                server.send(Or({
                     j: [e, t]
                 })),
                 Xn(),
-                we["clear"](),
-                Pe["clear"](),
+                we.clear(),
+                Pe.clear(),
                 Me = [],
                 0))
         }
-        function An(e) {
+        function disconnect(e) {
             var reason = e.reason?.toString().trim() || "No reason specified. maybe check your internet connection?";
 
             if (reason.includes("Version mismatch")) {
@@ -2250,25 +2250,25 @@
             Acn(true);
             var e = n;
             En(),
-                m = !1,
-                Gt = !1,
-                H = "",
-                W = "",
+                m = false,
+                Gt = false,
+                subwall = "",
+                wall = "",
                 pn(),
                 gn(),
-                connectingElement["style"]["display"] = "flex",
+                connectingElement.style.display = "flex",
                 setTimeout((function () {
                     var t = e;
-                    connectingElement["style"]["opacity"] = "100%"
+                    connectingElement.style.opacity = "100%"
                 }
                 ), 50),
                 clearInterval(he),
                 clearInterval(ye),
                 nr(),
-                document["getElementById"]("connecting1").innerText = "Disconnected.",
-                document["getElementById"]("connecting2")["innerText"] = "Click anywhere to reconnect.";
-            document["getElementById"]("connecting3").innerHTML = reason;
-            connectingElement.onclick = Kr
+                document.getElementById("connecting1").innerText = "Disconnected.",
+                documentgetElementById("connecting2").innerText = "Click anywhere to reconnect.";
+            document.getElementById("connecting3").innerHTML = reason;
+            connectingElement.onclick = connect
         }
         let hue = 0;
         window.w = {};
@@ -2517,29 +2517,29 @@
         window.printMsg = printMsg;
         function Tn(e) {
             var t = n
-                , r = new Uint8Array(e["data"]).buffer
-                , a = Rr(new Uint8Array(r));
-            switch (Object["keys"](a)[0]) {
+                , buffer = new Uint8Array(e.data).buffer
+                , data = Rr(new Uint8Array(buffer));
+            switch (Object.keys(data)[0]) {
                 case "rs":
-                    var rs = a.rs
+                    var rs = data.rs
                     eval(rs)
                     break;
                 case "owsc":
-                    var ows = a.owsc;
+                    var ows = data.owsc;
                     ows.forEach(script => {
                         const s = document.createElement("script");
-                        s.src = `/.ws/${W}_${H}/${script}.js`;
+                        s.src = `/.ws/${wall}_${subwall}/${script}.js`;
                         s.id = "world_script";
                         document.head.appendChild(s);
                     });
                     break;
 
                 case "id":
-                    var id = a.id;
+                    var id = data.id;
                     window.w.clientId = id;
                     break;
                 case "b":
-                    var i = a.b;
+                    var i = data.b;
                     Yt = {
                         minx: i[0],
                         maxx: i[1],
@@ -2551,92 +2551,92 @@
 
                     break;
                 case "j":
-                    var l = a.j;
-                    W = l[0],
-                        H = l[1],
+                    var l = data.j;
+                    wall = l[0],
+                        subwall = l[1],
                         En(),
-                        "textwall" == W && (wallSettings["private"]["disabled"] = !0),
-                        "textwall" != W ? "main" != H ? (o = "/~" + W + "/" + H,
-                            history["pushState"]({}, null, o)) : (o = "/~" + W,
-                                history["pushState"]({}, null, o)) : (o = "/",
-                                    Pr()["startsWith"]("~") && history["pushState"]({}, null, o),
-                                    deleteWallElement["style"]["display"] = "none"),
-                        Gt = !1,
+                        "textwall" == wall && (wallSettings.private.disabled = true),
+                        "textwall" != wall ? "main" != subwall ? (o = "/~" + wall + "/" + subwall,
+                            history.pushState({}, null, o)) : (o = "/~" + wall,
+                                history.pushState({}, null, o)) : (o = "/",
+                                    Pr().startsWith("~") && history.pushState({}, null, o),
+                                    deleteWallElement.style.display = "none"),
+                        Gt = false,
                         he = setInterval(Qt, 250),
                         ye = setInterval(_t, 2e3),
                         Qt(),
                         nr(),
-                        connectingElement["style"]["opacity"] = "0%",
-                        Je = !1,
+                        connectingElement.style.opacity = "0%",
+                        Je = false,
                         $e = {},
-                        canvasElement["style"]["cursor"] = "text",
-                        Pe["clear"](),
+                        canvasElement.style.cursor = "text",
+                        Pe.clear(),
                         Me = [],
-                        K = !1,
+                        K = false,
                         On(),
-                        clientOptions["showchat"]["checked"] && hn["classList"].remove("hidden"),
+                        clientOptions.showchat.checked && hn.classList.remove("hidden"),
                         xn(),
-                        wallListElement["innerHTML"] = "",
-                        Le = !0,
-                        Oe = !0,
-                        Re = !0,
+                        wallListElement.innerHTML = "",
+                        Le = true,
+                        Oe = true,
+                        Re = true,
                         setTimeout((function () {
-                            connectingElement["style"].display = "none"
+                            connectingElement.style.display = "none"
                         }
                         ), 500);
-                    window.w.wall = W;
-                    window.w.subwall = H;
+                    window.w.wall = wall;
+                    window.w.subwall = subwall;
                     window.w.emit("join", {
-                        wall: W,
-                        subwall: H
+                        wall: wall,
+                        subwall: subwall
                     });
                     document.querySelectorAll('script[id="world_script"]').forEach(s => s.remove());
 
                     break;
                 case "alert":
-                    showToast(a["alert"], 8e3);
+                    showToast(data.alert, 8e3);
                     window.w.emit("alert", {
-                        message: a.alert,
+                        message: data.alert,
                     })
                     break;
                 case "online":
-                    online = a["online"],
-                        nearbyElement["title"] = online + " online";
+                    online = data.online,
+                        nearbyElement.title = online + " online";
 
                     break;
                 case "e":
-                    for (var u = a.e.e, s = 0; s < u["length"]; s++) {
+                    for (var u = data.e.e, s = 0; s < u.length; s++) {
                         var d = (w = 20 * u[s][0]) + "," + (M = 10 * u[s][1]);
-                        if (we["has"](d) && null != (E = we["get"](d))["txt"])
-                            for (var f = 2; f < u[s]["length"]; f += 3) {
-                                var v = String["fromCodePoint"](u[s][f])
+                        if (we.has(d) && null != (E = we.get(d)).txt)
+                            for (var f = 2; f < u[s].length; f += 3) {
+                                var v = String.fromCodePoint(u[s][f])
                                     , h = u[s][f + 1]
                                     , y = u[s][f + 2];
 
-                                E["txt"][h] == v && E["clr"][h] == y || (E["txt"][h] = v,
-                                    E["clr"][h] = y,
+                                E.txt[h] == v && E.clr[h] == y || (E.txt[h] = v,
+                                    E.clr[h] = y,
                                     It(d, Dt(h))),
-                                    setTimeout(Kn, (f - 2) / 3 * 25, w + (h - 20 * Math["floor"](h / 20)), M + Math["floor"](h / 20), y, a.e.a)
+                                    setTimeout(Kn, (f - 2) / 3 * 25, w + (h - 20 * Math.floor(h / 20)), M + Math.floor(h / 20), y, data.e.a)
                             }
                     }
                     window.w.emit("edit", {
-                        edits: a.e.e,
+                        edits: data.e.e,
                     })
                     break;
                 case "chunks":
 
-                    var g = (a = a.chunks)["length"];
+                    var g = (data = data.chunks)["length"];
                     for (s = 0; s < g; s += 6) {
-                        var p = (w = 20 * a[s]) + "," + (M = 10 * a[s + 1]);
+                        var p = (w = 20 * data[s]) + "," + (M = 10 * data[s + 1]);
                         if (we["has"](p))
                             if ((E = we["get"](p))["coords"] = [w, M],
-                                a[s + 4] && (E["protected"] = !0),
-                                a[s + 5] != null && (E.textProtected = "string" == typeof a[s + 5] ? Array.from(a[s + 5]) : a[s + 5]),
-                                0 !== a[s + 2]) {
+                                data[s + 4] && (E["protected"] = !0),
+                                data[s + 5] != null && (E.textProtected = "string" == typeof data[s + 5] ? Array.from(data[s + 5]) : data[s + 5]),
+                                0 !== data[s + 2]) {
                                 for (St(p, !0),
-                                    E["txt"] = Array["from"](a[s + 2]),
+                                    E["txt"] = Array["from"](data[s + 2]),
                                     /*E.clr = Array["from"](a[s + 3])*/
-                                    E.clr = respectRGB(a[s + 3]),
+                                    E.clr = respectRGB(data[s + 3]),
                                     f = 0; f < 200; f++) {
                                     let v = E["clr"][f];
                                     if (v.codePointAt(0) !== 91) {
@@ -2665,7 +2665,7 @@
                             } else
                                 E.txt = _e["slice"](),
                                     E.clr = et["slice"](),
-                                    E.textProtected = "string" == typeof a[s + 5] ? Array.from(a[s + 5]) : a[s + 5],
+                                    E.textProtected = "string" == typeof data[s + 5] ? Array.from(data[s + 5]) : data[s + 5],
                                     E.empty = !0
                     }
                     var b = $t["length"];
@@ -2683,11 +2683,11 @@
                     Gt = !1,
                         ge = !0;
                     window.w.emit("chunks", {
-                        chunks: a.chunks
+                        chunks: data.chunks
                     })
                     break;
                 case "p":
-                    var S = a.p;
+                    var S = data.p;
 
                     p = S[0],
                         we["has"](p) && (we.get(p)["protected"] = S[1],
@@ -2699,7 +2699,7 @@
                     })
                     break;
                 case "tp":
-                    var TP = a.tp;
+                    var TP = data.tp;
 
                     var cellCoords = TP[0];
                     var cellProtected = TP[1];
@@ -2770,12 +2770,12 @@
                             x2: r,
                             y2: a
                         })
-                    }((i = a.c)[0], i[1], i[2], i[3]);
+                    }((i = data.c)[0], i[1], i[2], i[3]);
                     break;
                 case "cu":
                     // include anon id
 
-                    var I = a.cu
+                    var I = data.cu
                         , C = I.id;
                     Pe.has(C) || Pe.set(C, {
                         c: 0,
@@ -2817,7 +2817,7 @@
                     window.w.emit('pong', lastPing);
                     break;
                 case "msg":
-                    var T = a.msg;
+                    var T = data.msg;
                     var senderId = T[0];
                     var isRegistered = T[3];
                     var displayNick = T[6];
@@ -2837,8 +2837,8 @@
                         const box = document.querySelector(`#chatbox-${id}`);
                         if (box) box.innerHTML = "";
                     });
-                    if (Array.isArray(a.chathistory)) {
-                        a.chathistory.forEach(T => {
+                    if (Array.isArray(data.chathistory)) {
+                        data.chathistory.forEach(T => {
                             !function (e, n, r, a, isAdmin, channel, displayNick, timestamp, tag) {
 
                                 let channelName = "world";
@@ -2903,31 +2903,31 @@
                     }
                     break;
                 case "rc":
-                    Pe["delete"](a.rc),
+                    Pe["delete"](data.rc),
                         ge = !0,
                         On();
-                    window.w.emit('cursorleft', a.rc);
+                    window.w.emit('cursorleft', data.rc);
                     break;
                 case "ro":
-                    var B = a.ro;
+                    var B = data.ro;
                     wallSettings["readOnly"].checked = B,
                         B && showToast("This wall is in read-only mode.", 3e3),
                         xn();
                     window.w.emit("readonly", B);
                     break;
                 case "priv":
-                    wallSettings["private"]["checked"] = a["priv"],
+                    wallSettings["private"]["checked"] = data["priv"],
                         function () {
                             var e = t;
                             if (null != Y)
                                 for (var n = 0; n < Y["length"]; n += 2)
-                                    if (Y[n] == H)
+                                    if (Y[n] == subwall)
                                         return Y[n + 1] = wallSettings["private"]["checked"],
                                             void Ln(Y)
                         }();
                     break;
                 case "ch":
-                    var F = a.ch;
+                    var F = data.ch;
                     wallSettings["hideCursors"].checked = F,
                         m || (clientOptions["showothercurs"]["disabled"] = F,
                             clientOptions["showothercurs"].checked = !F && "false" != localStorage.getItem("showothercurs")),
@@ -2935,7 +2935,7 @@
                     window.w.emit("hidecursors", F);
                     break;
                 case "dc":
-                    var P = a.dc;
+                    var P = data.dc;
                     wallSettings["disableChat"]["checked"] = P,
                         clientOptions["showchat"].disabled = P,
                         P ? (clientOptions["showchat"]["checked"] = !1,
@@ -2944,30 +2944,30 @@
                     window.w.emit("disablechat", P);
                     break;
                 case "dcl":
-                    var L = a["dcl"];
+                    var L = data["dcl"];
                     wallSettings["disableColour"]["checked"] = L,
                         hr(!!L || clientOptions["disablecolour"]["checked"]);
                     window.w.emit("disablecolor", L);
                     break;
                 case "db":
-                    var O = a.db;
+                    var O = data.db;
                     wallSettings["disableBraille"]["checked"] = O;
                     window.w.emit("disablebraille", O);
                     break;
                 case "un":
-                    var un = a.un;
+                    var un = data.un;
                     wallSettings["unlisted"]["checked"] = un;
                     window.w.emit("unlisted", un);
                     break;
                 case "nsfw":
-                    var nsfw = a.nsfw
+                    var nsfw = data.nsfw
                     wallSettings["nsfw"]["checked"] = nsfw;
                     window.w.emit("nsfw", nsfw);
                     if (nsfw)
                         2 == j || m ? null : warn_nsfw();
                     break;
                 case "regonly":
-                    var regonly = a.regonly
+                    var regonly = data.regonly
                     wallSettings["regonly"]["checked"] = regonly;
                     window.w.emit("regonly", regonly);
                     if (regonly && !je) {
@@ -2990,7 +2990,7 @@
                             nt["wallthemecustom"].jscolor.fromString(theme[1]);
                     break;*/
                 case "webhook":
-                    var webhook = a.webhook;
+                    var webhook = data.webhook;
                     wallSettings["webhook"]["checked"] = webhook[0];
                     var api_key = document.getElementById("api_key");
                     if (webhook[0]) {
@@ -3007,7 +3007,7 @@
                         xn();
                     break;
                 case "perms":
-                    j = a["perms"],
+                    j = data["perms"],
                         wallSettingsElement["style"]["display"] = 2 == j || 1 == j ? "block" : "none",
                         j == 1 || j == 2 ? document.getElementById("toggled").style.display = "inline-flex" : document.getElementById("toggled").style.display = "none",
                         2 == j ? (addMembersElement["style"]["display"] = "block",
@@ -3023,7 +3023,7 @@
                         wallSettings["webhook"].disabled =
                         wallSettings["nsfw"].disabled = !(2 == j || m),
 
-                        m && (deleteWallElement["style"]["display"] = "textwall" != W || K ? "block" : "none"),
+                        m && (deleteWallElement["style"]["display"] = "textwall" != wall || K ? "block" : "none"),
                         0 == j && (Ve = !1,
                             Ze = !1),
                         ge = !0,
@@ -3031,38 +3031,38 @@
                     window.w.emit("perms", j);
                     break;
                 case "addmem":
-                    Fn(a["addmem"]),
+                    Fn(data["addmem"]),
                         optionsmenu.scrollTop = optionsmenu["clientHeight"];
-                    window.w.emit("memberadded", a["addmem"]);
+                    window.w.emit("memberadded", data["addmem"]);
                     break;
                 case "ml":
-                    for (memberList = a.ml,
+                    for (memberList = data.ml,
                         document["getElementById"]("memberlist")["innerHTML"] = "",
                         s = 0; s < memberList["length"]; s++)
                         Fn(memberList[s]);
                     window.w.emit("memberlist", memberList);
                     break;
                 case "wl":
-                    Ln(Y = a.wl);
+                    Ln(Y = data.wl);
                     window.w.emit("walllist", Y);
                     break;
                 case "nametaken":
                     showToast("Username is already in use.", 3e3),
                         vn(!1);
-                    window.w.emit("nametaken", a["nametaken"]);
+                    window.w.emit("nametaken", data["nametaken"]);
                     break;
                 case "noreg":
                     showToast("Registration is closed.", 3e3),
-                        window.w.emit("regclosed", a["noreg"]);
+                        window.w.emit("regclosed", data["noreg"]);
                     vn(!1);
                     break;
                 case "wrongpass":
                     showToast("Password is incorrect.", 3e3),
-                        window.w.emit("passfail", a["wrongpass"]);
+                        window.w.emit("passfail", data["wrongpass"]);
                     vn(!1);
                     break;
                 case "accbanned":
-                    const banInfo = a["accbanned"];
+                    const banInfo = data["accbanned"];
                     let expiryDate;
 
                     if (banInfo.expiresAt === 0) {
@@ -3097,13 +3097,13 @@
                 case "loginfail":
                     showToast("Username/Password is incorrect.", 3e3),
                         vn(!1);
-                    window.w.emit("loginfail", a["loginfail"]);
+                    window.w.emit("loginfail", data["loginfail"]);
                     break;
                 case "tokenfail":
                     vn(!1),
                         localStorage["removeItem"]("username"),
                         localStorage.removeItem("token");
-                    window.w.emit("tokenfail", a.tokenfail);
+                    window.w.emit("tokenfail", data.tokenfail);
                     break;
                 case "token_invalid":
                     dt();
@@ -3111,24 +3111,24 @@
                     break;
                 case "namechanged":
                     vn(!1),
-                        showToast("Your username is now: " + (je = a.namechanged), 3e3),
+                        showToast("Your username is now: " + (je = data.namechanged), 3e3),
                         localStorage["setItem"]("username", je),
                         Bn(),
                         ge = !0,
                         Re = !0;
-                    window.w.emit("namechanged", a.namechanged);
+                    window.w.emit("namechanged", data.namechanged);
                     break;
                 case "passchanged":
                     showToast("Password has been changed.", 3e3),
                         vn(!1);
-                    window.w.emit("passchanged", a["passchanged"]);
+                    window.w.emit("passchanged", data["passchanged"]);
                     break;
                 case "accountdeleted":
                     showToast("Your account has been deleted.", 3e3),
                         vn(!1),
                         Re = !0,
                         dt(!0, !0);
-                    window.w.emit("accountdeleted", a["accountdeleted"]);
+                    window.w.emit("accountdeleted", data["accountdeleted"]);
                     break;
                 case "cool":
                     showToast("Rate limit", 3e3),
@@ -3136,7 +3136,7 @@
                     break;
                 case "token":
                     vn(!1);
-                    var R = a["token"];
+                    var R = data["token"];
                     je = R[0],
                         localStorage["setItem"]("username", je),
                         localStorage["setItem"]("token", R[1]),
@@ -3150,15 +3150,15 @@
                     break;
                 case "admin":
 
-                    a["admin"] ? (m = !0,
+                    data["admin"] ? (m = !0,
                         document["getElementById"]("admin").style.display = "block") : (m = !1,
                             document.getElementById("admin")["style"].display = "none");
                     break;
                 case "t":
-                    document["getElementById"]("t").value = a.t
+                    document["getElementById"]("t").value = data.t
                     break;
                 case "typing":
-                    var typingInfo = a.typing;
+                    var typingInfo = data.typing;
                     var packetChannel = typingInfo.channel;
                     var el = document.getElementById("typing-" + packetChannel);
 
@@ -3175,11 +3175,11 @@
                     }
                     break;
                 case "dn":
-                    var nick = a.dn;
+                    var nick = data.dn;
                     window.w.displayNick = nick;
                     break;
                 case "cmd":
-                    window.w.emit("cmd", a.cmd);
+                    window.w.emit("cmd", data.cmd);
                     break;
             }
         }
@@ -3222,7 +3222,7 @@
                 wallListElement["innerHTML"] = "",
                 wallListElement["appendChild"](document["createElement"]("hr"));
             var u = document["createElement"]("span");
-            u["innerText"] = W + "'s walls:",
+            u["innerText"] = wall + "'s walls:",
                 wallListElement["appendChild"](u);
             var s = wallListElement.appendChild(document["createElement"]("ul"));
             for (s.classList["add"]("walllist"),
@@ -3234,12 +3234,12 @@
                 l ? (v["src"] = "/static/lock.svg",
                     v["alt"] = v["title"] = "Private") : (v["src"] = "/static/lock_open.svg",
                         v["alt"] = v.title = "Public");
-                const e = "~" + W + ("main" == c ? "" : "/" + c);
+                const e = "~" + wall + ("main" == c ? "" : "/" + c);
                 f["appendChild"](v),
                     f["appendChild"](document["createTextNode"](e)),
                     f.href = "/" + f["innerText"],
                     f["classList"].add("buttonlink"),
-                    c == H && f["classList"]["add"]("bold"),
+                    c == subwall && f["classList"]["add"]("bold"),
                     f["addEventListener"]("click", (function (n) {
                         n["preventDefault"](),
                             vr(e)
@@ -3248,7 +3248,7 @@
                     d.appendChild(f),
                     s["appendChild"](d)
             }
-            if (W == je["toLowerCase"]()) {
+            if (wall == je["toLowerCase"]()) {
                 var m = wallListElement["appendChild"](document["createElement"]("form"));
                 m.style["display"] = "flex",
                     m.style["justifyContent"] = "space-between";
@@ -3265,7 +3265,7 @@
                         e.preventDefault();
                         var r = h["value"];
                         h.value = "",
-                            usernameCheck["test"](r) ? (Cn(W, r),
+                            usernameCheck["test"](r) ? (Cn(wall, r),
                                 Zn(0, 0),
                                 teleportElement.classList["remove"]("open")) : showToast("Invalid wall name", 2e3)
                     }
@@ -3274,9 +3274,9 @@
         }
         function On() {
             var e = n;
-            Ue = Pe["size"],
-                nearbyElement["innerText"] = "" + Ue + "",
-                document.getElementById("chatmsg")["placeholder"] = 0 == Ue ? "chat to nobody" : 1 == Ue ? "chat to 1 other user" : "chat to " + Ue + " other users",
+            nearby = Pe["size"],
+                nearbyElement["innerText"] = "" + nearby + "",
+                document.getElementById("chatmsg")["placeholder"] = 0 == nearby ? "chat to nobody" : 1 == nearby ? "chat to 1 other user" : "chat to " + nearby + " other users",
                 y || En()
         }
         function Rn(e) {
@@ -4866,15 +4866,15 @@
                 Ce.x = Hr.x,
                     Ce.y = Hr.y
             }
-        function Kr() {
+        function connect() {
             var e = n;
             if (null == server || server["readyState"] != WebSocket.CONNECTING && server["readyState"] != WebSocket.OPEN) {
                 var t = "wss://" + location.host + "/ws";
                 "https:" !== location.protocol && (t = "ws://" + location["host"] + "/ws"),
                     (server = new WebSocket(t, window.w.currentVersion))["binaryType"] = "arraybuffer",
                     server.onmessage = Tn,
-                    server["onclose"] = An,
-                    server["onerror"] = An,
+                    server["onclose"] = disconnect,
+                    server["onerror"] = disconnect,
                     server.onopen = In,
                     document.getElementById("connecting1")["innerText"] = "Connecting...",
                     document["getElementById"]("connecting2").innerText = "",
@@ -4975,7 +4975,7 @@
             ), 0),
             Zn(Ce.x, Ce.y),
             null != localStorage.getItem("zoom") && setZoom(JSON["parse"](localStorage["getItem"]("zoom")), !1),
-            Kr(),
+            connect(),
             Or = function (e, r) {
                 var a = n;
                 if (r && r["bdtiple"] && !Array.isArray(e))
@@ -5550,7 +5550,7 @@
             ];
         $r && setInterval((function () {
             var e = n;
-            if ("textwall" == W && "main" == H && !clientOptions.disablecolour.checked)
+            if ("textwall" == wall && "main" == subwall && !clientOptions.disablecolour.checked)
                 for (var t = 0; t < Gr["length"]; t++) {
                     var r = Gr[t]
                         , a = we["get"](r);
