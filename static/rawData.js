@@ -28,7 +28,7 @@ function rawData(e, seen = new WeakSet()) {
 
             const keys = Reflect.ownKeys(e);
             const props = keys.map(key =>
-                `${/^[a-z$_][0-9a-z$_]*$/i.test(String(key)) ? String(key) : `${rawData(String(key))}`}: ${rawData(e[key], seen)}`
+                `${typeof key !== "symbol" ? /^[a-z$_][0-9a-z$_]*$/i.test(String(key)) ? String(key) : `${rawData(String(key))}` : `[${rawData(key)}]`}: ${rawData(e[key], seen)}`
             );
 
             const prefix = e.constructor?.name !== 'Object' ?
@@ -60,7 +60,7 @@ function rawData(e, seen = new WeakSet()) {
     }
 
     if (typeof e === 'symbol') {
-        return `Symbol(${e.description ?? ''})`;
+        return `Symbol(${rawData(e.description)})`;
     }
 
     if (typeof e === 'number') {
