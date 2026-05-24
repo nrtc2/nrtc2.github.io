@@ -327,7 +327,7 @@
                 }
             me[colorHexs["length"]] = "rgba(255, 255, 255, 0.2)"
         }();
-        var he, ye, ge, pe = 0, be = hexToRGBA(colorHexs[pe], .2), xe = false, we = new Map, Me = [], ke = [], Ee = new Map, Se = new Worker("/static/ping.js"), Ie = false, cur = {
+        var he, ye, ge, pe = 0, be = hexToRGBA(colorHexs[pe], .2), xe = false, chunks = new Map, Me = [], ke = [], Ee = new Map, Se = new Worker("/static/ping.js"), Ie = false, cur = {
             x: 0,
             y: 0,
             rawx: 0,
@@ -363,7 +363,7 @@
                 x: 0,
                 y: 0
             }
-        }, Ye = false, Je = false, Ve = false, Ze = false, $e = {}, Ge = [], Qe = null, _e = [];
+        }, Ye = false, selectionActive = false, Ve = false, Ze = false, $e = {}, Ge = [], Qe = null, _e = [];
         for (ne = 0; ne < 200; ne++)
             _e[ne] = " ";
         var et = [];
@@ -527,7 +527,7 @@
         }
         function pt(e, t) {
             var r = n
-                , a = we.get(e);
+                , a = chunks.get(e);
             if (a.empty) {
                 canvasGetContext.fillStyle = a.protected ? A : C,
                     yt(t);
@@ -569,7 +569,7 @@
 
         function wt(e) {
             var t = n;
-            return we.get(e).coords || e.split(",")
+            return chunks.get(e).coords || e.split(",")
         }
         function Mt(e, t, r, a) {
             var o = n;
@@ -721,7 +721,7 @@
         }
         function Xt(e, t) {
             var r = n
-                , a = we.get(e);
+                , a = chunks.get(e);
             if (null != a && null != a.txt) {
                 var o = zt(e);
                 if (a.empty = o,
@@ -729,8 +729,8 @@
                     qt(e);
                     var i = wt(e)
                         , c = i[0] + 20 + "," + i[1];
-                    if (we.has(c)) {
-                        var l = we.get(c);
+                    if (chunks.has(c)) {
+                        var l = chunks.get(c);
                         null != l.txt && (zt(c) ? (l.empty = true,
                             qt(c)) : t && It(c, false))
                     }
@@ -742,15 +742,15 @@
                         a.img.height = d,
                         function (e, t, n, a, o) {
                             var i = r
-                                , c = we.get(a);
+                                , c = chunks.get(a);
                             e.imageSmoothingEnabled = false,
                                 e.textBaseline = "alphabetic",
                                 e.textAlign = "left",
                                 e.fillStyle = c.protected ? A : C,
                                 e.fillRect(0, 0, t, n);
                             var l, u, s = {}, d = false, f = wt(a), v = f[0] - 20 + "," + f[1];
-                            if (we.has(v)) {
-                                var m = we.get(v);
+                            if (chunks.has(v)) {
+                                var m = chunks.get(v);
                                 null == m.edge || !m.protected && c.protected || (l = m.edge)
                             }
                             for (var h, y = t / Et, g = specialFonts.get(selectedFont), p = 16 * ft(), b = 0; b < 10; b++)
@@ -820,7 +820,7 @@
                             if (c.edge = d ? s : void 0,
                                 o) {
                                 var R = f[0] + 20 + "," + f[1];
-                                we.has(R) && null != we.get(R).txt && It(R, !1)
+                                chunks.has(R) && null != chunks.get(R).txt && It(R, !1)
                             }
                         }(a.img.getContext("2d", {
                             alpha: false
@@ -829,8 +829,8 @@
                         a.font = Q,
                         isBrowserFirefox && createImageBitmap(a.img).then((function (t) {
                             var n = r;
-                            if (we.has(e)) {
-                                var a = we.get(e);
+                            if (chunks.has(e)) {
+                                var a = chunks.get(e);
                                 null != a.bmp && a.bmp.close(),
                                     a.bmp = t,
                                     ge = true
@@ -842,7 +842,7 @@
             }
         }
         function zt(e) {
-            for (var t = n, r = we.get(e), a = !0, o = 0; o < 200; o++)
+            for (var t = n, r = chunks.get(e), a = !0, o = 0; o < 200; o++)
                 if (!Qn(r.txt[o], Zr(r.clr[o])[1])) {
                     a = false;
                     break
@@ -858,14 +858,14 @@
                 a) {
                 var i = wt(e)
                     , c = i[0] - 20 + "," + i[1];
-                we.has(c) && null != we.get(c).edge && (a = false)
+                chunks.has(c) && null != chunks.get(c).edge && (a = false)
             }
             return a
         }
         function qt(e) {
             var t = n;
-            if (we.has(e)) {
-                var r = we.get(e);
+            if (chunks.has(e)) {
+                var r = chunks.get(e);
                 null != r.img && delete r.img
             }
         }
@@ -896,7 +896,7 @@
                 for (var t = -120 - 20 * Math.floor(qe.offset.x / (200 * v)), r = -60 - 10 * Math.floor(qe.offset.y / (200 * v)), o = r, i = Math.floor(window.innerWidth / (10 * zoomValue) - qe.offset.x / (10 * v) + 120), c = Math.floor(window.innerHeight / (20 * zoomValue) - qe.offset.y / (20 * v) + 60), l = []; t < i;) {
                     for (; r < c;) {
                         var u = t + "," + r;
-                        !we.has(u) && Jt(t, r) && l.push(t, r),
+                        !chunks.has(u) && Jt(t, r) && l.push(t, r),
                             r += 10
                     }
                     r = o,
@@ -911,7 +911,7 @@
                             , y = l[m + 1];
                         if (u = h + "," + y,
                             $t.push(h / 20, y / 10),
-                            we.set(u, {}),
+                            chunks.set(u, {}),
 
                             parseInt(renderChunkAmount || (rot.value || 100)) == ++d)
                             break
@@ -927,9 +927,9 @@
         let diejx = false
         function _t() {
             var e, t = n, r = "pathname";
-            for (const n of we.keys()) {
+            for (const n of chunks.keys()) {
                 var a = wt(n);
-                !xt(a, r) || (e = a)[0] > cur.x - 20 && e[0] < cur.x + 20 && e[1] > cur.y - 10 && e[1] < cur.y + 10 || we.delete(n)
+                !xt(a, r) || (e = a)[0] > cur.x - 20 && e[0] < cur.x + 20 && e[1] > cur.y - 10 && e[1] < cur.y + 10 || chunks.delete(n)
             }
         }
         function en() {
@@ -943,7 +943,7 @@
                 var r = 20 * Math.floor(cur.x / 20)
                     , o = 10 * Math.floor(cur.y / 10)
                     , c = r + "," + o;
-                we.has(c) && (Ve && server.send(serialize_Uint8Array({
+                chunks.has(c) && (Ve && server.send(serialize_Uint8Array({
                     p: c
                 })),
                     Ze && (tn ? tn = false : server.send(serialize_Uint8Array({
@@ -1047,7 +1047,7 @@
                 e.isTrusted && (ie(false),
                     null != Dn && 1 != e.pointerId || Nn || (Dn = e.pointerId,
                         Te = Wn(e),
-                        Je ? ($e.start = Te,
+                        selectionActive ? ($e.start = Te,
                             $e.end = $e.start) : (Ye = true,
                                 qe.start.x = e.clientX * v,
                                 qe.start.y = e.clientY * v,
@@ -1085,7 +1085,7 @@
                     (Ve || Ze) && (ge = true),
                     e.pointerId == Dn && !Nn)) {
                     if (e.preventDefault(),
-                        Je) {
+                        selectionActive) {
                         if (currentRegionSelection.tiled) {
                             $e.end.tileX = Math.floor(Te.x / 20);
                             $e.end.tileY = Math.floor(Te.y / 10);
@@ -1167,12 +1167,12 @@
             var t = n;
             if (e.isTrusted && (e.preventDefault(),
                 e.pointerId == Dn && !Nn)) {
-                if (Je && $e.start && $e.end) {
+                if (selectionActive && $e.start && $e.end) {
                     var r = Math.min($e.start.x, $e.end.x)
                         , o = Math.min($e.start.y, $e.end.y)
                         , i = Math.max($e.start.x, $e.end.x)
                         , c = Math.max($e.start.y, $e.end.y);
-                    Je = false;
+                    selectionActive = false;
                     $e = {};
                     Dn = void 0;
                     var regionSelection = window.currentRegionSelection;
@@ -1357,7 +1357,7 @@
                             e.preventDefault();
                             break;
                         case 27:
-                            Je && (Je = false,
+                            selectionActive && (selectionActive = false,
                                 $e = {},
                                 canvasElement.style.cursor = "text",
                                 e.preventDefault()),
@@ -1954,7 +1954,7 @@
         var blockedUsers = new Set();
         var blockAnons = false;
         var blockAuthenticated = false;
-        function aib(e, t = window.selectedChatTab || 0) {
+        function sendMessage(e, t = window.selectedChatTab || 0) {
             if (e.startsWith("/")) {
                 var args = e.slice(1).split(" ");
                 var cmd = args[0].toLowerCase();
@@ -2112,14 +2112,14 @@
             ke = [],
                 Ee.clear();
             var r = [];
-            for (const e of we.keys()) {
+            for (const e of chunks.keys()) {
                 var a = wt(e);
                 r.push(a[0], a[1])
             }
             for (var o = Zt(r), i = 0; i < o.length; i++) {
                 var c = o[i][1]
                     , l = r[c] + "," + r[c + 1]
-                    , u = we.get(l);
+                    , u = chunks.get(l);
                 e ? u.protected && St(l, false) : u.empty || St(l, false)
             }
         } let pingInterval = null;
@@ -2234,7 +2234,7 @@
                     j: [e, t]
                 })),
                 Xn(),
-                we.clear(),
+                chunks.clear(),
                 curs.clear(),
                 Me = [],
                 0))
@@ -2567,7 +2567,7 @@
                         Qt(),
                         nr(),
                         connectingElement.style.opacity = "0%",
-                        Je = false,
+                        selectionActive = false,
                         $e = {},
                         canvasElement.style.cursor = "text",
                         curs.clear(),
@@ -2607,7 +2607,7 @@
                 case "e":
                     for (var u = data.e.e, s = 0; s < u.length; s++) {
                         var d = (w = 20 * u[s][0]) + "," + (M = 10 * u[s][1]);
-                        if (we.has(d) && null != (E = we.get(d)).txt)
+                        if (chunks.has(d) && null != (E = chunks.get(d)).txt)
                             for (var f = 2; f < u[s].length; f += 3) {
                                 var v = String.fromCodePoint(u[s][f])
                                     , h = u[s][f + 1]
@@ -2628,8 +2628,8 @@
                     var g = (data = data.chunks).length;
                     for (s = 0; s < g; s += 6) {
                         var p = (w = 20 * data[s]) + "," + (M = 10 * data[s + 1]);
-                        if (we.has(p))
-                            if ((E = we.get(p)).coords = [w, M],
+                        if (chunks.has(p))
+                            if ((E = chunks.get(p)).coords = [w, M],
                                 data[s + 4] && (E.protected = true),
                                 data[s + 5] != null && (E.textProtected = "string" == typeof data[s + 5] ? Array.from(data[s + 5]) : data[s + 5]),
                                 0 !== data[s + 2]) {
@@ -2672,7 +2672,7 @@
                     for (s = 0; s < b; s += 2) {
                         var w, M, E;
                         p = (w = 20 * $t[s]) + "," + (M = 10 * $t[s + 1]),
-                            we.has(p) && null == (E = we.get(p)).txt && we.set(p, {
+                            chunks.has(p) && null == (E = chunks.get(p)).txt && chunks.set(p, {
                                 txt: _e.slice(),
                                 clr: et.slice(),
                                 empty: true,
@@ -2690,7 +2690,7 @@
                     var S = data.p;
 
                     p = S[0],
-                        we.has(p) && (we.get(p).protected = S[1],
+                        chunks.has(p) && (chunks.get(p).protected = S[1],
                             It(p, true));
 
                     window.w.emit("protect", {
@@ -2713,8 +2713,8 @@
                     var cellIdx = tileY * 20 + tileX;
                     var chunkKey = (20 * chunkX) + "," + (10 * chunkY);
 
-                    if (!we.has(chunkKey)) {
-                        we.set(chunkKey, {
+                    if (!chunks.has(chunkKey)) {
+                        chunks.set(chunkKey, {
                             coords: [20 * chunkX, 10 * chunkY],
                             txt: _e.slice(),
                             clr: et.slice(),
@@ -2722,7 +2722,7 @@
                             empty: !0
                         });
                     }
-                    var chunk = we.get(chunkKey);
+                    var chunk = chunks.get(chunkKey);
                     if (!chunk.textProtected) {
                         chunk.textProtected = new Array(200).fill("0");
                     } else if (typeof chunk.textProtected === "string") {
@@ -2753,8 +2753,8 @@
                                 var l = 20 * Math.floor(c / 20)
                                     , u = 10 * Math.floor(i / 10)
                                     , s = l + "," + u;
-                                if (we.has(s)) {
-                                    var d = we.get(s);
+                                if (chunks.has(s)) {
+                                    var d = chunks.get(s);
                                     if (null != d.txt) {
                                         var f = c - l + 20 * (i - u);
                                         d.txt[f] = " ",
@@ -3525,9 +3525,9 @@
             var c = 20 * Math.floor(Ce.x / 20)
                 , l = 10 * Math.floor(Ce.y / 10)
                 , u = c + "," + l;
-            if (!we.has(u))
+            if (!chunks.has(u))
                 return 0;
-            var s = we.get(u);
+            var s = chunks.get(u);
             var A = Ce.x - c + 20 * (Ce.y - l);
             var cellTextProtected = s.textProtected && s.textProtected[A] === "1";
             if ((s.protected || cellTextProtected || wallSettings.readOnly.checked || U && "" == je) && !m && 0 == j || null == s.txt || K)
@@ -3618,9 +3618,9 @@
             var c = 20 * Math.floor(cur.x / 20)
                 , l = 10 * Math.floor(cur.y / 10)
                 , u = c + "," + l;
-            if (!we.has(u))
+            if (!chunks.has(u))
                 return 0;
-            var s = we.get(u);
+            var s = chunks.get(u);
             var A = cur.x - c + 20 * (cur.y - l);
             var cellTextProtected = s.textProtected && s.textProtected[A] === "1";
             if ((s.protected || cellTextProtected || wallSettings.readOnly.checked || U && "" == je) && !m && 0 == j || null == s.txt || K)
@@ -3820,7 +3820,7 @@
             var e = n
                 , t = 20 * Math.floor(cur.x / 20)
                 , r = 10 * Math.floor(cur.y / 10)
-                , a = we.get(t + "," + r);
+                , a = chunks.get(t + "," + r);
             if (!a || null == a.txt)
                 return false;
             var o = cur.x - t + 20 * (cur.y - r);
@@ -4253,7 +4253,7 @@
         function flushWrites() {
             var e = n;
             if (server && server.readyState == server.OPEN) {
-                if ((Le || Oe || Re || De) && we.size !== 0) {
+                if ((Le || Oe || Re || De) && chunks.size !== 0) {
                     var t = {};
                     Le && (t.l = [cur.x, cur.y]);
                     Oe && (t.c = pe);
@@ -4321,39 +4321,39 @@
         window.Tile = {}
         window.Tile.get = function (e, t) {
             var r = n;
-            if (!we.has(e + "," + t))
+            if (!chunks.has(e + "," + t))
                 return null;
-            var a = we.get(e + "," + t);
+            var a = chunks.get(e + "," + t);
             return a
         };
         window.Tile.set = function (e, t, r, a) {
             var o = n;
-            if (!we.has(e + "," + t))
+            if (!chunks.has(e + "," + t))
                 return false;
-            var i = we.get(e + "," + t);
+            var i = chunks.get(e + "," + t);
             return i.txt[r] = a,
                 true
         }
         window.Tile.exists = function (e, t) {
             var r = n;
-            return we.has(e + "," + t)
+            return chunks.has(e + "," + t)
         }
         window.Tile.loaded = function (e, t) {
             return !!Tile.get(e, t)
         }
         window.Tile.delete = function (e, t) {
             var r = n;
-            if (!we.has(e + "," + t))
+            if (!chunks.has(e + "," + t))
                 return false;
-            var a = we.get(e + "," + t);
-            return a.protected ? false : (we.delete(e + "," + t),
+            var a = chunks.get(e + "," + t);
+            return a.protected ? false : (chunks.delete(e + "," + t),
                 true)
         }
         window.Tile.visible = function (e, t) {
             var r = n;
-            if (!we.has(e + "," + t))
+            if (!chunks.has(e + "," + t))
                 return false;
-            var a = we.get(e + "," + t);
+            var a = chunks.get(e + "," + t);
             return !xt([e, t], bt(20))
         }
         window.Tile.empty = function (e, t) {
@@ -4391,9 +4391,9 @@
          } */
         window.Tile.saveBlob = function (e, t) {
             var r = n;
-            if (!we.has(e + "," + t)) return null;
+            if (!chunks.has(e + "," + t)) return null;
 
-            var tile = we.get(e + "," + t);
+            var tile = chunks.get(e + "," + t);
             if (!tile || !tile.img) return null;
 
             var img = tile.img;
@@ -4599,8 +4599,8 @@
                     , a = 20 * v
                     , o = Math.round(5 * v);
                 var i, c, l, u, s = bt(20), f = bt(d);
-                for (const t of we.keys())
-                    xt(h = wt(t), s) ? xt(h, f) && delete we.get(t).img : pt(t, h);
+                for (const t of chunks.keys())
+                    xt(h = wt(t), s) ? xt(h, f) && delete chunks.get(t).img : pt(t, h);
                 if (clientOptions.showothercurs.checked && (!wallSettings.hideCursors.checked || m)) {
                     gt(canvasGetContext);
                     for (const t of curs.values()) {
@@ -4633,7 +4633,7 @@
                                     c = n,
                                     l = 20 * Math.floor(i[0] / 20) + "," + 10 * Math.floor(i[1] / 10),
 
-                                    (u = we.get(l)) && u.protected && 0 == j) || Mt(
+                                    (u = chunks.get(l)) && u.protected && 0 == j) || Mt(
                                         t.n != ""
                                             ? (displayNameShow ? t.dn : t.n)
                                             : (anonIdShow ? `(${t.id || 0})` : ""),
@@ -4676,7 +4676,7 @@
                                 : (displayNameShow ? window.w.displayNick : je),
                             y, g, o
                         )),
-                    Je && $e.start && $e.end) {
+                    selectionActive && $e.start && $e.end) {
                     canvasGetContext.fillStyle = "rgba(0,120,212,0.5)",
 
 
@@ -4856,7 +4856,7 @@
                 Fr = true),
             Br.noui && (infoElement.classList.add("hidden"),
                 hn.style.display = "none");
-        var serialize_Uint8Array, deserialize_Uint8Array, Dr, Nr, jr, Ur, Wr = Pr();
+        var serialize_Uint8Array, deserialize_Uint8Array, toStr, isFunction, maxInt, Ur, Wr = Pr();
         if (Wr.length > 0)
             if (Wr.startsWith("~"))
                 o = "/" + Wr,
@@ -5372,48 +5372,48 @@
                 }
             }
             ,
-            Array.prototype["includes"] || (Array["prototype"]["includes"] = function (e) {
-                return !!~this.indexOf(e)
+            Array.prototype.includes || (Array.prototype.includes = function (item) {
+                return !!~this.indexOf(item) // !! force-converts it into boolean, the ~ operator turns -1 to 0 which is false
             }
             ),
-            Array["prototype"]["indexOf"] || (Array["prototype"].indexOf = function (e, n, r) {
+            Array.prototype.indexOf || (Array.prototype.indexOf = function (e, n, r) {
                 "use strict";
-                return function (a, o) {
+                return function (lookFor, startIndex) {
                     if (null == this)
                         throw TypeError("Array.prototype.indexOf called on null or undefined");
                     var i = e(this)
                         , c = i.length >>> 0
-                        , l = r(0 | o, c);
-                    if (l < 0)
-                        l = n(0, c + l);
-                    else if (l >= c)
+                        , index = r(0 | startIndex, c);
+                    if (index < 0)
+                        index = n(0, c + index);
+                    else if (index >= c)
                         return -1;
-                    if (void 0 === a) {
-                        for (; l !== c; ++l)
-                            if (void 0 === i[l] && l in i)
-                                return l
-                    } else if (a != a) {
-                        for (; l !== c; ++l)
-                            if (i[l] != i[l])
-                                return l
+                    if (void 0 === lookFor) {
+                        for (; index !== c; ++index)
+                            if (void 0 === i[index] && index in i)
+                                return index
+                    } else if (lookFor != lookFor) {
+                        for (; index !== c; ++index)
+                            if (i[index] != i[index])
+                                return index
                     } else
-                        for (; l !== c; ++l)
-                            if (i[l] === a)
-                                return l;
-                    return -1
+                        for (; index !== c; ++index)
+                            if (i[index] === lookFor)
+                                return index; // item found, return its index
+                    return -1 // item was not found
                 }
-            }(Object, Math.max, Math["min"])),
-            Array["from"] || (Array["from"] = (Dr = Object["prototype"]["toString"],
-                Nr = function (e) {
-                    return "function" == typeof e || "[object Function]" === Dr.call(e)
+            }(Object, Math.max, Math.min)),
+            Array.from || (Array.from = (toStr = Object.prototype.toString,
+                isFunction = function (e) {
+                    return "function" == typeof e || "[object Function]" === toStr.call(e)
                 }
                 ,
-                jr = Math["pow"](2, 53) - 1,
+                maxInt = Math.pow(2, 53) - 1,
                 Ur = function (e) {
                     var r, a, o = n, i = (r = t,
                         a = Number(e),
-                        isNaN(a) ? 0 : 0 !== a && isFinite(a) ? (a > 0 ? 1 : -1) * Math["floor"](Math["abs"](a)) : a);
-                    return Math["min"](Math["max"](i, 0), jr)
+                        isNaN(a) ? 0 : 0 !== a && isFinite(a) ? (a > 0 ? 1 : -1) * Math.floor(Math.abs(a)) : a);
+                    return Math.min(Math.max(i, 0), maxInt)
                 }
                 ,
                 function (e) {
@@ -5422,39 +5422,39 @@
                         , a = Object(e);
                     if (null == e)
                         throw new TypeError("Array.from requires an array-like object - not null or undefined");
-                    var o, i = arguments["length"] > 1 ? arguments[1] : void 0;
+                    var o, i = arguments.length > 1 ? arguments[1] : void 0;
                     if (void 0 !== i) {
-                        if (!Nr(i))
+                        if (!isFunction(i))
                             throw new TypeError("Array.from: when provided, the second argument must be a function");
                         arguments.length > 2 && (o = arguments[2])
                     }
-                    for (var c, l = Ur(a.length), u = Nr(r) ? Object(new r(l)) : new Array(l), s = 0; s < l;)
+                    for (var c, l = Ur(a.length), u = isFunction(r) ? Object(new r(l)) : new Array(l), s = 0; s < l;)
                         c = a[s],
-                            u[s] = i ? void 0 === o ? i(c, s) : i["call"](o, c, s) : c,
+                            u[s] = i ? void 0 === o ? i(c, s) : i.call(o, c, s) : c,
                             s += 1;
-                    return u["length"] = l,
+                    return u.length = l,
                         u
                 }
             )),
-            Math["sign"] || (Math["sign"] = function (e) {
-                return (e > 0) - (e < 0) || +e
+            Math.sign || (Math.sign = function (e) {
+                return (e > 0) - (e < 0) || +e // the - operator converts booleans into numbers, if both are false, then +e is evaluated, it also keeps signed zero, and NaN.
             }
             ),
-            String.prototype.startsWith || Object.defineProperty(String["prototype"], "startsWith", {
-                value: function (e, t) {
+            String.prototype.startsWith || Object.defineProperty(String.prototype, "startsWith", {
+                value: function (match, startIndex) {
                     var r = n
-                        , a = t > 0 ? 0 | t : 0;
-                    return this.substring(a, a + e["length"]) === e
+                        , a = startIndex > 0 ? 0 | startIndex : 0;
+                    return this.substring(a, a + match.length) === match
                 }
             }),
-            String["prototype"]["codePointAt"] || function () {
+            String.prototype.codePointAt || function () {
                 "use strict";
                 var e = n
-                    , r = function () {
+                    , defineProperty = function () {
                         var e = t;
                         try {
                             var n = {}
-                                , r = Object["defineProperty"]
+                                , r = Object.defineProperty
                                 , a = r(n, n, n) && r
                         } catch (e) { }
                         return a
@@ -5468,50 +5468,50 @@
                             , o = e ? Number(e) : 0;
                         if (o != o && (o = 0),
                             !(o < 0 || o >= a)) {
-                            var i, c = r["charCodeAt"](o);
-                            return c >= 55296 && c <= 56319 && a > o + 1 && (i = r["charCodeAt"](o + 1)) >= 56320 && i <= 57343 ? 1024 * (c - 55296) + i - 56320 + 65536 : c
+                            var i, c = r.charCodeAt(o);
+                            return c >= 55296 && c <= 56319 && a > o + 1 && (i = r.charCodeAt(o + 1)) >= 56320 && i <= 57343 ? 1024 * (c - 55296) + i - 56320 + 65536 : c // handles surrogates
                         }
                     };
-                r ? r(String.prototype, "codePointAt", {
+                defineProperty ? defineProperty(String.prototype, "codePointAt", {
                     value: a,
-                    configurable: !0,
-                    writable: !0
-                }) : String["prototype"]["codePointAt"] = a
+                    configurable: true,
+                    writable: true
+                }) : String.prototypecodePointAt = a
             }(),
-            String["fromCodePoint"] || function (e) {
+            String.fromCodePoint || function (e) {
                 var r = n
                     , a = function (n) {
                         for (var r = t, a = [], o = 0, i = "", c = 0, l = arguments.length; c !== l; ++c) {
                             var u = +arguments[c];
-                            if (!(u < 1114111 && u >>> 0 === u))
+                            if (!(u < 1114111 && u >>> 0 === u)) // total valid unicodes
                                 throw RangeError("Invalid code point: " + u);
-                            u <= 65535 ? o = a["push"](u) : (u -= 65536,
-                                o = a.push(55296 + (u >> 10), u % 1024 + 56320)),
-                                o >= 16383 && (i += e["apply"](null, a),
-                                    a["length"] = 0)
+                            u <= 65535 ? o = a.push(u) : (u -= 65536,
+                                o = a.push(55296 + (u >> 10), u % 1024 + 56320)), // handle surrogates
+                                o >= 16383 && (i += e.apply(null, a),
+                                    a.length = 0)
                         }
-                        return i + e["apply"](null, a)
+                        return i + e.apply(null, a)
                     };
                 try {
-                    Object["defineProperty"](String, "fromCodePoint", {
+                    Object.defineProperty(String, "fromCodePoint", {
                         value: a,
-                        configurable: !0,
-                        writable: !0
+                        configurable: true,
+                        writable: true
                     })
                 } catch (e) {
                     String.fromCodePoint = a
                 }
-            }(String["fromCharCode"]),
-            CanvasRenderingContext2D["prototype"]["roundRect"] || (CanvasRenderingContext2D.prototype["roundRect"] = function (e, t, r, a, o) {
+            }(String.fromCharCode),
+            CanvasRenderingContext2D.prototype.roundRect || (CanvasRenderingContext2D.prototype.roundRect = function (e, t, r, a, o) {
                 var i = n
                     , c = new Array(4);
                 if ("object" == typeof o)
-                    switch (o["length"]) {
+                    switch (o.length) {
                         case 1:
-                            c["fill"](o[0], 0, 4);
+                            c.fill(o[0], 0, 4);
                             break;
                         case 2:
-                            c["fill"](o[0], 0, 4),
+                            c.fill(o[0], 0, 4),
                                 c[1] = c[3] = o[1];
                             break;
                         case 3:
@@ -5525,20 +5525,20 @@
                         default:
                             c.fill(0, 0, 4)
                     }
-                this["beginPath"](),
-                    this["moveTo"](e + c[0], t),
-                    this["lineTo"](e + r - c[1], t),
-                    this["quadraticCurveTo"](e + r, t, e + r, t + c[1]),
-                    this["lineTo"](e + r, t + a - c[2]),
-                    this["quadraticCurveTo"](e + r, t + a, e + r - c[2], t + a),
-                    this["lineTo"](e + c[3], t + a),
-                    this["quadraticCurveTo"](e, t + a, e, t + a - c[3]),
-                    this["lineTo"](e, t + c[0]),
-                    this["quadraticCurveTo"](e, t, e + c[0], t),
+                this.beginPath(),
+                    this.moveTo(e + c[0], t),
+                    this.lineTo(e + r - c[1], t),
+                    this.quadraticCurveTo(e + r, t, e + r, t + c[1]), // quadratic curves makes round rectangles
+                    this.lineTo(e + r, t + a - c[2]),
+                    this.quadraticCurveTo(e + r, t + a, e + r - c[2], t + a),
+                    this.lineTo(e + c[3], t + a),
+                    this.quadraticCurveTo(e, t + a, e, t + a - c[3]),
+                    this.lineTo(e, t + c[0]),
+                    this.quadraticCurveTo(e, t, e + c[0], t),
                     this.closePath()
             }
             );
-        const $r =
+        const isChristmas =
             f.getMonth() === 12 && f.getDate() === 25
             , Gr = ["-20,-10", "0,-10"]
             , Qr = [
@@ -5548,27 +5548,27 @@
                 [255, 0, 255], // magenta
                 [0, 0, 255] // blue
             ];
-        $r && setInterval((function () {
+        isChristmas && setInterval((function () {
             var e = n;
             if ("textwall" == wall && "main" == subwall && !clientOptions.disablecolour.checked)
-                for (var t = 0; t < Gr["length"]; t++) {
+                for (var t = 0; t < Gr.length; t++) {
                     var r = Gr[t]
-                        , a = we["get"](r);
-                    if (null != a && null != a["txt"]) {
+                        , a = chunks.get(r);
+                    if (null != a && null != a.txt) {
                         for (var o = 0; o < 200; o++)
-                            switch (a["txt"][o]) {
+                            switch (a.txt[o]) {
                                 case "$":
                                 case "^":
                                 case ".":
                                 case "'":
-                                    a["clr"][o] = Qr[Math.floor(4 * Math["random"]())]
+                                    a.clr[o] = Qr[Math.floor(4 * Math.random())]
                             }
-                        St(r, !1)
+                        St(r, false)
                     }
                 }
         }
         ), 400);
-        window.w.chunks = we;
+        window.w.chunks = chunks;
 
         function advancedSplit(str, noSurrog, noComb, norm) {
             if (str && str.constructor == Array) return str.slice(0);
@@ -5675,20 +5675,20 @@
             }
         };
         window.w.rerender = function () {
-            for (let [key, chunk] of we) {
-                St(key, !1);
-                if (chunk["img"]) {
-                    delete chunk["img"];
+            for (let [key, chunk] of chunks) {
+                St(key, false);
+                if (chunk.img) {
+                    delete chunk.img;
                 }
-                if (chunk["bmp"]) {
-                    delete chunk["bmp"];
+                if (chunk.bmp) {
+                    delete chunk.bmp;
                 }
             }
 
         }
         window.w.split = advancedSplit;
         window.w.chat = {};
-        window.w.chat.send = aib;
+        window.w.chat.send = sendMessage;
         window.network = {};
         window.network.binary = serialize_Uint8Array;
         window.network.text = deserialize_Uint8Array;
@@ -5701,8 +5701,8 @@
             var r = n;
             clampedValue = e < 0 ? 0 : e > 10000 ? 10000 : e,
                 zoomValue = Math.round(100 * clampedValue) / 100,
-                zoomElement["value"] = 10 * zoomValue,
-                t && showToast(Math["round"](100 * zoomValue) + "% ", 1e3),
+                zoomElement.value = 10 * zoomValue,
+                t && showToast(Math.round(100 * zoomValue) + "% ", 1e3),
                 kn()
         }
         window.w.changeColor = mr;
@@ -5713,8 +5713,8 @@
             this.onSelectionEvents = [];
             this.tiled = false;
             this.startSelection = () => {
-                if (Je) throw "There is already an active region selection";
-                Je = true;
+                if (selectionActive) throw "There is already an active region selection";
+                selectionActive = true;
                 window.currentRegionSelection = this;
                 canvasElement.style.cursor = "crosshair";
             };
