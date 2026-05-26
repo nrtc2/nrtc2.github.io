@@ -796,7 +796,7 @@
                                                 Ht(e)),
                                                 (h = B) >= 58112 && h <= 58124 && (B = generateRandomChar(B),
                                                     S = String.fromCodePoint(B)),
-                                                (u = B) >= 9472 && u <= 9632 && !(u >= 9476 && u <= 9483) && !(u >= 9548 && u <= 9551) || u >= 9698 && u <= 9701 || qr(B))
+                                                (u = B) >= 9472 && u <= 9632 && !(u >= 9476 && u <= 9483) && !(u >= 9548 && u <= 9551) || u >= 9698 && u <= 9701 || isCodePointBraille(B))
                                                 e.font = Math.round(20 * y) + "px Special",
                                                     e.fillText(S, Math.round(w), Math.floor(M + 15 * y));
                                             else {
@@ -1066,7 +1066,7 @@
                                             cur.start = cur.x,
                                             e.altKey) {
                                             var a = rr();
-                                            a && (Qn(a[0], Zr(a[1])[1]) ? mr(0) : mr(Zr(a[1])[0]))
+                                            a && (Qn(a[0], Zr(a[1])[1]) ? changeColor(0) : changeColor(Zr(a[1])[0]))
                                         }
                                         Hn()
                                     }
@@ -1138,14 +1138,14 @@
                         var nextSwatch = swatches[nextIndex];
 
                         if (nextSwatch.classList.contains("swatch-p")) {
-                            mr(parseInt(nextSwatch.dataset.index));
+                            changeColor(parseInt(nextSwatch.dataset.index));
                         }
                         else if (nextSwatch.classList.contains("swatch-a")) {
                             var bgColor = window.getComputedStyle(nextSwatch).backgroundColor;
                             var rgb = bgColor.match(/\d+/g);
 
                             if (rgb && rgb.length >= 3) {
-                                mr([parseInt(rgb[0]), parseInt(rgb[1]), parseInt(rgb[2])]);
+                                changeColor([parseInt(rgb[0]), parseInt(rgb[1]), parseInt(rgb[2])]);
                                 document.querySelectorAll(".swatch-a.selected, .swatch-p.selected").forEach(el => el.classList.remove("selected"));
                                 nextSwatch.classList.add("selected");
                             }
@@ -1496,7 +1496,7 @@
                         break;
                     case clientOptions.showchat:
                         localStorage.setItem("showchat", r),
-                            e.target.checked ? null : hn.classList.add("hidden");
+                            e.target.checked ? null : chatElement.classList.add("hidden");
                         break;
                     case clientOptions.disablecolour:
                         localStorage.setItem("disablecolour", r),
@@ -1623,16 +1623,16 @@
             )),
             document.getElementById("chatbutton").addEventListener("click", (function () {
                 var e = n;
-                hn.classList.contains("open") ? hn.classList.remove("open") : (hn.classList.add("open"),
-                    yn.classList.remove("show"),
+                chatElement.classList.contains("open") ? chatElement.classList.remove("open") : (chatElement.classList.add("open"),
+                    unreadElement.classList.remove("show"),
                     window.unreadAmount = 0,
-                    yn.classList.remove("show"),
+                    unreadElement.classList.remove("show"),
                     gn())
             }
             )),
-            document.getElementById("sendmsg").addEventListener("click", bn),
+            document.getElementById("sendmsg").addEventListener("click", sendMessage2),
             document.getElementById("chatmsg").addEventListener("keyup", (function (e) {
-                13 == e.keyCode && bn(e)
+                13 == e.keyCode && sendMessage2(e)
             }
             )),
             document.getElementById("loginbtn").addEventListener("click", (function (e) {
@@ -1905,8 +1905,8 @@
             b.setAttribute("id", "textarea"),
             textArea.setAttribute("id", "clipboard");
         var mn = /^[\w.-]+$/;
-        const hn = document.getElementById("chat")
-            , yn = document.getElementById("unread");
+        const chatElement = document.getElementById("chat")
+            , unreadElement = document.getElementById("unread");
         function gn() {
             Array.from(document.getElementsByClassName("chatbox")).forEach(chatbox => {
                 chatbox.scrollTop = chatbox.scrollHeight;
@@ -1931,22 +1931,22 @@
                 chatChannel: channel
             }));
         }
-        function bn(e) {
-            var r = document.getElementById("chatmsg");
+        function sendMessage2(e) {
+            var chatMsg = document.getElementById("chatmsg");
             gn();
 
             if (Xe + 300 > performance.now()) return;
 
-            if (/^\s*$/.test(r.value)) {
-                r.value = "";
+            if (/^\s*$/.test(chatMsg.value)) {
+                chatMsg.value = "";
             } else {
-                window.w.chat.send(r.value.substr(0, 255), selectedChatTab);
+                window.w.chat.send(chatMsg.value.substr(0, 255), selectedChatTab);
                 sendTyping(false);
                 lastTypingPacket = 0;
 
                 Xe = performance.now();
-                r.value = "";
-                r.focus();
+                chatMsg.value = "";
+                chatMsg.focus();
             }
         }
         window.selectedChatTab = 0;
@@ -2134,7 +2134,7 @@
                     NKe = performance.now();
                     server.send(serialize_Uint8Array({ ping: true }));
                 } else {
-                    Acn(true);
+                    updatePingDisplay(true);
                 }
             }, 1000);
         }
@@ -2146,10 +2146,10 @@
             }
             lastPing = 0;
             NKe = 0;
-            Acn(true);
+            updatePingDisplay(true);
         }
 
-        function Acn(isDisconnected = false) {
+        function updatePingDisplay(isDisconnected = false) {
             const pingDisplay = document.getElementById('ping');
             if (!pingDisplay) return;
 
@@ -2172,7 +2172,7 @@
                                                 lastPing <= 160 ? "#8000ff" :
                                                     lastPing <= 180 ? "#4000ff" : "#0000ff";
         }
-        function In() {
+        function connected() {
             startPing()
 
             var e = n;
@@ -2247,7 +2247,7 @@
             }
             document.querySelectorAll(".typing-notice").forEach(el => el.innerText = "nobody is typing.");
             stopPing();
-            Acn(true);
+            updatePingDisplay(true);
             var e = n;
             En(),
                 m = false,
@@ -2280,10 +2280,10 @@
         window.w.events = {};
         window.w.on = function (e, t) {
             if (typeof t != "function") {
-                throw "Callback is not a function";
+                throw TypeError("Callback is not a function");
             }
             if (typeof e != "string") {
-                throw "Event name is not a string";
+                throw TypeError("Event name is not a string");
             }
             e = e.toLowerCase();
             if (!this.events[e]) {
@@ -2297,10 +2297,10 @@
         })
         window.w.off = function (e, t) {
             if (typeof t != "function") {
-                throw "Callback is not a function";
+                throw TypeError("Callback is not a function");
             }
             if (typeof e != "string") {
-                throw "Event name is not a string";
+                throw TypeError("Event name is not a string");
             }
             e = e.toLowerCase();
             if (!this.events[e]) {
@@ -2313,7 +2313,7 @@
         }
         window.w.emit = function (e, ...args) {
             if (typeof e != "string") {
-                throw "Event name is not a string";
+                throw TypeError("Event name is not a string");
             }
             e = e.toLowerCase();
             if (!this.events[e]) {
@@ -2342,7 +2342,7 @@
                     cur.x += amount;
                     break;
                 default:
-                    throw "Invalid direction";
+                    throw Error("Invalid direction");
                     break;
             }
             nr();
@@ -2488,7 +2488,7 @@
 
             isAtBottom && typeof gn === "function" && gn();
 
-            const chatClosed = typeof hn !== "undefined" && !hn.classList.contains("open");
+            const chatClosed = typeof chatElement !== "undefined" && !chatElement.classList.contains("open");
             const isOtherTab = (window.selectedChatTab !== (channelName === "global" ? 1 : 0));
 
             if (chatClosed || isOtherTab) {
@@ -2515,7 +2515,7 @@
             }
         }
         window.printMsg = printMsg;
-        function Tn(e) {
+        function recieveServerMessage(e) {
             var t = n
                 , buffer = new Uint8Array(e.data).buffer
                 , data = deserialize_Uint8Array(new Uint8Array(buffer));
@@ -2574,7 +2574,7 @@
                         Me = [],
                         K = false,
                         On(),
-                        clientOptions.showchat.checked && hn.classList.remove("hidden"),
+                        clientOptions.showchat.checked && chatElement.classList.remove("hidden"),
                         xn(),
                         wallListElement.innerHTML = "",
                         Le = true,
@@ -2813,7 +2813,7 @@
                 case "pong":
                     OKe = performance.now();
                     lastPing = OKe - NKe;
-                    Acn();
+                    updatePingDisplay();
                     window.w.emit('pong', lastPing);
                     break;
                 case "msg":
@@ -2939,8 +2939,8 @@
                     wallSettings.disableChat.checked = P,
                         clientOptions.showchat.disabled = P,
                         P ? (clientOptions.showchat.checked = false,
-                            hn.classList.add("hidden")) : (clientOptions.showchat.checked = "false" != localStorage.getItem("showchat"),
-                                clientOptions.showchat.checked && hn.classList.remove("hidden"));
+                            chatElement.classList.add("hidden")) : (clientOptions.showchat.checked = "false" != localStorage.getItem("showchat"),
+                                clientOptions.showchat.checked && chatElement.classList.remove("hidden"));
                     window.w.emit("disablechat", P);
                     break;
                 case "dcl":
@@ -3502,7 +3502,7 @@
                     zn = 0),
                 !e || zn >= 3)
                 return 0;
-            var decos2 = ce2();
+            var decos2 = getCurrentDecoration();
             var chr = prsFmt(color);
             var data = {
                 char,
@@ -3520,7 +3520,7 @@
             Ce.y = data.y;
             char = data.char;
             var i = char.codePointAt();
-            if (wallSettings.disableBraille.checked && qr(i))
+            if (wallSettings.disableBraille.checked && isCodePointBraille(i))
                 return 0;
             var c = 20 * Math.floor(Ce.x / 20)
                 , l = 10 * Math.floor(Ce.y / 10)
@@ -3535,7 +3535,7 @@
                     0;
 
             clientOptions.rainbow.checked && !r && (
-                clientOptions.rainbowMode.value === "legacy" ? (mr(Jn[Yn]), ++Yn == Jn.length && (Yn = 0)) :
+                clientOptions.rainbowMode.value === "legacy" ? (changeColor(Jn[Yn]), ++Yn == Jn.length && (Yn = 0)) :
                     (() => {
                         let h = (window.cH = ((window.cH || 0) + (clientOptions.hueSpeed?.value ? parseFloat(clientOptions.hueSpeed.value) : 2)) % 360);
                         let s = 100, l = 50;
@@ -3549,7 +3549,7 @@
                         else if (h < 240) [r, g, b] = [0, x, c];
                         else if (h < 300) [r, g, b] = [x, 0, c];
                         else[r, g, b] = [c, 0, x];
-                        mr([Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)], true);
+                        changeColor([Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)], true);
                     })()
             );
             var d, f, v, h, y, g, p, b, x, w, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = s.clr[A], B = Zr(T), F = B[0], P = B[1], L = s.txt[A];
@@ -3586,7 +3586,7 @@
                 S,
                 updateUndoRedoUI()
         }
-        window.ce2 = ce2;
+        window.ce2 = getCurrentDecoration;
         function Vn(e, t, r) {
 
             var o = n;
@@ -3595,7 +3595,7 @@
                     zn = 0),
                 !e || zn >= 3)
                 return 0;
-            var decos2 = ce2();
+            var decos2 = getCurrentDecoration();
             var chr = prsFmt(pe);
             var data = {
                 char: e,
@@ -3613,7 +3613,7 @@
             cur.y = data.y;
             char = data.char;
             var i = (char = Array.from(char)[0]).codePointAt();
-            if (wallSettings.disableBraille.checked && qr(i))
+            if (wallSettings.disableBraille.checked && isCodePointBraille(i))
                 return 0;
             var c = 20 * Math.floor(cur.x / 20)
                 , l = 10 * Math.floor(cur.y / 10)
@@ -3627,12 +3627,12 @@
                 return U && "" == je && !wallSettings.readOnly.checked && showToast("Please log in before typing.", 3e3),
                     0;
             clientOptions.rainbow.checked && !r && (
-                clientOptions.rainbowMode.value === "legacy" ? (mr(Jn[Yn]), ++Yn == Jn.length && (Yn = 0)) :
+                clientOptions.rainbowMode.value === "legacy" ? (changeColor(Jn[Yn]), ++Yn == Jn.length && (Yn = 0)) :
                     (() => {
                         let h = (window.cH = ((window.cH || 0) + (clientOptions.hueSpeed?.value ? parseFloat(clientOptions.hueSpeed.value) : 2)) % 360),
                             X = (1 - Math.abs((h / 60) % 2 - 1)),
                             [r, g, b] = h < 60 ? [1, X, 0] : h < 120 ? [X, 1, 0] : h < 180 ? [0, 1, X] : h < 240 ? [0, X, 1] : h < 300 ? [X, 0, 1] : [1, 0, X];
-                        mr([r * 255, g * 255, b * 255].map(Math.round), true);
+                        changeColor([r * 255, g * 255, b * 255].map(Math.round), true);
                     })()
             );
             var d, f, v, h, y, g, p, b, x, w, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = s["clr"][A], B = Zr(T), F = B[0], P = B[1], L = s.txt[A];
@@ -3759,7 +3759,7 @@
                     if (nIdx >= r.length || !Ie) {
                         nr();
                         er = false;
-                        mr(savedColor);
+                        changeColor(savedColor);
                         le(savedDeco);
                         return;
                     }
@@ -3785,14 +3785,14 @@
                                 var decoRaw = raw.length >= 7 ? raw.charCodeAt(6) - 192 : 0;
                                 var fmt = prsFmt([red, green, blue, decoRaw]);
 
-                                mr(fmt.color);
+                                changeColor(fmt.color);
                                 le((fmt.bold ? 8 : 0) | (fmt.italic ? 4 : 0) | (fmt.underline ? 2 : 0) | (fmt.strikethrough ? 1 : 0));
                             }
                         } else {
                             var rawVal = token.charCodeAt(0) - 192;
                             var fmt = prsFmt(rawVal);
 
-                            mr(fmt.color);
+                            changeColor(fmt.color);
                             le((fmt.bold ? 8 : 0) | (fmt.italic ? 4 : 0) | (fmt.underline ? 2 : 0) | (fmt.strikethrough ? 1 : 0));
                         }
                     }
@@ -4022,7 +4022,7 @@
                 (function (idx) {
                     palEl.addEventListener("click", function (evt) {
                         _30c = idx;
-                        mr(_30c, false, true);
+                        changeColor(_30c, false, true);
                         nn(evt);
                     });
                 })(pi);
@@ -4041,7 +4041,7 @@
                             el.addEventListener("click", function (evt) {
                                 var extractedRGB = cssToRGB(el.style.backgroundColor);
                                 _30c = extractedRGB;
-                                mr(extractedRGB, false, true);
+                                changeColor(extractedRGB, false, true);
                                 document.querySelectorAll(".swatch-p.selected, .swatch-a.selected, #customcolour.selected").forEach(function (s) { s.classList.remove("selected") });
                                 el.classList.add("selected");
                                 nn(evt);
@@ -4064,7 +4064,7 @@
                         el.addEventListener("click", function (evt) {
                             var extractedRGB = cssToRGB(el.style.backgroundColor);
                             _30c = extractedRGB;
-                            mr(extractedRGB, false, true);
+                            changeColor(extractedRGB, false, true);
                             document.querySelectorAll(".swatch-p.selected, .swatch-a.selected, #customcolour.selected").forEach(function (s) { s.classList.remove("selected") });
                             el.classList.add("selected");
                             nn(evt);
@@ -4085,7 +4085,7 @@
                         document.getElementById("tpword").focus())
         }
         function fr(e) {
-            return e["replace"](/^\/|\/$/g, "")
+            return e.replace(/^\/|\/$/g, "")
         }
         function goto(e) {
             var t = n
@@ -4109,7 +4109,7 @@
         }
 
 
-        function mr(e, noSave = false, select = true) {
+        function changeColor(e, noSave = false, select = true) {
             let hexColor = null;
             let newEl = null;
             if (Array.isArray(e)) {
@@ -4170,13 +4170,13 @@
         function hr(e) {
             for (var t = n, r = 0; r < colList.children.length; r++)
                 "0" != colList.children[r].id && (e ? colList.children[r].classList.add("hidden") : colList.children[r].classList.remove("hidden"));
-            e && mr(0)
+            e && changeColor(0)
         }
         function changeTheme(e, noSave = false) {
             var t = n;
             if (null != e)
-                N = e;
-            else
+                N = e; // 0 = light, 1 = dark, 2 = custom
+            else // cycle through if there's no input
                 switch (N) {
                     case 0:
                         N = 1;
@@ -4204,7 +4204,7 @@
                 !noSave && localStorage.setItem("theme", N),
                 ge = true,
                 en(),
-                mr(pe),
+                changeColor(pe),
                 Sn()
         }
         function gr(e) {
@@ -4722,12 +4722,12 @@
         if (val != null) {
             const parts = val.split(",");
             if (parts.length === 3) {
-                mr(parts.map(Number), true);
+                changeColor(parts.map(Number), true);
             } else {
-                mr(parseInt(val), true);
+                changeColor(parseInt(val), true);
             }
         } else {
-            mr(0, true);
+            changeColor(0, true);
         }
 
         var Er = Object.keys(clientOptions);
@@ -4855,7 +4855,7 @@
             null != Br.y && (cur.y = -1 * parseInt(Br.y),
                 Fr = true),
             Br.noui && (infoElement.classList.add("hidden"),
-                hn.style.display = "none");
+                chatElement.style.display = "none");
         var serialize_Uint8Array, deserialize_Uint8Array, toStr, isFunction, maxInt, Ur, Wr = Pr();
         if (Wr.length > 0)
             if (Wr.startsWith("~"))
@@ -4872,10 +4872,10 @@
                 var t = "wss://" + location.host + "/ws";
                 "https:" !== location.protocol && (t = "ws://" + location.host + "/ws"),
                     (server = new WebSocket(t, window.w.currentVersion)).binaryType = "arraybuffer",
-                    server.onmessage = Tn,
+                    server.onmessage = recieveServerMessage,
                     server.onclose = disconnect,
                     server.onerror = disconnect,
-                    server.onopen = In,
+                    server.onopen = connected,
                     document.getElementById("connecting1").innerText = "Connecting...",
                     document.getElementById("connecting2").innerText = "",
                     document.getElementById("connecting3").innerText = "",
@@ -4904,7 +4904,7 @@
                 e = "0" + e;
             return e
         }
-        function qr(e) {
+        function isCodePointBraille(e) {
             return e >= 10240 && e <= 10495
         }
         function hexToRGBA(e, t) {
@@ -4938,7 +4938,7 @@
             return 31 * e + t
         }
 
-        function ce2() {
+        function getCurrentDecoration() {
             var decorations = {
                 bold: decorationSetting.bold.enabled,
                 italic: decorationSetting.italic.enabled,
@@ -5381,11 +5381,11 @@
                 return function (lookFor, startIndex) {
                     if (null == this)
                         throw TypeError("Array.prototype.indexOf called on null or undefined");
-                    var i = e(this)
+                    var i = e(this) // e === Object
                         , c = i.length >>> 0
-                        , index = r(0 | startIndex, c);
+                        , index = r(0 | startIndex, c); // r === Math.min
                     if (index < 0)
-                        index = n(0, c + index);
+                        index = n(0, c + index); // n === Math.max
                     else if (index >= c)
                         return -1;
                     if (void 0 === lookFor) {
@@ -5696,32 +5696,34 @@
             server.send(window.network.binary(data))
         };
         window.network.wsUrl = "wss://" + location.host + "/ws";
-        window.w.changeZoom = function (e, t) {
+        window.w.changeZoom = function (input, toast) {
             console.warn("remember, this won't save!");
             var r = n;
-            clampedValue = e < 0 ? 0 : e > 10000 ? 10000 : e,
+            clampedValue = input < 0 ? 0 : input > 10000 ? 10000 : input,
                 zoomValue = Math.round(100 * clampedValue) / 100,
                 zoomElement.value = 10 * zoomValue,
-                t && showToast(Math.round(100 * zoomValue) + "% ", 1e3),
+                toast && showToast(Math.round(100 * zoomValue) + "% ", 1e3),
                 kn()
         }
-        window.w.changeColor = mr;
+        window.w.changeColor = changeColor;
         window.w.showToast = showToast;
         window.currentRegionSelection = null;
         window.RegionSelection = RegionSelection;
-        function RegionSelection() {
-            this.onSelectionEvents = [];
-            this.tiled = false;
-            this.startSelection = () => {
-                if (selectionActive) throw "There is already an active region selection";
-                selectionActive = true;
-                window.currentRegionSelection = this;
-                canvasElement.style.cursor = "crosshair";
-            };
-            this.onSelection = func => {
-                this.onSelectionEvents.push(func);
+        class RegionSelection {
+            constructor() {
+                this.onSelectionEvents=[];
+                this.tiled=false;
+                this.startSelection=() => {
+                    if (selectionActive) throw Error("There is already an active region selection");
+                    selectionActive=true;
+                    window.currentRegionSelection=this;
+                    canvasElement.style.cursor="crosshair";
+                };
+                this.onSelection=func => {
+                    this.onSelectionEvents.push(func);
+                };
+                this.getSelected=rr;
             }
-            this.getSelected = rr;
         }
         let cc = document.getElementById("customcolour");
         function hexToRGBArr(hex) {
@@ -5768,7 +5770,7 @@
             cc.jscolor.onChange = function () {
                 let hex = cc.jscolor.toHEXString();
                 let rgbArr = hexToRGBArr(hex);
-                mr(rgbArr);
+                changeColor(rgbArr);
             };
             /*
                         document.getElementById("wallthemeprotectcustom").jscolor.onChange = function () {
@@ -5785,7 +5787,7 @@
             if (col) {
                 let rgb = col.split(",").map(c => parseInt(c.trim()));
                 cc.jscolor.fromRGBA(...rgb, 0);
-                mr(rgb, true);
+                changeColor(rgb, true);
             }
             var resp = fetch("/.ss").then(r => r.json());
             resp.then(scripts => {
