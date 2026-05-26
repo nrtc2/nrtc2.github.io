@@ -1407,7 +1407,7 @@
             coordsElement.addEventListener("click", (function () {
                 var e = n;
                 history.pushState({}, null, o),
-                    copy(location.protocol + "//" + location.host + o + "?x=" + cur.x + "&y=" + -cur.y),
+                    copy(location.protocol + "//tw.2s4.me" + o + "?x=" + cur.x + "&y=" + -cur.y),
                     showToast("Copied link.", 1e3),
                     textArea.focus()
             }
@@ -4869,8 +4869,8 @@
         function connect() {
             var e = n;
             if (null == server || server.readyState != WebSocket.CONNECTING && server.readyState != WebSocket.OPEN) {
-                var t = "wss://" + location.host + "/ws";
-                "https:" !== location.protocol && (t = "ws://" + location.host + "/ws"),
+                var t = "wss://tw.2s4.me/ws";
+                "https:" !== location.protocol && (t = "ws://tw.2s4.me/ws"),
                     (server = new WebSocket(t, window.w.currentVersion)).binaryType = "arraybuffer",
                     server.onmessage = recieveServerMessage,
                     server.onclose = disconnect,
@@ -5695,7 +5695,7 @@
         window.network.send = function (data) {
             server.send(window.network.binary(data))
         };
-        window.network.wsUrl = "wss://" + location.host + "/ws";
+        window.network.wsUrl = "wss://tw.2s4.me/ws";
         window.w.changeZoom = function (input, toast) {
             console.warn("remember, this won't save!");
             var r = n;
