@@ -63,7 +63,7 @@
 		<div class="chatcontainer">
 			<div class="mock-fieldset">
 				<div class="channelbar">
-					<button class="channel-btn active" data-channel="world">This wall <span class="badge"
+					<button class="channel-btn active" data-channel="world">This world <span class="badge"
 							data-badge="world"></span></button>
 					<button class="channel-btn" data-channel="global">Global <span class="badge"
 							data-badge="global">1</span></button>
@@ -81,7 +81,7 @@
 			<div id="typing-world" class="typing-notice active" data-channel="world">nobody is typing.</div>
 			<div id="typing-global" class="typing-notice" data-channel="global">nobody is typing.</div>
 			<div class="msgcontainer">
-				<input maxlength="255" type="text" title="type a message" id="chatmsg" autocomplete="off">
+				<input maxlength="256" type="text" title="type a message" id="chatmsg" autocomplete="off">
 				<img alt="send" id="sendmsg" class="button" src="/static/send.svg" role="button">
 			</div>
 
@@ -158,7 +158,7 @@
 					<button class="tab-btn active" data-tab="optionsmenu">Options</button>
 					<button class="tab-btn" data-tab="explore">Explore</button>
 					<button class="tab-btn" data-tab="account">Account</button>
-					<button class="tab-btn" data-tab="wall" id="wallsettings">Wall</button>
+					<button class="tab-btn" data-tab="wall" id="wallsettings">World</button>
 					<button class="tab-btn" data-tab="admin_" id="admin">Admin</button>
 					<button class="tab-btn" data-tab="misc">Misc</button>
 					<button class="tab-btn" data-tab="report" id="report">Report</button>
@@ -359,7 +359,7 @@
 
 
 					<div id="wall" class="tab-content">
-						<h1>Wall Settings</h1>
+						<h1>World Settings</h1>
 
 						<input id="readonly" type="checkbox"><label for="readonly">Read-only</label><br>
 						<input id="private" type="checkbox"><label for="private">Private</label><br>
@@ -428,6 +428,7 @@
 						<button id="erudaBtn" onclick="loadEruda()">Load Eruda</button>
 					</div>
 
+
 					<div id="explore" class="tab-content">
 						<h3>Explore</h3>
 						<small class="tip">You can explore public walls and discover content.</small>
@@ -495,22 +496,6 @@
 			</div>
 		</div>
 	</div>
-	<span id="ping">-- ms</span>
-	<span id="fpsc">--</span>
-	<script>
-		function loadEruda() {
-			const btn = document.getElementById('erudaBtn');
-			btn.parentNode.removeChild(btn);
-			const script = document.createElement('script');
-			script.src = 'https://cdn.jsdelivr.net/npm/eruda';
-			script.onload = () => {
-				eruda.init();
-				alert("if you see this message, eruda has loaded successfully");
-			};
-
-			document.body.appendChild(script);
-		}
-	</script>
 	<script src="/static/pep.js"></script>
 	<script src="/static/tw-v3.js"></script>
 	<script>
@@ -588,6 +573,8 @@
 
 		updateChatboxes();
 	</script>
+	<span id="ping">0ms</span>
+	<span id="fpsc">999</span>
 	<script>
 		let lastTime = performance.now();
 		let frameCount = 0;
