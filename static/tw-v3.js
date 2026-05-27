@@ -2155,7 +2155,7 @@
                 clearInterval(ye),
                 nr(),
                 document.getElementById("connecting1").innerText = "Disconnected.",
-                documentgetElementById("connecting2").innerText = "Click anywhere to reconnect.";
+                document.getElementById("connecting2").innerText = "Click anywhere to reconnect.";
             document.getElementById("connecting3").innerHTML = reason;
             connectingElement.onclick = connect
         }
