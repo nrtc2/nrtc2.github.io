@@ -427,20 +427,6 @@
 						<h3>Miscellaneous</h3>
 						<button id="erudaBtn" onclick="loadEruda()">Load Eruda</button>
 					</div>
-					<script defer>
-						function loadEruda() {
-						const btn = document.getElementById('erudaBtn');
-						btn.parentNode.removeChild(btn);
-						const script = document.createElement('script');
-						script.src = 'https://cdn.jsdelivr.net/npm/eruda';
-						script.onload = () => {
-							eruda.init();
-							alert("if you see this message, eruda has loaded successfully");
-						};
-
-						document.body.appendChild(script);
-					}
-				</script>
 
 					<div id="explore" class="tab-content">
 						<h3>Explore</h3>
@@ -509,16 +495,32 @@
 			</div>
 		</div>
 	</div>
-	<script src="/static/pep.js" defer></script>
-	<script src="/static/tw-v3.js" defer></script>
-	<script defer>
+	<span id="ping">-- ms</span>
+	<span id="fpsc">--</span>
+	<script>
+		function loadEruda() {
+			const btn = document.getElementById('erudaBtn');
+			btn.parentNode.removeChild(btn);
+			const script = document.createElement('script');
+			script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+			script.onload = () => {
+				eruda.init();
+				alert("if you see this message, eruda has loaded successfully");
+			};
+
+			document.body.appendChild(script);
+		}
+	</script>
+	<script src="/static/pep.js"></script>
+	<script src="/static/tw-v3.js"></script>
+	<script>
 		/*if ('serviceWorker' in navigator) {
 		window.addEventListener('load', function() {
 			navigator.serviceWorker.register('/service-worker.js').then(function(registration) {})
 		});
 		}*/
 	</script>
-	<script defer>
+	<script>
 		const checkbox = document.getElementById('darkChat');
 		const rainbowTagsCheckbox = document.getElementById("rainbowTag");
 		const chatboxes = document.getElementsByClassName('chatbox');
@@ -586,9 +588,7 @@
 
 		updateChatboxes();
 	</script>
-	<span id="ping">-- ms</span>
-	<span id="fpsc">--</span>
-	<script defer>
+	<script>
 		let lastTime = performance.now();
 		let frameCount = 0;
 
@@ -775,7 +775,7 @@
 			}
 		}
 	</script>
-	<script defer>
+	<script>
 		const defaults = { darkMode: false, anonIdShow: true, rainbowTags: true, showFps: false, showFeedback: true, showPing: false };
 
 		for (const k in defaults) {
@@ -790,7 +790,7 @@
 		}
 
 	</script>
-	<script defer>
+	<script>
 		const anonId = document.getElementById("anonIdShow");
 
 		anonId.checked = localStorage.getItem("anonIdShow") === "true";
