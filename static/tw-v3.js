@@ -1,7 +1,7 @@
-//!function () {
+!function () {
     window.unreadAmount = 0;
     function t() { /* gone for good */ }
-//    !function (e) {
+    !function (e) {
         var n = t;
         class fontRender {
             constructor(e, n) {
@@ -5631,5 +5631,5 @@
         });
 
 
-/*    }("undefined" == typeof browser ? browser = {} : browser)
-}("undefined" == typeof browser ? browser = {} : browser);*/
+    }("undefined" == typeof browser ? browser = {} : browser)
+}("undefined" == typeof browser ? browser = {} : browser);
