@@ -1,3 +1,16 @@
+function loadEruda() {
+    const btn = document.getElementById('erudaBtn');
+    btn.parentNode.removeChild(btn);
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+    script.onload = () => {
+        eruda.init();
+        w.showToast("Eruda loaded", 1e3);
+    };
+
+    document.body.appendChild(script);
+}
+
 !function () {
     window.unreadAmount = 0;
     function t() { /* gone for good */ }
