@@ -1,11 +1,14 @@
 function loadEruda() {
+    const loadStart = Date.now()
     const btn = document.getElementById('erudaBtn');
     btn.parentNode.removeChild(btn);
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/eruda';
     script.onload = () => {
         eruda.init();
-        w.showToast("Eruda loaded", 1e3);
+        const p = document.createElement("p");
+        p.innerText = `Eruda loaded successfully within ${Date.now()-loadStart}ms.`;
+        document.getElementById("misc").appendChild(p);
     };
 
     document.body.appendChild(script);
@@ -3438,7 +3441,7 @@ function loadEruda() {
                         changeColor([Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)], true);
                     })()
             );
-            var d, f, v, h, g, p, b, x, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = chunk.clr[A], B = Zr(T), F = B[0], P = B[1], L = chunk.txt[A];
+            var d, f, v, h, y, g, p, b, x, w, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = chunk.clr[A], B = Zr(T), F = B[0], P = B[1], L = chunk.txt[A];
             var colorMatch = false;
             if (Array.isArray(F) && Array.isArray(data.color)) {
                 colorMatch = F[0] === data.color[0] && F[1] === data.color[1] && F[2] === data.color[2];
@@ -3521,7 +3524,7 @@ function loadEruda() {
                         changeColor([r * 255, g * 255, b * 255].map(Math.round), true);
                     })()
             );
-            var d, f, v, h, g, p, b, x, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = s.clr[A], B = Zr(T), F = B[0], P = B[1], L = s.txt[A];
+            var d, f, v, h, y, g, p, b, x, w, M, k, E, S = 1, I = Array.isArray(newColFmt) ? newColFmt[3] || 0 : Math.floor(newColFmt / 31), C = newColFmt, T = s.clr[A], B = Zr(T), F = B[0], P = B[1], L = s.txt[A];
             var colorMatch = false;
             if (Array.isArray(F) && Array.isArray(data.color)) {
                 colorMatch = F[0] === data.color[0] && F[1] === data.color[1] && F[2] === data.color[2];
