@@ -840,24 +840,24 @@ td {
 
 @font-face {
     font-family: ubuntu mono;
-    src: url(fonts/UbuntuMono-Regular.ttf)
+    src: url(fonts/UbuntuMono-R.ttf)
 }
 
 @font-face {
     font-family: ubuntu mono;
-    src: url(fonts/UbuntuMono-Bold.ttf);
+    src: url(fonts/UbuntuMono-B.ttf);
     font-weight: 700
 }
 
 @font-face {
     font-family: ubuntu mono;
-    src: url(fonts/UbuntuMono-Italic.ttf);
+    src: url(fonts/UbuntuMono-RI.ttf);
     font-style: italic
 }
 
 @font-face {
     font-family: ubuntu mono;
-    src: url(fonts/UbuntuMono-BoldItalic.ttf);
+    src: url(fonts/UbuntuMono-BI.ttf);
     font-weight: 700;
     font-style: oblique
 }
