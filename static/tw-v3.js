@@ -14,10 +14,10 @@ function loadEruda() {
     document.body.appendChild(script);
 }
 
-!function () {
+//!function () {
     window.unreadAmount = 0;
     function t() { /* gone for good */ }
-    !function (e) {
+    //!function (e) {
         var n = t;
         class fontRender {
             constructor(e, n) {
@@ -252,7 +252,7 @@ function loadEruda() {
             } else
                 decorationsElement.style.display = "none"
         }
-        function ce() {
+        function getDecoNumber() {
             var t = 0;
             return decorationSetting.bold.enabled && (t |= 8),
                 decorationSetting.italic.enabled && (t |= 4),
@@ -260,7 +260,7 @@ function loadEruda() {
                 decorationSetting.strikethrough.enabled && (t |= 1),
                 t
         }
-        window.cel = ce;
+        window.cel = getDecoNumber;
         function le(e) {
             br("bold", Boolean(8 & e)),
                 br("italic", Boolean(4 & e)),
@@ -1222,7 +1222,7 @@ function loadEruda() {
                     cur.y = n[1];
 
                     var r = pe,
-                        a = ce(),
+                        a = getDecoNumber(),
                         o = Zr(n[3]);
                     pe = o[0];
                     window.color = pe;
@@ -1240,7 +1240,7 @@ function loadEruda() {
                     cur.x = t[0],
                         cur.y = t[1];
                     var n = pe
-                        , a = ce()
+                        , a = getDecoNumber()
                         , o = Zr(t[3]);
                     pe = o[0],
                         window.color = pe,
@@ -3640,7 +3640,7 @@ function loadEruda() {
             if (!er) {
                 er = true;
                 var savedColor = pe;
-                var savedDeco = ce();
+                var savedDeco = getDecoNumber();
 
                 (function loop(nIdx, oIdx) { // oIdx is useless
                     if (nIdx >= chars.length || !Ie) {
@@ -4100,7 +4100,7 @@ function loadEruda() {
             var a = decorationSetting[e];
             a.enabled = null != t ? t : !a.enabled,
                 a.enabled ? a.el.classList.add("enabled") : a.el.classList.remove("enabled"),
-                localStorage.setItem("dec", ce())
+                localStorage.setItem("dec", getDecoNumber())
         }
         function xr(e, t, r) {
             if (Math.abs(e - t) > .1) {
@@ -5647,5 +5647,5 @@ function loadEruda() {
         });
 
 
-    }("undefined" == typeof browser ? browser = {} : browser)
-}("undefined" == typeof browser ? browser = {} : browser);
+    //}("undefined" == typeof browser ? browser = {} : browser)
+//}("undefined" == typeof browser ? browser = {} : browser);
