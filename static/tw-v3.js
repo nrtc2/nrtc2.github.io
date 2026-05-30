@@ -5549,7 +5549,6 @@ function loadEruda() {
         window.w.changeColor = changeColor;
         window.w.showToast = showToast;
         window.currentRegionSelection = null;
-        window.RegionSelection = RegionSelection;
         class RegionSelection { // use classes bitch
             constructor() {
                 this.onSelectionEvents=[];
@@ -5566,6 +5565,7 @@ function loadEruda() {
                 this.getSelected=rr;
             }
         }
+        window.RegionSelection = RegionSelection;
         let cc = document.getElementById("customcolour");
         function hexToRGBArr(hex) {
             if (hex.startsWith("#")) hex = hex.slice(1);
