@@ -13,6 +13,7 @@ function loadEruda() {
 
     document.body.appendChild(script);
 }
+var e = "undefined" == typeof browser ? browser = {} : browser;
 
 //!function () {
     window.unreadAmount = 0;
