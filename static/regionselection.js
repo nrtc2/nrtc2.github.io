@@ -1,5 +1,5 @@
-const e = new RegionSelection
-e.onSelection(function(sx, sy, ex, ey) {
+const sel = new RegionSelection
+sel.onSelection(function(sx, sy, ex, ey) {
     const d = Date.now()
     let s = 0
     let c = 0
@@ -13,8 +13,8 @@ e.onSelection(function(sx, sy, ex, ey) {
             }
         }
     }
-    printMsg("script", 0, `Region voided: ${sx}, ${-sy} to ${ex}, ${-ey} |
-Time taken: ${(Date.now()-d)/1000} seconds |
-Chars successfully cleared: ${c}/${(ex-sx+1)*(ey-sy+1)}`, !1)
+    w.showToast(`Region voided: ${sx}, ${-sy} to ${ex}, ${-ey}
+Time taken: ${(Date.now()-d)/1000} seconds
+Chars successfully cleared: ${c}/${(ex-sx+1)*(ey-sy+1)}`, 1500)
 })
-e.startSelection()
+sel.startSelection()
