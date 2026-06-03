@@ -1,5 +1,3 @@
-// better than JSON™
-
 function rawData(e, indent, seen = new WeakSet()) {
     if (typeof e === 'object' && e !== null) {
         if (seen.has(e)) return '...';
@@ -8,22 +6,22 @@ function rawData(e, indent, seen = new WeakSet()) {
         try {
             if (e instanceof RegExp) return e.toString();
             if (e instanceof Date) return `new Date(${e.getTime()})`;
-            if (e instanceof Error) return `new Error(${rawData(e.message)})`;
+            if (e instanceof Error) return `${e}`;
 
             if (Array.isArray(e)) {
                 return `[${e.map(v => rawData(v, seen)).join(', ')}]`;
             }
 
             if (e instanceof Map) {
-                return `new Map([${[...e.entries()]
-                    .map(([k, v]) => `[${rawData(k, seen)}, ${rawData(v, seen)}]`)
-                    .join(', ')}])`;
+                return `Map(${e.size}) {${[...e.entries()]
+                    .map(([k, v]) => `${rawData(k, seen)} => ${rawData(v, seen)}`)
+                    .join(', ')}}`;
             }
 
             if (e instanceof Set) {
-                return `new Set([${[...e]
+                return `Set(${e.size}) {${[...e]
                     .map(v => rawData(v, seen))
-                    .join(', ')}])`;
+                    .join(', ')}}`;
             }
 
             const keys = Reflect.ownKeys(e);
@@ -60,7 +58,7 @@ function rawData(e, indent, seen = new WeakSet()) {
     }
 
     if (typeof e === 'symbol') {
-        return `Symbol(${rawData(e.description)})`;
+        return `Symbol(${e.description})`;
     }
 
     if (typeof e === 'number') {
