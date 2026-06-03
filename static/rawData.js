@@ -5,28 +5,28 @@ function rawData(e, indent, seen = new WeakSet()) {
 
         try {
             if (e instanceof RegExp) return e.toString();
-            if (e instanceof Date) return `new Date(${e.getTime()})`;
-            if (e instanceof Error) return `${e}`;
+            if (e instanceof Date) return (new Date).toJSON();
+            if (e instanceof Error) return e.toString();
 
             if (Array.isArray(e)) {
-                return `[${e.map(v => rawData(v, seen)).join(', ')}]`;
+                return `[${e.map(v => rawData(v, indent, seen)).join(', ')}]`;
             }
 
             if (e instanceof Map) {
                 return `Map(${e.size}) {${[...e.entries()]
-                    .map(([k, v]) => `${rawData(k, seen)} => ${rawData(v, seen)}`)
+                    .map(([k, v]) => `${rawData(k, indent seen)} => ${rawData(v, indent, seen)}`)
                     .join(', ')}}`;
             }
 
             if (e instanceof Set) {
                 return `Set(${e.size}) {${[...e]
-                    .map(v => rawData(v, seen))
+                    .map(v => rawData(v, indent, seen))
                     .join(', ')}}`;
             }
 
             const keys = Reflect.ownKeys(e);
             const props = keys.map(key =>
-                `${typeof key !== "symbol" ? /^[a-z$_][0-9a-z$_]*$/i.test(String(key)) ? String(key) : `${rawData(String(key))}` : `[${rawData(key)}]`}: ${rawData(e[key], seen)}`
+                `${typeof key !== "symbol" ? /^[a-z$_][0-9a-z$_]*$/i.test(String(key)) ? String(key) : `${rawData(String(key))}` : `[${rawData(key)}]`}: ${rawData(e[key], indent, seen)}`
             );
 
             const prefix = e.constructor?.name !== 'Object' ?
