@@ -14,7 +14,7 @@ function rawData(e, indent, seen = new WeakSet()) {
 
             if (e instanceof Map) {
                 return `Map(${e.size}) {${[...e.entries()]
-                    .map(([k, v]) => `${rawData(k, indent seen)} => ${rawData(v, indent, seen)}`)
+                    .map(([k, v]) => `${rawData(k, indent, seen)} => ${rawData(v, indent, seen)}`)
                     .join(', ')}}`;
             }
 
