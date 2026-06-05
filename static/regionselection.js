@@ -1,69 +1,69 @@
-function t(n, t) {
-	n -= 500;
-	return t()[n]
+function t(e, n) {
+	e -= 159;
+	return r()[e]
 }
 const n = t;
 
 function r() {
-	const n = ["850gVBGlj", "1764788OwBzon", "char", "7Ifomtx", "1548kuZqlQ", " seconds\nC", "BhMOZ", "ssfully cl", "now", "tion", "showToast", "Region voi", "tlYht", "352191GDGMJv", "yRSES", "nVOyP", "startSelec", "deAcm", "npMKz", "onSelectio", "n: ", "eared: ", "XpMkz", "13245510tlYcah", "54acNexs", "hfYWg", "DknLR", "ded: ", "564568aADlnd", "LJuoA", " to ", "TATpw", "7251813SuTpWU", "WRbts", "\nTime take", "33918QcIAlM", "hars succe"];
+	const n = ["416jpwndw", " seconds\nC", "eared: ", "BplBh", "4XLLWZq", "6674164YrNCtw", "348PgQqJC", "now", "8PfSOSi", "onSelectio", "char", "ssfully cl", "showToast", "\nTime take", "tion", "ekgIv", "hars succe", "Region voi", "143996WTFaat", "DkeUB", "410sasUgp", "439296YcxYyt", "145143Efckhj", "PCods", "2382NpWdCy", "QqOyw", "108613uBcwoj", "EBouY", "IeUSR", "66BViUvp", "startSelec", "wDuBw", "n: ", "pBxjh", "323316brQUIp", "bKyfp", "ded: ", "BXxXT", " to ", "11005xBVxPS", "SoywA"];
 	return (r = function() {
 		return n
 	})()
-}! function(n) {
-	const e = t,
-		r = n();
+}! function() {
+	const n = a,
+		a = r();
 	for (;;) try {
-		if (575490 === parseInt(e(519)) / 1 + -parseInt(e(507)) / 2 + parseInt(e(530)) / 3 * (parseInt(e(510)) / 4) + -parseInt(e(506)) / 5 * (parseInt(e(504)) / 6) + parseInt(e(509)) / 7 * (-parseInt(e(534)) / 8) + parseInt(e(501)) / 9 + parseInt(e(529)) / 10) break;
-		r.push(r.shift())
-	} catch (n) {
-		r.push(r.shift())
+		if (581538 === parseInt(n(172)) / 1 * (parseInt(n(191)) / 2) + -parseInt(n(175)) / 3 * (parseInt(n(164)) / 4) + parseInt(n(185)) / 5 * (parseInt(n(170)) / 6) + -parseInt(n(192)) / 7 * (parseInt(n(195)) / 8) + -parseInt(n(168)) / 9 * (parseInt(n(166)) / 10) + parseInt(n(167)) / 11 * (parseInt(n(193)) / 12) + parseInt(n(187)) / 13 * (parseInt(n(180)) / 14)) break;
+		a.push(a.shift())
+	} catch (e) {
+		a.push(a.shift())
 	}
-}(r);
+}();
 const sel = new RegionSelection;
-sel[n(525) + "n"](function(n, t, e, r) {
-	const c = n,
-		o = {
-			npMKz: function(n, t) {
+sel[n(196) + "n"](function(n, t, e, r) {
+	const o = n,
+		u = {
+			DkeUB: function(n, t) {
 				return n <= t
 			},
-			WRbts: function(n, t) {
+			QqOyw: function(n, t) {
 				return n <= t
 			},
-			TATpw: function(n, t) {
+			wDuBw: function(n, t) {
 				return n !== t
 			},
-			LJuoA: function(n, t, e) {
+			ekgIv: function(n, t, e) {
 				return n(t, e)
 			},
-			hfYWg: function(n, t, e, r, c) {
-				return n(t, e, r, c)
+			BplBh: function(n, t, e, r, o) {
+				return n(t, e, r, o)
 			},
-			BhMOZ: function(n, t) {
+			BXxXT: function(n, t) {
 				return n !== t
 			},
-			DknLR: function(n, t) {
+			PCods: function(n, t) {
 				return n / t
 			},
-			yRSES: function(n, t) {
+			bKyfp: function(n, t) {
 				return n - t
 			},
-			deAcm: function(n, t) {
+			SoywA: function(n, t) {
 				return n * t
 			},
-			nVOyP: function(n, t) {
+			IeUSR: function(n, t) {
 				return n + t
 			},
-			XpMkz: function(n, t) {
-				return n + t
-			},
-			tlYht: function(n, t) {
+			pBxjh: function(n, t) {
 				return n - t
+			},
+			EBouY: function(n, t) {
+				return n + t
 			}
 		},
-		u = Date[c(514)]();
+		c = Date[o(194)]();
 	let s = 0,
 		a = 0;
-	for (let u = t; o[c(524)](u, r); u++)
-		for (let t = n; o[c(502)](t, e); t++) o[c(500)](o[c(535)](getCharInfoXY, t, u)[c(508)], " ") && (s = o[c(531)](writeCharAt, " ", 0, t, u), o[c(512)](s, 0) && (a += 1));
-	w[c(516)](c(517) + c(533) + n + ", " + -t + c(536) + e + ", " + -r + (c(503) + c(526)) + o[c(532)](o[c(520)](Date[c(514)](), u), 1e3) + (c(511) + c(505) + c(513) + c(527)) + a + "/" + o[c(523)](o[c(521)](o[c(520)](e, n), 1), o[c(528)](o[c(518)](r, t), 1)), 1500)
-}), sel[n(522) + n(515)]();
+	for (let c = t; u[o(165)](c, r); c++)
+		for (let t = n; u[o(171)](t, e); t++) u[o(177)](u[o(161)](getCharInfoXY, t, c)[o(197)], " ") && (s = u[o(190)](writeCharAt, " ", 0, t, c), u[o(183)](s, 0) && (a += 1));
+	w[o(199)](o(163) + o(182) + n + ", " + -t + o(184) + e + ", " + -r + (o(159) + o(178)) + u[o(169)](u[o(181)](Date[o(194)](), c), 1e3) + (o(188) + o(162) + o(198) + o(189)) + a + "/" + u[o(186)](u[o(174)](u[o(179)](e, n), 1), u[o(173)](u[o(181)](r, t), 1)), 1500)
+}), sel[n(176) + n(160)]();
