@@ -1,4 +1,5 @@
 function format(e, indent, depth = 0, seen = new WeakSet()) {
+    if (!(seen instanceof WeakSet)) throw TypeError("'seen' argument is not a WeakSet")
     const getSpacing = () => {
         if (!indent) return { base: '', inner: '', nl: '' };
         const spaceStr = typeof indent === 'number' ? ' '.repeat(indent) : indent;
@@ -109,7 +110,7 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
 
     if (typeof e === 'symbol') return `Symbol(${e.description ?? ''})`;
     if (typeof e === 'number') return (1 / e === -Infinity && e === 0) ? '-0' : String(e);
-    if (typeof e === 'function') return `[Function: ${e.name || '(anonymous)'}]`;
+    if (typeof e === 'function') return e.toString().startsWith("async") ? e.toString().replace(/^async(\s+)function/, "async$1ƒ") : e.toString().replace(/^function/, "ƒ");
 
     return String(e);
 }
