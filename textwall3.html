@@ -405,7 +405,7 @@
 							<div id="memberlist"></div>
 						</div>
 						<br>
-						<button class="alert" id="deletewall">Delete wall (DANGEROUS!)</button>
+						<button class="alert" id="deletewall">Delete world (DANGEROUS!)</button>
 					</div>
 
 
@@ -431,26 +431,26 @@
 
 					<div id="explore" class="tab-content">
 						<h3>Explore</h3>
-						<small class="tip">You can explore public walls and discover content.</small>
+						<small class="tip">You can explore public worlds and discover content.</small>
 						<form id="exploreform">
-							<input id="exploreinput" placeholder="Search for walls..." type="text" maxlength="250"
+							<input id="exploreinput" placeholder="Search for worlds..." type="text" maxlength="250"
 								minlength="1">
 							<input id="explorebtn" value="Search" type="submit"><br>
 						</form>
 						<hr>
 						<div id="exploreresults">
-							<div id="buffer">Search for walls to get the result</div>
+							<div id="buffer">Search for worlds to get the result</div>
 						</div>
 					</div>
 
 					<div id="report" class="tab-content">
 						<h3>Report</h3>
-						<small class="tip">Report users or walls that violate the rules.</small><br>
+						<small class="tip">Report users or worlds that violate the rules.</small><br>
 						<small class="tip" style="color: #ffff00">Note that you can't submit a report if you're not
 							logged in.</small>
 						<form id="reportform">
-							<label for="reportid">Username or wall name:</label><br>
-							<input id="reportid" placeholder="Username or wall name" type="text" maxlength="250"
+							<label for="reportid">Username or world name:</label><br>
+							<input id="reportid" placeholder="Username or world name" type="text" maxlength="250"
 								minlength="1"><br><br>
 
 							<label for="reportreason">Reason:</label><br>
@@ -488,7 +488,7 @@
 		<h2 class="shake">NSFW Warning</h2>
 		<div class="nsfw-content">
 
-			<p>This wall has been marked as NSFW (Not Safe For Work) by its creator. It may contain content that is
+			<p>This world has been marked as NSFW (Not Safe For Work) by its creator. It may contain content that is
 				inappropriate for certain audiences.</p>
 			<div class="footer">
 				<button id="nsfwaccept" onclick="accept_nsfw()">I understand</button>
@@ -707,7 +707,7 @@
 				const data = await response.json();
 
 				if (data.success) {
-					buffer.textContent = `Found ${data.totalFound || "no"} walls`;
+					buffer.textContent = `Found ${data.totalFound || "no"} worlds`;
 					data.results.forEach(world => {
 						const resultDiv = document.createElement('div');
 						resultDiv.className = 'result';
