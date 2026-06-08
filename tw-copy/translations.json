@@ -1,0 +1,99 @@
+{
+  "usermenu": {
+    "tabs": {
+      "options": "Options",
+      "explore": "Explore",
+      "account": "Account",
+      "misc": "Misc",
+      "report": "Report"
+    },
+    "options": {
+      "showothercurs": "Show other cursors",
+      "shownametags": "Show name tags",
+      "showchat": "Show chat",
+      "disablecolor": "Disable color",
+      "smoothpanning": "Smooth panning",
+      "smoothcursors": "Smooth cursors",
+      "copycolors": "Copy colors",
+      "copydecorations": "Copy decorations",
+      "rainbowtext": "Rainbow text",
+      "rainbow": {
+        "mode": {
+          "custom": "Custom",
+          "legacy": "Legacy"
+        },
+        "modetext": "Mode:",
+        "huespeedtext": "Hue Speed (custom):"
+      },
+      "darkchat": "Dark chat",
+      "rainbowtag": "Show rainbow tag animation",
+      "showanonid": "Show anonymous IDs",
+      "showdn": "Show display name",
+      "showfps": "Show FPS",
+      "showping": "Show ping",
+      "showtypingfeedback": "Show typing feedback",
+      "roundcursors": "Round cursors",
+      "fademsg": "Fade in animation for chat messages",
+      "clearchats": "Clear chats",
+      "zoom": "Zoom:",
+      "fetchchunkamount": "Fetch chunk amount:",
+      "lqfontwarning": "WARNING: Some of the fonts are low quality!",
+      "font": "Font:",
+      "customthemetext": "Custom Theme",
+      "customtheme": {
+        "primary": "Primary:",
+        "secondary": "Secondary:",
+        "whitetext": "White text"
+      }
+    },
+    "explore": {
+      "description": "You can explore public walls and discover content.",
+      "input": "Search for walls...",
+      "search": "Search",
+      "searchforresult": "Search for walls to get the result"
+    },
+    "account": {
+      "logintext": "Log in",
+      "login": {
+        "username": "Username",
+        "password": "Password",
+        "submit": "Go"
+      },
+      "registertext": "Register",
+      "register": {
+        "password": "Password (don't forget it)",
+        "password2": "Password again"
+      },
+      "user": {
+        "loginas": "Logged in as ${username}",
+        "anonymous": "Anonymous",
+        "logout": "Log out",
+        "accsettingstext": "Account settings",
+        "accsettings": {
+          "changeusernametext": "Change username",
+          "changeusername": {
+            "newusername": "New username"
+          },
+          "changepasstext": "Change password",
+          "changepass": {
+            "oldpass": "Old password",
+            "newpass": "New password",
+            "newpass2": "New password again"
+          },
+          "delacctext": "Delete account"
+        }
+      }
+    },
+    "misc": {
+      "loaderuda": "Load Eruda"
+    },
+    "report": {
+      "nologinwarn": "Note that you can't submit a report if you're not logged in.",
+      "input": "Username or wall name:",
+      "inputbox": "Username or wall name",
+      "reason": "Reason:",
+      "reasoninput": "Describe the issue...",
+      "submit": "Submit Report"
+    }
+  }
+}
