@@ -1,7 +1,7 @@
 function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
-        if (!indent) return { base: '', inner: '', nl: ' ' };
+        if (!indent) return { base: '', inner: '', nl: '' };
         const spaceStr = typeof indent === 'number' ? ' '.repeat(indent) : indent;
         return {
             base: spaceStr.repeat(depth),
