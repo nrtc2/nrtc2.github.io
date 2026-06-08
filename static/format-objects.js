@@ -1,7 +1,7 @@
 function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
-        if (!indent) return { base: '', inner: '', nl: '' };
+        if (!indent) return { base: '', inner: '', nl: ' ' };
         const spaceStr = typeof indent === 'number' ? ' '.repeat(indent) : indent;
         return {
             base: spaceStr.repeat(depth),
@@ -75,13 +75,13 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
                     const parts = [];
                     if (desc.get) parts.push(desc.get.toString());
                     if (desc.set) parts.push(desc.set.toString());
-                    return `${parts.join(', ')}`;
+                    return `${parts.join(`,${nl}`)}`;
                 }
 
                 // Normal property value
                 const valStr = format(e[key], indent, depth + 1, seen);
                 return `${keyStr}: ${valStr}`;
-            }).join(`, ${nl}${inner}`);
+            }).join(`,${nl}${inner}`);
 
             return `${prefix}{${nl}${inner}${props}${nl}${base}}`;
 
