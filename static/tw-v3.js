@@ -363,7 +363,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 x: 0,
                 y: 0
             }
-        }, Ye = false, selectionActive = false, Ve = false, Ze = false, $e = {}, Ge = [], Qe = null, _e = [];
+        }, Ye = false, selectionActive = false, protectEnabled = false, Ze = false, $e = {}, Ge = [], Qe = null, _e = [];
         for (ne = 0; ne < 200; ne++)
             _e[ne] = " ";
         var et = [];
@@ -815,19 +815,19 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             }
         }
         function zt(e) {
-            for (var r = chunks.get(e), a = true, o = 0; o < 200; o++)
-                if (!Qn(r.txt[o], Zr(r.clr[o])[1])) {
+            for (var chunk = chunks.get(e), a = true, o = 0; o < 200; o++)
+                if (!Qn(chunk.txt[o], Zr(chunk.clr[o])[1])) {
                     a = false;
                     break
                 }
-            if (a && r.textProtected) {
+            if (a && chunk.textProtected) {
                 for (o = 0; o < 200; o++)
-                    if (r.textProtected[o] === "1") {
+                    if (chunk.textProtected[o] === "1") {
                         a = false;
                         break
                     }
             }
-            if (a && (r.edge = void 0),
+            if (a && (chunk.edge = void 0),
                 a) {
                 var i = wt(e)
                     , c = i[0] - 20 + "," + i[1];
@@ -837,8 +837,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         }
         function qt(e) {
             if (chunks.has(e)) {
-                var r = chunks.get(e);
-                null != r.img && delete r.img
+                var chunk = chunks.get(e);
+                null != chunk.img && delete chunk.img
             }
         }
         var Yt = null;
@@ -911,7 +911,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 var r = 20 * Math.floor(cur.x / 20)
                     , o = 10 * Math.floor(cur.y / 10)
                     , c = r + "," + o;
-                chunks.has(c) && (Ve && server.send(serialize_Uint8Array({
+                chunks.has(c) && (protectEnabled && server.send(serialize_Uint8Array({
                     p: c
                 })),
                     Ze && (tn ? tn = false : server.send(serialize_Uint8Array({
@@ -1041,7 +1041,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             )),
             document.addEventListener("pointermove", (function (e) {
                 if (e.isTrusted && (Te = Wn(e),
-                    (Ve || Ze) && (ge = true),
+                    (protectEnabled || Ze) && (ge = true),
                     e.pointerId == Dn && !Nn)) {
                     if (e.preventDefault(),
                         selectionActive) {
@@ -1124,10 +1124,10 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             if (e.isTrusted && (e.preventDefault(),
                 e.pointerId == Dn && !Nn)) {
                 if (selectionActive && $e.start && $e.end) {
-                    var r = Math.min($e.start.x, $e.end.x)
-                        , o = Math.min($e.start.y, $e.end.y)
-                        , i = Math.max($e.start.x, $e.end.x)
-                        , c = Math.max($e.start.y, $e.end.y);
+                    var sx = Math.min($e.start.x, $e.end.x) // start X
+                        , sy = Math.min($e.start.y, $e.end.y) // start Y
+                        , ex = Math.max($e.start.x, $e.end.x) // end X
+                        , ey = Math.max($e.start.y, $e.end.y); // end Y
                     selectionActive = false;
                     $e = {};
                     Dn = void 0;
@@ -1136,7 +1136,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
                     regionSelection.onSelectionEvents.forEach(func => {
                         try {
-                            func(r, o, i, c);
+                            func(sx, sy, ex, ey);
                         } catch (e) {
                             console.error("Region selection event handler error:", e);
                         }
@@ -1638,7 +1638,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             )),
             worldSettings.protect.addEventListener("click", (function (e) {
                 worldSettings.protect.classList.toggle("enabled")
-                Ve = worldSettings.protect.classList.contains("enabled"),
+                protectEnabled = worldSettings.protect.classList.contains("enabled"),
                     ge = true
             }
             )),
@@ -2926,7 +2926,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                         worldSettings.nsfw.disabled = !(2 == j || m),
 
                         m && (deleteWorldElement.style.display = "textwall" != world || K ? "block" : "none"),
-                        0 == j && (Ve = false,
+                        0 == j && (protectEnabled = false,
                             Ze = false),
                         ge = true,
                         hideChatIfReadOnly();
@@ -4548,9 +4548,9 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     canvasGetContext.fillRect(y, g, S, I)
 
                 }
-                if (Ve || Ze) {
+                if (protectEnabled || Ze) {
 
-                    canvasGetContext.fillStyle = Ve && Ze ? "rgba(195,219,224,0.5)" : (Ve ? "rgba(204,204,204,0.5)" : "rgba(221,249,255,0.5)")
+                    canvasGetContext.fillStyle = protectEnabled && Ze ? "rgba(195,219,224,0.5)" : (protectEnabled ? "rgba(204,204,204,0.5)" : "rgba(221,249,255,0.5)")
                     var C = 20 * Math.floor(Te.x / 20)
                         , T = 10 * Math.floor(Te.y / 10);
                     canvasGetContext.fillRect(10 * C * v, 20 * T * v, 200 * v, 200 * v)
