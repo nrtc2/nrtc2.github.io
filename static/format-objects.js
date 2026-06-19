@@ -73,14 +73,14 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
                 // Handle Getters / Setters safely
                 if (desc && (desc.get || desc.set)) {
                     const parts = [];
-                    if (desc.get) parts.push(desc.get.toString());
-                    if (desc.set) parts.push(desc.set.toString());
+                    if (desc.get) parts.push(format(desc.get));
+                    if (desc.set) parts.push(format(desc.set));
                     return `${parts.join(`,${nl}`)}`;
                 }
 
                 // Normal property value
                 const valStr = format(e[key], indent, depth + 1, seen);
-                return `${keyStr}: ${valStr}`;
+                return `${keyStr}:${nl ? " " : ""}${valStr}`;
             }).join(`,${nl}${inner}`);
 
             return `${prefix}{${nl}${inner}${props}${nl}${base}}`;
@@ -110,7 +110,10 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
 
     if (typeof e === 'symbol') return `Symbol(${e.description ?? ''})`;
     if (typeof e === 'number') return (1 / e === -Infinity && e === 0) ? '-0' : String(e);
-    if (typeof e === 'function') return e.toString().startsWith("async") ? e.toString().replace(/^async(\s+)function/, "async$1ƒ") : e.toString().replace(/^function/, "ƒ");
+    if (typeof e === 'function') {
+        const a = e.toString().length > 256 ? `${e.toString().substring(0, 256)}…` : e.toString().substring(0, 256);
+        return a.toString().startsWith("async") ? a.toString().replace(/^async(\s+)function/, "async$1ƒ") : a.toString().replace(/^function/, "ƒ");
+    }
 
     return String(e);
 }
