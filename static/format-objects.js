@@ -1,7 +1,11 @@
 function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
-        if (!indent) return { base: '', inner: '', nl: '' };
+        if (!indent) return {
+            base: '',
+            inner: '',
+            nl: ''
+        };
         const spaceStr = typeof indent === 'number' ? ' '.repeat(indent) : indent;
         return {
             base: spaceStr.repeat(depth),
@@ -16,10 +20,18 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
 
         try {
             if (e instanceof RegExp) return e.toString();
-            if (e instanceof Date) return typeof e.toJSON === 'function' ? e.toJSON() : (new Date(e)).toJSON();
+            if (e instanceof Date) return !Number.isNaN(e.valueOf()) ? typeof e.toJSON === 'function' ? e.toJSON() : (new Date(e)).toJSON() : "Invalid Date";
             if (e instanceof Error) return `${e.name}: ${e.message}`;
 
-            const { base, inner, nl } = getSpacing();
+
+            if (e instanceof WeakSet) return 'WeakSet { <items unknown> }';
+            if (e instanceof WeakMap) return 'WeakMap { <items unknown> }';
+
+            const {
+                base,
+                inner,
+                nl
+            } = getSpacing();
 
             // 1. Arrays
             if (Array.isArray(e)) {
@@ -61,7 +73,7 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
 
             const props = keys.map(key => {
                 const desc = Reflect.getOwnPropertyDescriptor(e, key);
-                
+
                 // Format Key
                 let keyStr;
                 if (typeof key === 'symbol') {
