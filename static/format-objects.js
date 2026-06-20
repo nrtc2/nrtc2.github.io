@@ -87,7 +87,7 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
                     const parts = [];
                     if (desc.get) parts.push(format(desc.get));
                     if (desc.set) parts.push(format(desc.set));
-                    return `${parts.join(`,${nl}`)}`;
+                    return `${parts.join(`,${inner}${nl}`)}`;
                 }
 
                 // Normal property value
@@ -123,6 +123,7 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (typeof e === 'symbol') return `Symbol(${e.description ?? ''})`;
     if (typeof e === 'number') return (1 / e === -Infinity && e === 0) ? '-0' : String(e);
     if (typeof e === 'function') {
+        if (depth !== 0) return 'ƒ'
         const a = e.toString().length > 256 ? `${e.toString().substring(0, 256)}…` : e.toString().substring(0, 256);
         return a.toString().startsWith("async") ? a.toString().replace(/^async(\s+)function/, "async$1ƒ") : a.toString().replace(/^function/, "ƒ");
     }
