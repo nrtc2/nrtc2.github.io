@@ -3724,49 +3724,49 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             var t = n;
             canvasElement.style.cursor = "crosshair";
             var regionSelection = new RegionSelection();
-            regionSelection.onSelection(function (r, o, i, c) {
+            regionSelection.onSelection(function (sx, sy, ex, ey) {
                 var l = cur.x
                     , u = cur.y;
-                cur.x = r,
-                    cur.y = o;
-                for (var s = "", d = "", f = false, v = false, h = o; h <= c; h++) {
-                    for (var y = r; y <= i; y++) {
+                cur.x = sx,
+                    cur.y = sy;
+                for (var plainText = "", codes = "", f = false, v = false, h = sy; h <= ey; h++) {
+                    for (var y = sx; y <= ex; y++) {
                         var g = rr();
 
                         if (g) {
-                            g[0] == x1B ? s += " " : s += g[0];
+                            g[0] == x1B ? plainText += " " : plainText += g[0];
                             var [p, b] = Zr(g[1]);
                             if (clientOptions.copycolour.checked) {
                                 if (Array.isArray(g[1])) {
                                     var rgb = g[1];
-                                    d += "[";
-                                    for (var i = 0; i < 3; i++) {
-                                        d += String.fromCharCode(192 + (rgb[i] >> 6)) +
+                                    codes += "[";
+                                    for (let i = 0; i < 3; i++) {
+                                        codes += String.fromCharCode(192 + (rgb[i] >> 6)) +
                                             String.fromCharCode(192 + (rgb[i] & 63));
                                     }
-                                    d += clientOptions.copydecorations.checked ? String.fromCharCode(192 + b) : String.fromCharCode(192);
-                                    d += "]";
+                                    codes += clientOptions.copydecorations.checked ? String.fromCharCode(192 + b) : String.fromCharCode(192);
+                                    codes += "]";
                                 } else {
-                                    d += String.fromCharCode(ue + g[1]);
+                                    codes += String.fromCharCode(ue + g[1]);
                                 }
                             } else if (clientOptions.copydecorations.checked) {
-                                d += String.fromCharCode(ue + Vr(0, b));
+                                codes += String.fromCharCode(ue + Vr(0, b));
                             }
                             Qn(g[0], b) || (0 != b && (v = true),
                                 0 != p && (f = true)),
                                 cur.x++
                         }
                     }
-                    cur.x = r,
+                    cur.x = sx,
                         cur.y++,
-                        s += "\n",
-                        d += "�";
+                        plainText += "\n",
+                        codes += "�";
 
                 }
-                s = s.slice(0, -1),
-                    d = d.slice(0, -1),
-                    s.startsWith("http") && (f = v = false),
-                    clientOptions.copycolour.checked && f || clientOptions.copydecorations.checked && v ? copy(s + x1B + d) : copy(s),
+                plainText = plainText.slice(0, -1),
+                    codes = codes.slice(0, -1),
+                    plainText.startsWith("http") && (f = v = false),
+                    clientOptions.copycolour.checked && f || clientOptions.copydecorations.checked && v ? copy(plainText + x1B + codes) : copy(plainText),
                     cur.x = l,
                     cur.y = u,
                     showToast("Copied selection.", 1500);
