@@ -82,17 +82,17 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
                     keyStr = /^[a-z$_][0-9a-z$_]*$/i.test(key) ? key : `'${key.replace(/'/g, "\\'")}'`;
                 }
 
-                // Handle Getters / Setters safely
+                // Getters / Setters
                 if (desc && (desc.get || desc.set)) {
                     const parts = [];
-                    if (desc.get) parts.push(format(desc.get));
-                    if (desc.set) parts.push(format(desc.set));
-                    return `${parts.join(`,${inner}${nl}`)}`;
+                    if (desc.get) parts.push('Getter');
+                    if (desc.set) parts.push('Setter');
+                    return `${key}:${nl ? ' ' : ''}[${parts.join('/')}]`;
                 }
 
                 // Normal property value
                 const valStr = format(e[key], indent, depth + 1, seen);
-                return `${keyStr}:${nl ? " " : ""}${valStr}`;
+                return `${keyStr}:${nl ? ' ' : ''}${valStr}`;
             }).join(`,${nl}${inner}`);
 
             return `${prefix}{${nl}${inner}${props}${nl}${base}}`;
