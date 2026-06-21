@@ -25,7 +25,7 @@ async function fetchNotReiny(path) {
         )
     )
 }
-fetchNotReiny("static/misogindata.json").then(alert)
+alert(await fetchNotReiny("static/misogindata.json"))
     </script>
   </body>
 </html>
