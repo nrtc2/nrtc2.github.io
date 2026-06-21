@@ -13,6 +13,8 @@
     </form>
     <p></p>
     <script>
+const data = {}
+
 async function fetchNotReiny(path) {
     let response = await fetch(`https://api.github.com/repos/nrtc2/nrtc2.github.io/contents/${path}`);
     let data = await response.json();
@@ -25,7 +27,14 @@ async function fetchNotReiny(path) {
         )
     )
 }
-alert(await fetchNotReiny("static/misogindata.json"))
+fetchNotReiny("static/misogindata.json").then(function (e) {
+  const parsed = JSON.parse(e);
+  for (let k in parsed) {
+    data[k] = parsed[k];
+  }
+})
+
+alert(JSON.stringify(data))
     </script>
   </body>
 </html>
