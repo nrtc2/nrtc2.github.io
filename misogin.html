@@ -9,7 +9,23 @@
   </head>
   <body>
     <form>
-      <label for="sel">How misogin is </label><select id="sel"></select>
+      <label for="sel">How misogin is </label><select id="sel"></select>?
     </form>
+    <p></p>
+    <script>
+async function fetchNotReiny(path) {
+    let response = await fetch(`https://api.github.com/repos/nrtc2/nrtc2.github.io/contents/${path}`);
+    let data = await response.json();
+
+    return (new TextDecoder).decode(
+        new Uint8Array(
+            atob(data.content)
+            .split("")
+            .map(e => e.codePointAt())
+        )
+    )
+}
+fetchNotReiny("static/misogindata.json").then(alert)
+    </script>
   </body>
 </html>
