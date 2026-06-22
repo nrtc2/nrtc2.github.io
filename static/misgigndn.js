@@ -10,6 +10,13 @@ const misogLevels = [
     [500, "WTFQY8 syndrome", "#ABCDEF"]
 ];
 
+function dis(va) {
+    const a = getThresoldValue(data[va], misogLevels);
+    d.title = `How misogin is ${va}`
+    d.getElementsByTagName("p")[0].style.color = a[1]
+    d.getElementsByTagName("p")[0].innerText = `${a[0]} (${data[va]} Misogin Essence)`
+}
+
 function getThresoldValue(inputNumber, thresholdArray) {
     if (!Array.isArray(thresholdArray)) throw new TypeError("The second argument must be an array");
     if (!thresholdArray.every(function (a) {
@@ -50,11 +57,7 @@ async function init() {
 
     appendOptions(data, d.getElementById("sel"));
     d.getElementById("sel").addEventListener("input", function (e) {
-        const va = e.target.value,
-            a = getThresoldValue(data[va], misogLevels)n;
-        d.title = `How misogin is ${va}`
-        d.getElementsByTagName("p")[0].style.color = a[1]
-        d.getElementsByTagName("p")[0].innerText = `${a[0]} (${data[va]} Misogin Essence)`
+        dis(e.target.value)
     })
 }
 
