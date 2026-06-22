@@ -13,7 +13,7 @@ async function scr(u) {
             }
 
             if (len >= max) {
-                lines.push(line);
+                lines.push(line.padEnd(max, " "));
                 line = "";
                 len = 0;
             }
@@ -35,3 +35,4 @@ async function scr(u) {
         0, 21, -9, 0
     )
 }
+0
