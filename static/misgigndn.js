@@ -56,6 +56,7 @@ async function init() {
     }
 
     appendOptions(data, d.getElementById("sel"));
+    dis(d.getElementById("sel").value)
     d.getElementById("sel").addEventListener("input", function (e) {
         dis(e.target.value)
     })
