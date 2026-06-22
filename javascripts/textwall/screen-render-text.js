@@ -6,14 +6,14 @@ async function scr(u) {
 
         for (const ch of text) {
             if (ch === "\n") {
-                lines.push(line);
+                lines.push(line.padEnd(78, " "));
                 line = "";
                 len = 0;
                 continue;
             }
 
-            if (len >= max) {
-                lines.push(line.padEnd(max, " "));
+            if (len > max) {
+                lines.push(line);
                 line = "";
                 len = 0;
             }
@@ -27,12 +27,6 @@ async function scr(u) {
         return lines.slice(0, ln).join("\n");
     }
 
-    await writeTextAt(
-        paginateText(`${u}`).split("\n")
-        .slice(0, 18)
-        .map(e => e.slice(0, 78))
-        .join("\n"),
-        0, 21, -9, 0
-    )
+    await writeTextAt(paginateText(`${u}`), 0, 21, -9, 0)
 }
 0
