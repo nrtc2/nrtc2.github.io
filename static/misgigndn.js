@@ -1,6 +1,6 @@
 const data = {},
-    d = document,
-    iId = 0;
+    d = document;
+let iId = 0;
 
 const misogLevels = [
     [0, "no misogin", "#00CC78"],
@@ -17,7 +17,7 @@ function dis(va) {
     d.title = `How misogin is ${va}`
     d.getElementsByTagName("p")[0].style.color = Array.isArray(a[1])
         ? iId = setInterval(function () {
-            d.getElementsByTagName("p")[0].style.color = a[Math.floor(Math.random() * a[1].length)]")
+            d.getElementsByTagName("p")[0].style.color = a[Math.floor(Math.random() * a[1].length)])
         })
         : a[1]
     d.getElementsByTagName("p")[0].innerText = `${a[0]} (${data[va]} Misogin Essence)`
@@ -68,7 +68,7 @@ async function init() {
     })
 }
 
-init();
+/* init() */
 
 function appendOptions(obj, elm) {
     for (let k in obj) {
