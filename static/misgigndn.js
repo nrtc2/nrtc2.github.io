@@ -68,8 +68,6 @@ async function init() {
     })
 }
 
-/* init() */
-
 function appendOptions(obj, elm) {
     for (let k in obj) {
         const o = d.createElement("option");
@@ -78,3 +76,5 @@ function appendOptions(obj, elm) {
         elm.appendChild(o)
     }
 }
+
+init()
