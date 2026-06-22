@@ -27,14 +27,15 @@ async function fetchNotReiny(path) {
         )
     )
 }
-fetchNotReiny("static/misogindata.json").then(function (e) {
-  const parsed = JSON.parse(e);
-  for (let k in parsed) {
-    data[k] = parsed[k];
-  }
-})
+async function init() {
+  const json = await fetchNotReiny("static/misogindata.json")
+    const parsed = JSON.parse(json);
+    for (let k in parsed) {
+      data[k] = parsed[k];
+    }
+}
 
-alert(JSON.stringify(data))
+init()
     </script>
   </body>
 </html>
