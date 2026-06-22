@@ -23,7 +23,7 @@ async function scr(u) {
         }
 
         lines.push(line.padEnd(max, " "));
-        for (let e = 0; e < ln-lines.length; e++) lines.push(" ".repeat(max))
+        for (let e = lines.length; e < ln; e++) lines.push(" ".repeat(max))
         return lines.slice(0, ln).join("\n");
     }
 
@@ -35,4 +35,3 @@ async function scr(u) {
         0, 21, -9, 0
     )
 }
-0
