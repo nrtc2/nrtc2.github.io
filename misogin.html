@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>How confusing is ${selected}</title>
+    <title>How misogin is ${selected}</title>
     <link rel="stylesheet" href="/static/a.css">
     <link rel="icon" href="/static/whatthehell.png">
     <meta charset="UTF-8">
@@ -12,30 +12,6 @@
       <label for="sel">How misogin is </label><select id="sel"></select>?
     </form>
     <p></p>
-    <script>
-const data = {}
-
-async function fetchNotReiny(path) {
-    let response = await fetch(`https://api.github.com/repos/nrtc2/nrtc2.github.io/contents/${path}`);
-    let data = await response.json();
-
-    return (new TextDecoder).decode(
-        new Uint8Array(
-            atob(data.content)
-            .split("")
-            .map(e => e.codePointAt())
-        )
-    )
-}
-async function init() {
-  const json = await fetchNotReiny("static/misogindata.json")
-    const parsed = JSON.parse(json);
-    for (let k in parsed) {
-      data[k] = parsed[k];
-    }
-}
-
-init()
-    </script>
+    <script src="/static/misgigndn.js"></script>
   </body>
 </html>
