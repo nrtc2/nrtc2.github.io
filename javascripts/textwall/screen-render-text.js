@@ -12,7 +12,7 @@ async function scr(u) {
                 continue;
             }
 
-            if (len > max) {
+            if (len >= max) {
                 lines.push(line);
                 line = "";
                 len = 0;
