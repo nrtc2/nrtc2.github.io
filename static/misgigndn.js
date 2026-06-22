@@ -1,5 +1,6 @@
 const data = {},
-    d = document;
+    d = document,
+    iId = 0;
 
 const misogLevels = [
     [0, "no misogin", "#00CC78"],
@@ -7,13 +8,16 @@ const misogLevels = [
     [20, "mid misogin", "#FF4500"],
     [80, "high misogin", "#BE0039"],
     [250, "TOO MISOGIN", "#515252"],
-    [500, "WTFQY8 syndrome", "#ABCDEF"]
+    [500, "WTFQY8 syndrome", ["#FFD635", "#FF4500", "#FFA800", "#7EED56", "#00CC78", "#000000", "#B44AC0", "#DE107F", "#BE0039", "#3690EA", "#6A5CFF"]]
 ];
 
 function dis(va) {
+    clearInterval(iId);
     const a = getThresoldValue(data[va], misogLevels);
     d.title = `How misogin is ${va}`
-    d.getElementsByTagName("p")[0].style.color = a[1]
+    d.getElementsByTagName("p")[0].style.color = Array.isArray(a[1])
+        ? iId = setInterval("d.getElementsByTagName(\"p\")[0].style.color = a[Math.floor(Math.random() * a[1].length)]")
+        : a[1]
     d.getElementsByTagName("p")[0].innerText = `${a[0]} (${data[va]} Misogin Essence)`
 }
 
