@@ -7,7 +7,7 @@ const misogLevels = [
     [20, "mid misogin", "#FF4500"],
     [80, "high misogin", "#BE0039"],
     [250, "TOO MISOGIN", "#515252"],
-    [500, "WTFQY8 syndrome", "#FFFFFF"]
+    [500, "WTFQY8 syndrome", "#ABCDEF"]
 ];
 
 function getThresoldValue(inputNumber, thresholdArray) {
@@ -50,8 +50,11 @@ async function init() {
 
     appendOptions(data, d.getElementById("sel"));
     d.getElementById("sel").addEventListener("input", function (e) {
-        const va = e.target.value;
-        d.getElementsByTagName("p")[0].innerText = getThresoldValue(data[va], misogLevels)
+        const va = e.target.value,
+            a = getThresoldValue(data[va], misogLevels)n;
+        d.title = `How misogin is ${va}`
+        d.getElementsByTagName("p")[0].style.color = a[1]
+        d.getElementsByTagName("p")[0].innerText = `${a[0]} (${data[va]} Misogin Essence)`
     })
 }
 
