@@ -1,4 +1,4 @@
-async function scr(u) {
+async function scr(e, t) {
     function paginateText(text, max = 78, ln = 18) {
         let lines = [];
         let line = "";
@@ -27,6 +27,6 @@ async function scr(u) {
         return lines.slice(0, ln).join("\n");
     }
 
-    await writeTextAt(paginateText(`${u}`), 0, 21, -9, 0)
+    await writeTextAt(paginateText(`${e}`), t, 21, -9, 0)
 }
 0
