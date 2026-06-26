@@ -837,9 +837,10 @@ td {
 .button:active {
     transform: scale(.9)
 }
+
 @font-face {
     font-family: notocler;
-    src: url(tw-copy/NotoColorEmoji-Regular.ttf)
+    src: url(fonts/NotoColorEmoji-Regular.ttf)
 }
 
 @font-face {
