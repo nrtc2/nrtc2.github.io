@@ -668,7 +668,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             return (e + 2) % 20 < 2
         }
         function Nt(e) {
-            return Math.round(16 * e) + "px Courier"
+            return Math.round(16 * e) + "px notocler"
         }
         function jt(e, t, r, a, o) {
             e.fillText(t, Math.floor(r), Math.floor(a + 15 * o))
