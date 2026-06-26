@@ -775,7 +775,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                                                     e.fillText(S, Math.round(w), Math.floor(M + 15 * y));
                                             else {
                                                 var O = false;
-                                                extendedPictographicRegExp && extendedPictographicRegExp.test(S) && (O = true,
+                                                (B >= 65536 && extendedPictographicRegExp) && extendedPictographicRegExp.test(S) && (O = true,
                                                     e.font = Nt(y)),
                                                     null != g && g.charMap.has(B) ? (g.bold = P,
                                                         g.italic = L,
