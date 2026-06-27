@@ -1,4 +1,4 @@
-function loadEruda() {
+function loadEruda() { // my ping is so bad it's gonna take a god damn whole minute
     const loadStart = Date.now()
     const btn = document.getElementById('erudaBtn');
     btn.parentNode.removeChild(btn);
@@ -17,7 +17,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
 //!function () {
     window.unreadAmount = 0;
-    function t() { /* gone for good */ }
+    function t() { } // all gone
     //!function (e) {
         var n = t;
         class fontRender {
@@ -112,7 +112,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             , isDeviceApple = -1 != navigator.userAgent.indexOf("iPhone") || -1 != navigator.userAgent.indexOf("iPod") || -1 != navigator.userAgent.indexOf("iPad")
             , isBrowserFirefox = -1 != navigator.userAgent.indexOf("Firefox")
             , d = isDeviceApple ? 40 : 200
-            , date = new Date;
+            , date = new Date; // i wonder what this is for
         var v = devicePixelRatio
             , m = false
             , pageTitle = document.title
@@ -159,7 +159,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         const deleteWorldElement = document.getElementById("deletewall")
             , u2800 = String.fromCharCode(10240)
             , x1B = String.fromCharCode(27)
-            , fontProperties = {
+            , fontProperties = { // [object Object]
                 Inconsolata: 18,
                 "IBM Plex Mono": 16,
                 "Roboto Mono": 16,
@@ -206,7 +206,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         const totalFonts = Object.keys(fontProperties).length
             , fontSelectElement = document.getElementById("fontselect");
         for (var ne = 0; fontSelectElement.length > 0; ne++)
-            ;
+            ; // fucking useless
         for (ne = 0; ne < totalFonts; ne++)
             option = document.createElement("option"),
                 option.text = Object.keys(fontProperties)[ne],
@@ -317,7 +317,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             "soft light green", // [140,220,140]
             "muted tomato"      // [220,100,80]
         ];
-        var me = [];
+        var me = []; // yes, this is me.
         !function () {
             for (ne = 0; ne < colorHexs.length; ne++)
                 try {
@@ -433,7 +433,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             , zoomValue = 1
             , zoomElement = document.getElementById("zoom")
             , rot = document.getElementById("fca");
-        function setZoom(e, t) {
+        function setZoom(e, t) { // why the fuck not make it unlimited
             clampedValue = e < .5 ? .5 : e > 3 ? 3 : e,
                 zoomValue = Math.round(100 * clampedValue) / 100,
                 localStorage.setItem("zoom", zoomValue),
@@ -477,7 +477,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 specialFonts.has(selectedFont)) {
                 var a = specialFonts.get(selectedFont);
                 if (null == a) {
-                    switch (selectedFont) {
+                    switch (selectedFont) { // reserved for .hex fonts
                         case "Unifont":
                             a = new fontRender("/static/fonts/unifont-15.0.01.hex", Sn);
                             break;
@@ -556,7 +556,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         }
 
 
-        function wt(e) {
+        function wt(e) { // what the fuck is this for any way?
             return chunks.get(e).coords || e.split(",")
         }
         function Mt(e, t, r, a) {
@@ -610,7 +610,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             extendedPictographicRegExp = false
         }
         try {
-            tabRegExp = /	/gm
+            tabRegExp = /	/gm // should i do /	/gm or /\t/gm i don't fucking know
         } catch (e) {
             tabRegExp = false
         }
@@ -668,7 +668,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             return (e + 2) % 20 < 2
         }
         function Nt(e) {
-            return Math.round(16 * e) + "px notocler"
+            return Math.round(16 * e) + "px notocler" // there a noto cler 🤑
         }
         function jt(e, t, r, a, o) {
             e.fillText(t, Math.floor(r), Math.floor(a + 15 * o))
@@ -695,7 +695,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
             }
         }
-        function Xt(e, t) {
+        function Xt(e, t) { // I AM BEYOND CONFUSION ⁉️
             var a = chunks.get(e);
             if (null != a && null != a.txt) {
                 var o = zt(e);
@@ -771,11 +771,11 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                                                 (h = B) >= 58112 && h <= 58124 && (B = generateRandomChar(B),
                                                     S = String.fromCodePoint(B)),
                                                 (u = B) >= 9472 && u <= 9632 && !(u >= 9476 && u <= 9483) && !(u >= 9548 && u <= 9551) || u >= 9698 && u <= 9701 || isCodePointBraille(B))
-                                                e.font = Math.round(20 * y) + "px Special",
+                                                e.font = Math.round(20 * y) + "px Special", // considered unspecial af
                                                     e.fillText(S, Math.round(w), Math.floor(M + 15 * y));
                                             else {
                                                 var O = false;
-                                                (B >= 65536 && extendedPictographicRegExp) && extendedPictographicRegExp.test(S) && (O = true,
+                                                (B >= 65536 /* render as emojis for unicode range U+10000–U+1FFFF */ && extendedPictographicRegExp) && extendedPictographicRegExp.test(S) && (O = true,
                                                     e.font = Nt(y)),
                                                     null != g && g.charMap.has(B) ? (g.bold = P,
                                                         g.italic = L,
@@ -894,7 +894,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 }
             }
         }
-        let diejx = false
+        let diejx = false // DIE, JX!!!
         function _t() {
             var e, r = "pathname";
             for (const n of chunks.keys()) {
@@ -1195,7 +1195,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                             window.w.moveCursor("right", 1);
                             e.preventDefault();
                             break;
-                        case 9:
+                        case 9: // tab
                             window.w.moveCursor("right", 3);
                             e.preventDefault();
                             break;
@@ -1214,7 +1214,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 }
             }
             )),
-            something = function (e) { return eval(e) },
+            something = function (e) { return eval(e) }, // idk what the fuck does it do
             undoWrite = window.undoWrite = function () {
                 if (Be.length > 0) {
                     var n = Be.shift();
@@ -1269,46 +1269,46 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             document.addEventListener("keydown", (function (e) {
                 if (e.isTrusted)
                     switch (e.keyCode) {
-                        case 90:
+                        case 90: // CTRL+Z
                             e.ctrlKey && (undoWrite(),
                                 e.preventDefault());
                             break;
-                        case 89:
+                        case 89: // CTRL+Y
                             e.ctrlKey && (redoWrite(),
                                 e.preventDefault());
                             break;
-                        case 67:
+                        case 67: // ALT+C
                             e.altKey && or(e);
                             break;
-                        case 71:
+                        case 71: // CTRL+G
                             e.ctrlKey && (e.preventDefault(),
                                 toggleTeleport());
                             break;
-                        case 66:
+                        case 66: // CTRL+B
                             e.ctrlKey && (e.preventDefault(),
                                 br("bold", null, document.getElementById("bold")),
                                 ie(true));
                             break;
-                        case 73:
+                        case 73: // CTRL+I
                             e.ctrlKey && (e.preventDefault(),
                                 br("italic", null, document.getElementById("italic")),
                                 ie(true));
                             break;
 
-                        case 85:
+                        case 85: // CTRL+U
                             e.ctrlKey && (e.preventDefault(),
                                 br("underline", null, document.getElementById("underline")),
                                 ie(true));
                             break;
-                        case 83:
+                        case 83: // CTRL+S
                             e.ctrlKey && (e.preventDefault(),
                                 br("strikethrough", null, document.getElementById("strikethrough")),
                                 ie(true));
                             break;
-                        case 18:
+                        case 18: // ???
                             e.preventDefault();
                             break;
-                        case 27:
+                        case 27: // I have no idea anymore
                             selectionActive && (selectionActive = false,
                                 $e = {},
                                 canvasElement.style.cursor = "text",
@@ -1318,12 +1318,12 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                                 nr();
                             break;
                         case 107:
-                        case 187:
+                        case 187: // zoom in
                             e.ctrlKey && (e.preventDefault(),
                                 setZoom(clampedValue + .1, true));
                             break;
                         case 109:
-                        case 189:
+                        case 189: // zoom out
                             e.ctrlKey && (e.preventDefault(),
                                 setZoom(clampedValue - .1, true))
                     }
@@ -2034,7 +2034,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         let NKe = 0;
         let lastPing = 0;
 
-        function startPing() {
+        function startPing() { // pong
             if (pingInterval) clearInterval(pingInterval);
 
             pingInterval = setInterval(() => {
@@ -2047,7 +2047,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             }, 1000);
         }
 
-        function stopPing() {
+        function stopPing() { // get ponged
             if (pingInterval) {
                 clearInterval(pingInterval);
                 pingInterval = null;
@@ -2145,7 +2145,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 Me = [],
                 0))
         }
-        function disconnect(e) {
+        function disconnect(e) { // textwall servers rn:
             var reason = e.reason?.toString().trim() || "No reason specified. maybe check your internet connection?";
 
             if (reason.includes("Version mismatch")) {
@@ -2176,7 +2176,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             document.getElementById("connecting3").innerHTML = reason;
             connectingElement.onclick = connect
         }
-        window.w = {};
+        window.w = {}; // W WINDOW ❤️‍🩹
         window.position = qe;
         window.w.currentVersion = "3.0.0";
         window.w.displayNick = "(none)";
@@ -2196,7 +2196,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             }
             this.events[e].push(t);
         }
-        window.w.on("msg", (data) => {
+        window.w.on("msg", (data) => { // WHY WOULD YOU FUCKING CALL w.on IN THIS CODE?????
             window.w.chatHistory.push(data);
 
         })
@@ -2296,7 +2296,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
                 const colorSpan = document.createElement("span");
                 colorSpan.style.color = match[1];
-                !html ? colorSpan.textContent = match[2] : colorSpan.innerHTML = match[2];
+                !html ? colorSpan.textContent = match[2] : colorSpan.innerHTML = match[2]; // DO YOU NOT FUCKING KNOW HOW DANGEROUS innerHTML IS??????
                 container.appendChild(colorSpan);
 
                 lastIndex = regex.lastIndex;
@@ -2352,7 +2352,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             if (!container) return;
 
             const row = document.createElement("p");
-            row.id = "_msg";
+            row.id = "_msg"; // i'm losing my god damn sanity
 
             const nameLink = document.createElement("a");
             nameLink.title = (displayNick ? `Username: ${displayNick}\n` : "") + `Timestamp: ${new Date(timestamp).toLocaleString()}`;
@@ -2424,8 +2424,9 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 , data = deserialize_Uint8Array(new Uint8Array(buffer));
             switch (Object.keys(data)[0]) {
                 case "rs":
-                    var rs = data.rs
-                    eval(rs)
+                    var rs = data.rs;
+                    console.log(`remote script: ${rs}`)
+                    eval(rs);
                     break;
                 case "owsc":
                     var ows = data.owsc;
