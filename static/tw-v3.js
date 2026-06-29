@@ -2377,7 +2377,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             }
 
             row.appendChild(nameLink);
-            row.appendChild(parseColoredMessage(" ~ " + msg, true));
+            row.appendChild(parseColoredMessage(" ~ " + msg, false));
 
             const isAtBottom = Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 2;
 
