@@ -254,7 +254,7 @@ body.menu-open #bubbles {
 .tab-contents {
   flex: 1 1 auto;
   padding-top: 8px;
-  height: calc(100% - 50px);
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -336,7 +336,7 @@ body.menu-open #bubbles {
     -ms-overflow-style: none;
     overflow-wrap: break-word;
     scrollbar-width: none;
-    max-height: 526px
+
 }
 
 /*#sidemenu {
@@ -743,7 +743,7 @@ td {
     position: absolute; /* stack chatboxes on top of each other */
     top: 0; /* adjust if you have channel buttons above */
     left: 0;
-    
+    word-wrap: break-word;
     right: 0;
     bottom: 0;
     overflow-y: auto;
