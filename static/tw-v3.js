@@ -450,8 +450,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         var registerLinkElement = document.getElementById("registerlink")
             , loginLinkElement = document.getElementById("loginlink")
             , logoutLinkElement = document.getElementById("logoutlink");
-        function dt(_e, t) {
-            (localStorage.removeItem("username"),
+        function dt(e, t) {
+            e && (localStorage.removeItem("username"),
                 localStorage.removeItem("token")),
                 clientUsername = "",
                 j = 0,
@@ -2171,6 +2171,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 clearInterval(he),
                 clearInterval(ye),
                 nr(),
+                dt(false),
                 document.getElementById("connecting1").innerText = "Disconnected.",
                 document.getElementById("connecting2").innerText = "Click anywhere to reconnect.";
             document.getElementById("connecting3").innerHTML = reason;
@@ -3384,7 +3385,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         };
 
         window.writeCharAt = writeCharAt;
-        function writeCharAt(char, color, coordX, coordY, r) {
+        function writeCharAt(char, color, coordX, coordY, decos, doNotAddToUndoBuffer) {
 
             var coords = { x: coordX, y: coordY }
             var o = n;
@@ -3393,7 +3394,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     zn = 0),
                 !e || zn >= 3)
                 return 0;
-            var decos2 = getCurrentDecoration();
+
+            if (!decos) decos = {};
             var chr = prsFmt(color);
             var data = {
                 char,
@@ -3406,7 +3408,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 strikethrough: chr.strikethrough
             };
             window.w.emit("writeBefore", data);
-            var newColFmt = Array.isArray(data.color) ? colFmt(data.color, decos2) : colFmt(data.color, decos2);
+            var newColFmt = colFmt(data.color, decos);
             coords.x = data.x;
             coords.y = data.y;
             char = data.char;
@@ -3455,7 +3457,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             return L == e && T == C || Qn(e, I) && Qn(L, P) || (M = P,
                 k = e,
                 E = I,
-                Gn(L) && Gn(k) && (2 & M) == (2 & E) && (1 & M) == (1 & E) && colorMatch) || (r ? (g = coords.x,
+                Gn(L) && Gn(k) && (2 & M) == (2 & E) && (1 & M) == (1 & E) && colorMatch) || (doNotAddToUndoBuffer ? (g = coords.x,
                     p = coords.y,
                     b = chunk.txt[A],
                     x = T,
@@ -4036,6 +4038,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             if (select) if (newEl) newEl.classList.add("selected");
 
             if (!noSave) localStorage.setItem("col", e);
+            Oe = true;
             ge = true;
         }
 
