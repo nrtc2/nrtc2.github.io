@@ -2179,7 +2179,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         }
         window.w = {}; // W WINDOW ❤️‍🩹
         window.position = qe;
-        window.w.currentVersion = "3.0.0";
+        window.w.currentVersion = "3.0.7";
         window.w.displayNick = "(none)";
         window.elem = clientOptions;
         window.w.chatHistory = [];
