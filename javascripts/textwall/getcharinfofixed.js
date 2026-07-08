@@ -1,4 +1,4 @@
-window.getCharInfo = function (e, t, r = 0, a = 0) {
+window.getCharInfoFixed = function (e, t, r = 0, a = 0) {
     if (e === undefined || t === undefined || r === undefined || a === undefined) {
         [e, t, r, a] = window.cursorCoords;
     }
