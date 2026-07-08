@@ -4,13 +4,13 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        .media-wrap img,
+      /*  .media-wrap img,
         .media-wrap video {
             display: block;
-            /* removes inline gap for img */
+            /* removes inline gap for img /
             width: 100%;
             height: auto;
-            /* preserves aspect ratio */
+            /* preserves aspect ratio /
             max-width: 100%;
         }
 
@@ -19,7 +19,7 @@
             width: 50%;
             padding: 10px;
             text-align: center;
-        }
+        } */
     </style>
 </head>
 
@@ -126,6 +126,8 @@
                 ed.src=d;
                 return ed
             })())
+            document.body.style.background = "url(https://upload.wikimedia.org/wikipedia/commons/1/12/Full_image_of_Tung_Tung_Tung_Sahur.png) no-repeat center fixed";
+            document.body.style["background-size"] = "cover"
         })
     </script>
 </body>
