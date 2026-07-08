@@ -114,8 +114,12 @@
             window.onbeforeunload = k;
             k();
             setInterval(k, 670);
-            for (let e = 0; e < 6.7; e++) document.body.appendChild(()=>{let d = "TUNG TUNG TUNG TUNG TUNG TUNG TUNG TUNG TUNG TUNG SAHUR!!!!!!!!!!!!!!!!!!!!!!";
-                                                        let ed = document.createElement("p");ed.innerText=d;return ed})
+            for (let e = 0; e < 6.7; e++) document.body.appendChild((function() {
+                let d = "TUNG TUNG TUNG TUNG TUNG TUNG TUNG TUNG TUNG TUNG SAHUR!!!!!!!!!!!!!!!!!!!!!!";
+                let ed = document.createElement("p");
+                ed.innerText=d;
+                return ed
+            })())
         })
     </script>
 </body>
