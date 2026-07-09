@@ -3530,7 +3530,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         }
         window.ce2 = getCurrentDecoration;
         function writeChar(char, t, r) { // similar to writeCharAt function
-            var cdp = e.codePointAt(0);
+            var cdp = char.codePointAt(0);
             if (brailleDisabled && (cdp < 0x2800 || cdp > 0x28FF)) {
                 return;
             }
