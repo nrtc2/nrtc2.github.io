@@ -1518,7 +1518,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     if (document.getElementById("oldprng").checked) {
                         r = oldLr(t);
                     } else {
-                        r = Lr(t);
+                        r = getSeed(t);
                     }
                 }
 
