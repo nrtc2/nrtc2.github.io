@@ -2246,6 +2246,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         window.w = {}; // W WINDOW ❤️‍🩹
         window.position = qe;
         window.w.currentVersion = "3.0.7";
+        document.getElementById("vers").innerText = "Version: " + window.w.currentVersion;
         window.w.displayNick = "(none)";
         window.elem = clientOptions;
         window.w.chatHistory = [];
@@ -3140,7 +3141,9 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                         var others = typingInfo.users.filter(u => u.id != window.w.clientId);
 
                         if (others.length > 0) {
-                            var names = others.map(u => u.name).join(", ");
+                            var names = others
+                                .map(u => u.name.length > 10 ? u.name.substring(0, 10) + "..." : u.name)
+                                .join(", ");
                             var suffix = others.length === 1 ? " is typing..." : " are typing...";
                             el.innerText = names + suffix;
                         } else {
@@ -3457,7 +3460,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         window.writeCharAt = writeCharAt;
         function writeCharAt(char, color, coordX, coordY, decos, doNotAddToUndoBuffer) {
             var cdp = char.codePointAt(0);
-            if (brailleDisabled && (cdp < 0x2800 || cdp > 0x28FF)) {
+            if (brailleDisabled && (cdp >= 0x2800 || cdp <= 0x28FF)) {
                 return;
             }
             var coords = { x: coordX, y: coordY }
@@ -3503,6 +3506,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             clientOptions.rainbow.checked && !r && (
                 clientOptions.rainbowMode.value === "legacy" ? (changeColor(Jn[Yn]), ++Yn == Jn.length && (Yn = 0)) :
                     (() => {
+                        if (tt.hueSpeed.value < 0) { ir("Invalid hex speed.", 3000); return; }
                         let h = (window.cH = ((window.cH || 0) + (clientOptions.hueSpeed?.value ? parseFloat(clientOptions.hueSpeed.value) : 2)) % 360);
                         let s = 100, l = 50;
                         let c = (1 - Math.abs(2 * l / 100 - 1)) * (s / 100);
@@ -3555,7 +3559,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         window.ce2 = getCurrentDecoration;
         function writeChar(char, t, r) { // similar to writeCharAt function
             var cdp = char.codePointAt(0);
-            if (brailleDisabled && (cdp < 0x2800 || cdp > 0x28FF)) {
+            if (brailleDisabled && (cdp >= 0x2800 || cdp <= 0x28FF)) {
                 return;
             }
             var o = n;
@@ -3598,6 +3602,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             clientOptions.rainbow.checked && !r && (
                 clientOptions.rainbowMode.value === "legacy" ? (changeColor(Jn[Yn]), ++Yn == Jn.length && (Yn = 0)) :
                     (() => {
+                        if (clientOptions.hueSpeed.value < 0) { showToast("Invalid hex speed.", 3000); return; }
                         let h = (window.cH = ((window.cH || 0) + (clientOptions.hueSpeed?.value ? parseFloat(clientOptions.hueSpeed.value) : 2)) % 360),
                             X = (1 - Math.abs((h / 60) % 2 - 1)),
                             [r, g, b] = h < 60 ? [1, X, 0] : h < 120 ? [X, 1, 0] : h < 180 ? [0, 1, X] : h < 240 ? [0, X, 1] : h < 300 ? [X, 0, 1] : [1, 0, X];
@@ -4435,6 +4440,25 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             return tile.txt[Tp];
         };
 
+window.getCharDecoration = function (e) {
+            let Lj = 0;
+
+            if (Array.isArray(e)) {
+
+                Lj = e.length > 3 ? e[3] : 0;
+            } else {
+
+                Lj = Math.floor(e / 31);
+            }
+
+            return {
+                bold: (Lj & 8) === 8,
+                italic: (Lj & 4) === 4,
+                underline: (Lj & 2) === 2,
+                strike: (Lj & 1) === 1
+            };
+        };
+
         window.getCharColor = function (e, t, r = 0, a = 0) {
             if (e === undefined || t === undefined || r === undefined || a === undefined) {
                 [e, t, r, a] = window.cursorCoords;
@@ -4456,19 +4480,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             }
 
             const Kf = a * _20 + r;
-            return tile.clr[Kf] % 31;
-        };
-
-        window.getCharDecoration = function (e) {
-
-            const decoId = Math.floor(e / 31);
-            return {
-
-                bold: (decoId & 8) == 8,
-                italic: (decoId & 4) == 4,
-                underline: (decoId & 2) == 2,
-                strike: (decoId & 1) == 1
-            };
+            const color = tile.clr[Kf];
+            return Array.isArray(color) ? color.slice(0, 3) : (color % 31);
         };
 
         window.getCharInfo = function (e, t, r = 0, a = 0) {
@@ -4494,7 +4507,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             const Pd = a * _20 + r;
             const char = tile.txt[Pd];
             const clr = tile.clr[Pd];
-            const color = Array.isArray(clr) ? clr : (clr % 31);
+            const color = Array.isArray(clr) ? clr.slice(0, 3) : (clr % 31);
             return {
                 tileCoords: [e, t, r, a],
                 char: char,
