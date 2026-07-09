@@ -1531,7 +1531,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             });
 
         document.getElementById("oldprng").checked = localStorage.getItem("oldPrng") === "true";
-        tt.showTypingStatus.checked = localStorage.getItem("typingStatus") === "true";
+        clientOptions.showTypingStatus.checked = localStorage.getItem("typingStatus") === "true";
         logoutLinkElement.addEventListener("click", dt)
         document.getElementById("closeteleport").addEventListener("click", (function () {
             teleportElement.classList.remove("open")
