@@ -2571,7 +2571,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     }
                     window.w.emit("edit", {
                         edits: data.e.e,
-                        clientId: a.e.clientId
+                        clientId: data.e.clientId
                     })
                     break;
                 case "chunks": // load chunks
