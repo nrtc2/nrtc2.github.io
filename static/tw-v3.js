@@ -4044,7 +4044,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
         function changeColor(e, noSave = false, select = true) {
             if (colorsDisabled) return;
-            if (tt.disablecolour.checked) { e = 0 };
+            if (clientOptions.disablecolour.checked) { e = 0 };
             let hexColor = null;
             let newEl = null;
 
