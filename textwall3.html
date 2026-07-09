@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="notranslate" translate="no">
 
@@ -28,7 +29,7 @@
 		<div id="teleport">
 			<div class="tpheader">
 				<div id="closeteleport" class="tpbutton">
-					<img alt="❌" class="nohover" src="/tw-copy/cancel.svg">
+					<img alt="cancel" class="nohover" src="/static/cancel.svg">
 				</div>
 				Teleport
 			</div>
@@ -60,14 +61,14 @@
 
 	<div id="chat" class="hidden">
 		<div class="buttoncontainer">
-			<div id="chatbutton"> <img alt="💬" class="button nohover" src="/static/chat.svg">
+			<div id="chatbutton"> <img alt="chat" class="button nohover" src="/static/chat.svg">
 				<div id="unread"></div>
 			</div>
 		</div>
 		<div class="chatcontainer">
 			<div class="mock-fieldset">
 				<div class="channelbar">
-					<button class="channel-btn active" data-channel="world">This world <span class="badge"
+					<button class="channel-btn active" data-channel="world">This wall <span class="badge"
 							data-badge="world"></span></button>
 					<button class="channel-btn" data-channel="global">Global <span class="badge"
 							data-badge="global">1</span></button>
@@ -85,8 +86,8 @@
 			<div id="typing-world" class="typing-notice active" data-channel="world">nobody is typing.</div>
 			<div id="typing-global" class="typing-notice" data-channel="global">nobody is typing.</div>
 			<div class="msgcontainer">
-				<input maxlength="256" type="text" title="type a message" id="chatmsg" autocomplete="off">
-				<img alt="➡️" id="sendmsg" class="button" src="/static/send.svg" role="button">
+				<input maxlength="255" type="text" title="type a message" id="chatmsg" autocomplete="off">
+				<img alt="send" id="sendmsg" class="button" src="/static/send.svg" role="button">
 			</div>
 
 		</div>
@@ -107,33 +108,33 @@
 		</div>
 
 		<div class="buttons">
-			<div id="copy" title="Copy" class="infobtn"><img id="copyico" alt="📄" src="/tw-copy/copy.svg"
+			<div id="copy" title="Copy" class="infobtn"><img id="copyico" alt="copy" src="/static/copy.svg"
 					class="nohover"></div>
-			<div id="paste" title="Paste" class="infobtn"><img id="pasteico" alt="📋" src="/tw-copy/paste.svg"
+			<div id="paste" title="Paste" class="infobtn"><img id="pasteico" alt="paste" src="/static/paste.svg"
 					class="nohover"></div>
 			<div class="separator"></div>
-			<div id="undo" title="Undo" class="infobtn disabled"><img id="undoico" alt="↩️" src="/tw-copy/undo.svg"
+			<div id="undo" title="Undo" class="infobtn disabled"><img id="undoico" alt="undo" src="/static/undo.svg"
 					class="nohover">
 			</div>
-			<div id="redo" title="Redo" class="infobtn disabled"><img id="redoico" alt="↪️" src="/tw-copy/redo.svg"
+			<div id="redo" title="Redo" class="infobtn disabled"><img id="redoico" alt="redo" src="/static/redo.svg"
 					class="nohover">
 			</div>
 
 			<div class="separator"></div>
-			<div id="openmenu" title="Colours" class="infobtn"><img alt="🌈" src="/static/palette.svg"
+			<div id="openmenu" title="Colours" class="infobtn"><img alt="colour" src="/static/palette.svg"
 					class="nohover"></div>
 			<div class="separator"></div>
 			<div class="infobtn decor tool" id="bold">
-				<img alt="B" title="bold" src="/static/bold.svg" class="nohover">
+				<img alt="bold" title="bold" src="/static/bold.svg" class="nohover">
 			</div>
 			<div class="infobtn decor tool" id="italic">
-				<img alt="I" title="italic" src="/static/italic.svg" class="nohover">
+				<img alt="italic" title="italic" src="/static/italic.svg" class="nohover">
 			</div>
 			<div class="infobtn decor tool" id="underline" alt="underline">
-				<img alt="U" title="underline" src="/static/underline.svg" class="nohover">
+				<img alt="underline" title="underline" src="/static/underline.svg" class="nohover">
 			</div>
 			<div class="infobtn decor tool" id="strikethrough" alt="strikethrough">
-				<img alt="S" title="strikethrough" src="/static/strikethrough.svg" class="nohover">
+				<img alt="strikethrough" title="strikethrough" src="/static/strikethrough.svg" class="nohover">
 			</div>
 
 			<div class="separator"></div>
@@ -141,10 +142,10 @@
 			<span id="toggled">
 				<div class="separator"></div>
 				<div class="infobtn tool" id="protect">
-					<img alt="🛡️" title="Protect" src="/static/shield.svg" class="nohover">
+					<img alt="Protect" title="Protect" src="/static/shield.svg" class="nohover">
 				</div>
 				<div class="infobtn tool" id="clear">
-					<img alt="❎" title="Clear" src="/static/clear.svg" class="nohover">
+					<img alt="Clear" title="Clear" src="/static/clear.svg" class="nohover">
 				</div>
 			</span>
 
@@ -162,7 +163,7 @@
 					<button class="tab-btn active" data-tab="optionsmenu">Options</button>
 					<button class="tab-btn" data-tab="explore">Explore</button>
 					<button class="tab-btn" data-tab="account">Account</button>
-					<button class="tab-btn" data-tab="wall" id="wallsettings">World</button>
+					<button class="tab-btn" data-tab="wall" id="wallsettings">Wall</button>
 					<button class="tab-btn" data-tab="admin_" id="admin">Admin</button>
 					<button class="tab-btn" data-tab="misc">Misc</button>
 					<button class="tab-btn" data-tab="report" id="report">Report</button>
@@ -278,6 +279,8 @@
 								value="#FBFFBD"><br>
 							<input id="themetext" type="checkbox"><label for="themetext">White text</label>
 						</fieldset>
+						<br><br>
+						<span id="vers">Version: ?</span>
 					</div>
 
 
@@ -366,7 +369,7 @@
 
 
 					<div id="wall" class="tab-content">
-						<h1>World Settings</h1>
+						<h1>Wall Settings</h1>
 
 						<input id="readonly" type="checkbox"><label for="readonly">Read-only</label><br>
 						<input id="private" type="checkbox"><label for="private">Private</label><br>
@@ -412,7 +415,7 @@
 							<div id="memberlist"></div>
 						</div>
 						<br>
-						<button class="alert" id="deletewall">Delete world (DANGEROUS!)</button>
+						<button class="alert" id="deletewall">Delete wall (DANGEROUS!)</button>
 					</div>
 
 
@@ -438,26 +441,26 @@
 
 					<div id="explore" class="tab-content">
 						<h3>Explore</h3>
-						<small class="tip">You can explore public worlds and discover content.</small>
+						<small class="tip">You can explore public walls and discover content.</small>
 						<form id="exploreform">
-							<input id="exploreinput" placeholder="Search for worlds..." type="text" maxlength="250"
+							<input id="exploreinput" placeholder="Search for walls..." type="text" maxlength="250"
 								minlength="1">
 							<input id="explorebtn" value="Search" type="submit"><br>
 						</form>
 						<hr>
 						<div id="exploreresults">
-							<div id="buffer">Search for worlds to get the result</div>
+							<div id="buffer">Search for walls to get the result</div>
 						</div>
 					</div>
 
 					<div id="report" class="tab-content">
 						<h3>Report</h3>
-						<small class="tip">Report users or worlds that violate the rules.</small><br>
+						<small class="tip">Report users or walls that violate the rules.</small><br>
 						<small class="tip" style="color: #ffff00">Note that you can't submit a report if you're not
 							logged in.</small>
 						<form id="reportform">
-							<label for="reportid">Username or world name:</label><br>
-							<input id="reportid" placeholder="Username or world name" type="text" maxlength="250"
+							<label for="reportid">Username or wall name:</label><br>
+							<input id="reportid" placeholder="Username or wall name" type="text" maxlength="250"
 								minlength="1"><br><br>
 
 							<label for="reportreason">Reason:</label><br>
@@ -472,16 +475,16 @@
 		</div>
 		<div id="bubbles">
 			<div class="bubble clickable"><span id="coords">0,0</span></div>
-			<div class="bubble"><img alt="👱‍♂️" src="/static/user.svg" style="max-width: 20px;max-height:20px"
+			<div class="bubble"><img alt="Nearby" src="/static/user.svg" style="max-width: 20px;max-height:20px"
 					class="nohover">
 				<div id="padding"></div><span id="nearby">0</span>
 			</div>
-			<div id="options_" title="Options" class="bubble clickable"><img alt="⚙️" src="/static/settings.svg"
+			<div id="options_" title="Options" class="bubble clickable"><img alt="options" src="/static/settings.svg"
 					class="nohover">
 			</div>
-			<div id="home" title="Home" class="bubble clickable"><img alt="🏠" src="/static/home.svg" class="nohover">
+			<div id="home" title="Home" class="bubble clickable"><img alt="home" src="/static/home.svg" class="nohover">
 			</div>
-			<div title="Theme" class="bubble clickable" id="theme"><img id="themeico" alt="⭐" src="/static/sun.svg"
+			<div title="Theme" class="bubble clickable" id="theme"><img id="themeico" alt="theme" src="/static/sun.svg"
 					class="nohover">
 			</div>
 		</div>
@@ -495,7 +498,7 @@
 		<h2 class="shake">NSFW Warning</h2>
 		<div class="nsfw-content">
 
-			<p>This world has been marked as NSFW (Not Safe For Work) by its creator. It may contain content that is
+			<p>This wall has been marked as NSFW (Not Safe For Work) by its creator. It may contain content that is
 				inappropriate for certain audiences.</p>
 			<div class="footer">
 				<button id="nsfwaccept" onclick="accept_nsfw()">I understand</button>
@@ -718,7 +721,7 @@
 				const data = await response.json();
 
 				if (data.success) {
-					buffer.textContent = `Found ${data.totalFound || "no"} worlds`;
+					buffer.textContent = `Found ${data.totalFound || "no"} walls`;
 					data.results.forEach(world => {
 						const resultDiv = document.createElement('div');
 						resultDiv.className = 'result';
@@ -812,6 +815,17 @@
 
 
 		})();
+
+		function loadEruda() {
+			if (window.eruda) {
+				window.eruda.init();
+			} else {
+				const script = document.createElement('script');
+				script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+				script.onload = () => {alert("if you see this message, eruda has loaded");eruda.init();};
+				document.body.appendChild(script);
+			}
+		}
 	</script>
 
 </body>
