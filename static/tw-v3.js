@@ -113,6 +113,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             , isBrowserFirefox = -1 != navigator.userAgent.indexOf("Firefox")
             , d = isDeviceApple ? 40 : 200
             , date = new Date; // i wonder what this is for
+        var colorsDisabled = false;
+        var brailleDisabled = false;
         var v = devicePixelRatio
             , m = false
             , pageTitle = document.title
@@ -270,7 +272,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         }
         const ue = 192
             , colorHexs = ["#000000", "#898D90", "#D4D7D9", "#FF99AA", "#FF4500", "#FFA800", "#9C6926", "#FFD635", "#7EED56", "#00CC78", "#51E9F4", "#3690EA", "#2450A4", "#B44AC0", "#811E9F", "#BE0039", "#00A368", "#00756F", "#009EAA", "#493AC1", "#6A5CFF", "#FF3881", "#6D482F", "#6D001A", "#FFF8B8", "#00CCC0", "#94B3FF", "#E4ABFF", "#DE107F", "#FFB470", "#515252"]
-            , colorNames = ["black", "grey", "light grey", "light pink", "red", "orange", "brown", "yellow", "light green", "green", "light blue", "blue", "dark blue", "purple", "dark purple", "dark red", "dark green", "dark teal", "teal", "indigo", "periwinkle", "pink", "dark brown", "burgundy", "pale yellow", "light teal", "lavender", "pale purple", "magenta", "beige", "dark grey"];
+            , colorNames = ["black", "gray", "light gray", "light pink", "red", "orange", "brown", "yellow", "light green", "green", "light blue", "blue", "dark blue", "purple", "dark purple", "dark red", "dark green", "dark teal", "teal", "indigo", "periwinkle", "pink", "dark brown", "burgundy", "pale yellow", "light teal", "lavender", "pale purple", "magenta", "beige", "dark grey"];
+
         // addons
         const rgbse = [
             [200, 50, 50],     // muted red
@@ -286,7 +289,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             [180, 180, 180],   // light silver/gray
             [120, 120, 120],   // muted gray
             [60, 130, 130],    // teal-ish
-            [50, 120, 60],     // dark green
+            [50, 120, 60],     // deep forest green
             [130, 50, 50],     // muted maroon
             [50, 50, 120],     // muted navy
             [220, 200, 50],    // soft gold
@@ -309,7 +312,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             "light silver",     // [180,180,180]
             "muted gray",       // [120,120,120]
             "teal-ish",         // [60,130,130]
-            "dark green",       // [50,120,60]
+            "deep forest green",// [50,120,60]
             "muted maroon",     // [130,50,50]
             "muted navy",       // [50,50,120]
             "soft gold",        // [220,200,50]
@@ -395,7 +398,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             fadeInMsg: document.getElementById("fadeInMsg"),
             //doNotChangeTheme: document.getElementById("doNotChangeTheme")
             hueSpeed: document.getElementById("hueSpeed"),
-            rainbowMode: document.getElementById("rainbowMode")
+            rainbowMode: document.getElementById("rainbowMode"),
+            showTypingStatus: document.getElementById("showTypingStatus")
         };
         clientOptions.showothercurs.checked = true,
             clientOptions.shownametags.checked = true,
@@ -409,6 +413,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             clientOptions.roundCursors.checked = true,
             clientOptions.displayNames.checked = false,
             clientOptions.fadeInMsg.checked = true;
+        clientOptions.showTypingStatus.checked = true;
         clientOptions.hueSpeed.value = localStorage.getItem("hueSpeed") ?? 5;
         clientOptions.rainbowMode.value = localStorage.getItem("rainbowMode") ?? "legacy";
         /* tt["doNotChangeTheme"].checked = !1;*/
@@ -1440,7 +1445,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                         break;
                     case clientOptions.showchat:
                         localStorage.setItem("showchat", r),
-                            e.target.checked ? null : chatElement.classList.add("hidden");
+                            e.target.checked ? chatElement.classList.remove("hidden") : chatElement.classList.add("hidden");
                         break;
                     case clientOptions.disablecolour:
                         localStorage.setItem("disablecolour", r),
@@ -1483,6 +1488,9 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     case clientOptions.fadeInMsg:
                         localStorage.setItem("fadeInMsg", r);
                         break;
+                    case clientOptions.showTypingStatus:
+                        localStorage.setItem("typingStatus", r)
+                        break;
                     /* case tt.doNotChangeTheme:
                          localStorage["setItem"]("doNotChangeTheme", r);
                          break;*/
@@ -1499,7 +1507,32 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 }
             }
             )),
-            logoutLinkElement.addEventListener("click", dt)
+            document.getElementById("oldprng").addEventListener("click", function (e) {
+                localStorage.setItem("oldPrng", e.target.checked);
+                var t = document.getElementById("tpword").value.replace(/^\/|\/$/g, "");
+                var r;
+
+                if (t == "0" || t === "" || t.startsWith("~")) {
+                    r = { x: 0, y: 0 };
+                } else {
+                    if (document.getElementById("oldprng").checked) {
+                        r = oldLr(t);
+                    } else {
+                        r = Lr(t);
+                    }
+                }
+
+                if (document.getElementById("tpx")) {
+                    document.getElementById("tpx").value = r.x;
+                }
+                if (document.getElementById("tpy")) {
+                    document.getElementById("tpy").value = -r.y;
+                }
+            });
+
+        document.getElementById("oldprng").checked = localStorage.getItem("oldPrng") === "true";
+        tt.showTypingStatus.checked = localStorage.getItem("typingStatus") === "true";
+        logoutLinkElement.addEventListener("click", dt)
         document.getElementById("closeteleport").addEventListener("click", (function () {
             teleportElement.classList.remove("open")
         }
@@ -1511,16 +1544,27 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     r.blur()
             }
             )),
-            document.getElementById("tpword").addEventListener("input", (function () {
-                var t = document.getElementById("tpword").value.replace(/^\/|\/$/g, "")
-                    , r = 0 == t || t.startsWith("~") ? {
-                        x: 0,
-                        y: 0
-                    } : getSeed(t);
-                document.getElementById("tpx").value = r.x,
-                    document.getElementById("tpy").value = -r.y
-            }
-            )),
+            document.getElementById("tpword").addEventListener("input", function () {
+                var t = document.getElementById("tpword").value.replace(/^\/|\/$/g, "");
+                var r;
+
+                if (t == "0" || t === "" || t.startsWith("~")) {
+                    r = { x: 0, y: 0 };
+                } else {
+                    if (document.getElementById("oldprng").checked) {
+                        r = oldLr(t);
+                    } else {
+                        r = getSeed(t);
+                    }
+                }
+
+                if (document.getElementById("tpx")) {
+                    document.getElementById("tpx").value = r.x;
+                }
+                if (document.getElementById("tpy")) {
+                    document.getElementById("tpy").value = -r.y;
+                }
+            }),
             document.getElementById("tpcoordgo").addEventListener("click", (function (e) {
                 e.preventDefault();
                 var tpx = document.getElementById("tpx")
@@ -1837,6 +1881,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         var lastTypingPacket = 0;
 
         function sendTyping(isTyping) {
+            if (localStorage.getItem("typingStatus")==="false") return;
             var channel = window.selectedChatTab === 1 ? "global" : "world";
 
             server.send(serialize_Uint8Array({
@@ -1941,13 +1986,13 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     return;
                 }
 
-// /help
+                // /help
                 if (cmd === "help") {
                     send("/block <id|anon|user>, /blockuser <name>, /unblock <id|anon|user>, /unblockuser <name>, /unblockall, /day, /night, /help");
                     return;
                 }
             }
-        
+
             var channel = (typeof t == "number") ? (t === 1 ? "global" : "world") : t;
             var chatData = { msg: [e, channel] };
             window.w.emit("chatBefore", chatData);
@@ -2356,7 +2401,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             row.id = "_msg"; // i'm losing my god damn sanity
 
             const nameLink = document.createElement("a");
-            nameLink.title = (displayNick ? `Username: ${displayNick}\n` : "") + `Timestamp: ${new Date(timestamp).toLocaleString()}`;
+            nameLink.title = (displayNick ? `Username: ${nick}\n` : "") + `Timestamp: ${new Date(timestamp).toLocaleString()}`;
             nameLink.innerText = displayNick ? displayNick : nick;
 
             if (tag) {
@@ -2378,7 +2423,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             }
 
             row.appendChild(nameLink);
-            row.appendChild(parseColoredMessage(" ~ " + msg, false));
+            row.appendChild(parseColoredMessage(" ~ " + msg, html));
 
             const isAtBottom = Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 2;
 
@@ -2526,6 +2571,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     }
                     window.w.emit("edit", {
                         edits: data.e.e,
+                        clientId: a.e.clientId
                     })
                     break;
                 case "chunks": // load chunks
@@ -2769,7 +2815,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
                                 var link = document.createElement("a");
                                 var constructTitle = (p) => {
-                                    return (p.displayNick ? `Username: ${p.displayNick}\n` : "") + `Timestamp: ${new Date(p.timestamp).toLocaleString()}`;
+
+                                    return (p.displayNick ? `Username: ${e}\n` : "") + `Timestamp: ${new Date(p.timestamp).toLocaleString()}`;
                                 }
                                 link.title = constructTitle({ displayNick, timestamp });
                                 link.innerText = displayNick ? displayNick : nick;
@@ -2797,7 +2844,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
                                 i.appendChild(chatTextBox);
 
-                                while (i.children.length > 70) {
+                                while (i.children.length > 3500) {
                                     i.removeChild(i.firstChild);
                                 }
 
@@ -2852,11 +2899,13 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     worldSettings.disableColour.checked = L,
                         hr(!!L || clientOptions.disablecolour.checked);
                     window.w.emit("disablecolor", L);
+                    colorsDisabled = !!L;
                     break;
                 case "db": // braille is disabled
                     var O = data.db;
                     worldSettings.disableBraille.checked = O;
                     window.w.emit("disablebraille", O);
+                    brailleDisabled = !!O;
                     break;
                 case "un": // world is unlisted
                     var un = data.un;
@@ -2922,7 +2971,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                         worldSettings.disableChat.disabled =
                         worldSettings.disableColour.disabled =
                         worldSettings.disableBraille.disabled =
-                        worldSettings.unlisted.disabled = 
+                        worldSettings.unlisted.disabled =
                         worldSettings.regonly.disabled =
                         worldSettings.webhook.disabled =
                         worldSettings.nsfw.disabled = !(2 == j || m),
@@ -3481,7 +3530,10 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         }
         window.ce2 = getCurrentDecoration;
         function writeChar(char, t, r) { // similar to writeCharAt function
-
+            var cdp = e.codePointAt(0);
+            if (brailleDisabled && (cdp < 0x2800 || cdp > 0x28FF)) {
+                return;
+            }
             var o = n;
             if (ie(false),
                 performance.now() - qn >= 15 && (qn = performance.now(),
@@ -3985,13 +4037,39 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     Cn("textwall", "main"),
                     0 == c.x && 0 == c.y ? $n() : history.pushState({}, null, e)
             }
+            document.querySelectorAll(".typing-notice").forEach(el => el.innerText = "nobody is typing.");
             teleportElement.classList.remove("open")
         }
 
 
         function changeColor(e, noSave = false, select = true) {
+            if (colorsDisabled) return;
+            if (tt.disablecolour.checked) { e = 0 };
             let hexColor = null;
             let newEl = null;
+
+            if (typeof e === "string" && (e.startsWith("#") || e.startsWith("0x"))) {
+                let cleanHex = e.startsWith("0x") ? e.slice(2) : e.slice(1);
+                if (cleanHex.length === 3) {
+                    cleanHex = cleanHex.split('').map(char => char + char).join('');
+                }
+                if (/^[0-9A-Fa-f]{6}$/.test(cleanHex)) {
+                    let r = parseInt(cleanHex.substring(0, 2), 16);
+                    let g = parseInt(cleanHex.substring(2, 4), 16);
+                    let b = parseInt(cleanHex.substring(4, 6), 16);
+                    e = [r, g, b];
+                }
+            }
+            if (typeof e === "string" && e.startsWith("rgb")) {
+                let rgbMatch = e.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+                if (rgbMatch) {
+                    let r = parseInt(rgbMatch[1], 10);
+                    let g = parseInt(rgbMatch[2], 10);
+                    let b = parseInt(rgbMatch[3], 10);
+                    e = [r, g, b];
+                }
+            }
+
             if (Array.isArray(e)) {
                 if (e.length >= 3) {
                     let r = e[0] & 255,
@@ -4001,8 +4079,6 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                         g.toString(16).padStart(2, "0") +
                         b.toString(16).padStart(2, "0");
                 } else return;
-            } else if (typeof e === "string" && e.startsWith("#")) {
-                hexColor = e;
             } else {
                 e = parseInt(e, 10);
             }
@@ -4017,11 +4093,12 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             }
             pe = e;
             window.color = pe;
-            if (typeof e === "number" && e < colorHexs.length) {
+
+            if (typeof e === "number" && !isNaN(e) && e < colorHexs.length) {
                 be = xe && e === 0 ? "rgba(255,255,255,0.6)" : hexToRGBA(colorHexs[e], 0.6);
                 newEl = document.querySelector(`.swatch-p[data-index='${e}']`);
             }
-            else if (typeof e === "number" && e >= colorHexs.length) {
+            else if (typeof e === "number" && !isNaN(e) && e >= colorHexs.length) {
                 let addonIndex = e - colorHexs.length;
                 let obj = rgbse[addonIndex];
                 if (obj) {
@@ -4035,7 +4112,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 if (ct && ct.jscolor) ct.jscolor.fromString(hexColor);
                 newEl = ct;
             }
-            if (select) if (newEl) newEl.classList.add("selected");
+
+            if (select && newEl) newEl.classList.add("selected");
 
             if (!noSave) localStorage.setItem("col", e);
             Oe = true;
@@ -4048,9 +4126,25 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         sr();
 
         function hr(e) {
-            for (var r = 0; r < colList.children.length; r++)
-                "0" != colList.children[r].id && (e ? colList.children[r].classList.add("hidden") : colList.children[r].classList.remove("hidden"));
-            e && changeColor(0)
+            for (var t = n, r = 0; r < colList.children.length; r++) {
+                if (colList.children[r].getAttribute("data-index") != "0") {
+                    if (e) {
+                        colList.children[r].classList.add("hidden");
+                    } else {
+                        colList.children[r].classList.remove("hidden");
+                    }
+                }
+            }
+            var customColour = document.getElementById("customcolour");
+            if (customColour) {
+                if (e) {
+                    customColour.classList.add("hidden");
+                } else {
+                    customColour.classList.remove("hidden");
+                }
+            }
+
+            e && changeColor(0);
         }
         function changeTheme(e, noSave = false) {
             if (null != e)
@@ -4714,7 +4808,92 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 y: axis(tpl.maxY, 10)
             };
         }
+
+        function oldLr(input) {
+            let normalized = decodeURI((input || "").toLowerCase());
+            if (normalized === "" || normalized === "~main") {
+                return { x: 0, y: 0 };
+            }
+
+            var rand = (function (seed) {
+                var key = [];
+                var seedStr = seed + "";
+                var len = seedStr.length;
+                var xorState = 0;
+
+
+                for (var i = 0; i < len; i++) {
+                    key[255 & i] = 255 & (xorState ^= 19 * key[255 & i]) + seedStr.codePointAt(i);
+                }
+
+                var keyLen = key.length;
+                if (!keyLen) {
+                    key = [keyLen++];
+                }
+
+
+                var sBox = [];
+                for (var s = 0; s < 256; s++) {
+                    sBox[s] = s;
+                }
+
+
+                var j = 0;
+                for (var s = 0; s < 256; s++) {
+                    var temp = sBox[s];
+                    j = 255 & (j + key[s % keyLen] + temp);
+                    sBox[s] = sBox[j];
+                    sBox[j] = temp;
+                }
+
+
+                var iState = 0;
+                var jState = 0;
+
+                var nextByte = function (count) {
+                    var output = 0;
+                    while (count--) {
+                        iState = 255 & (iState + 1);
+                        var t = sBox[iState];
+                        jState = 255 & (jState + t);
+
+                        sBox[iState] = sBox[jState];
+                        sBox[jState] = t;
+
+                        output = 256 * output + sBox[255 & (sBox[iState] + sBox[jState])];
+                    }
+                    return output;
+                };
+                nextByte(256);
+
+                return function () {
+                    var e = nextByte(6);
+                    var t = 281474976710656;
+                    var n = 0;
+
+                    while (e < 4503599627370496) {
+                        e = 256 * (e + n);
+                        t *= 256;
+                        n = nextByte(1);
+                    }
+                    while (e >= 9007199254740992) {
+                        e /= 2;
+                        t /= 2;
+                        n >>>= 1;
+                    }
+                    return (e + n) / t;
+                };
+            })(normalized);
+            var rawX = Math.floor(200000 * rand()) - 100000;
+            var rawY = Math.floor(200000 * rand()) - 100000;
+
+            return {
+                x: 20 * Math.floor(rawX / 20),
+                y: 10 * Math.floor(rawY / 10)
+            };
+        }
         window.w.generateCoords = getSeed;
+        window.w.generateCoordsOld = oldLr;
         null != Br.x && (cur.x = parseInt(Br.x),
             Fr = true),
             null != Br.y && (cur.y = -1 * parseInt(Br.y),
