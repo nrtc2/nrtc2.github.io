@@ -272,7 +272,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         }
         const ue = 192
             , colorHexs = ["#000000", "#898D90", "#D4D7D9", "#FF99AA", "#FF4500", "#FFA800", "#9C6926", "#FFD635", "#7EED56", "#00CC78", "#51E9F4", "#3690EA", "#2450A4", "#B44AC0", "#811E9F", "#BE0039", "#00A368", "#00756F", "#009EAA", "#493AC1", "#6A5CFF", "#FF3881", "#6D482F", "#6D001A", "#FFF8B8", "#00CCC0", "#94B3FF", "#E4ABFF", "#DE107F", "#FFB470", "#515252"]
-            , colorNames = ["black", "gray", "light gray", "light pink", "red", "orange", "brown", "yellow", "light green", "green", "light blue", "blue", "dark blue", "purple", "dark purple", "dark red", "dark green", "dark teal", "teal", "indigo", "periwinkle", "pink", "dark brown", "burgundy", "pale yellow", "light teal", "lavender", "pale purple", "magenta", "beige", "dark grey"];
+            , colorNames = ["black", "gray", "light gray", "light pink", "red", "orange", "brown", "yellow", "light green", "green", "light blue", "blue", "dark blue", "purple", "dark purple", "dark red", "dark green", "dark teal", "teal", "indigo", "periwinkle", "pink", "dark brown", "burgundy", "pale yellow", "light teal", "lavender", "pale purple", "magenta", "beige", "dark gray"];
 
         // addons
         const rgbse = [
@@ -1881,7 +1881,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         var lastTypingPacket = 0;
 
         function sendTyping(isTyping) {
-            if (localStorage.getItem("typingStatus")==="false") return;
+            if (localStorage.getItem("typingStatus") === "false") return;
             var channel = window.selectedChatTab === 1 ? "global" : "world";
 
             server.send(serialize_Uint8Array({
@@ -1988,7 +1988,28 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
                 // /help
                 if (cmd === "help") {
-                    send("/block <id|anon|user>, /blockuser <name>, /unblock <id|anon|user>, /unblockuser <name>, /unblockall, /day, /night, /help");
+                    send("/block <id|anon|user>, /blockuser <name>, /unblock <id|anon|user>, /unblockuser <name>, /unblockall, /day, /night, /nick, /help");
+                    return;
+                }
+                if (cmd === "nick") {
+                    var nickname = args[1];
+
+                    if (!nickname) {
+                        network.send({
+                            nick: ""
+                        });
+                        send("Your nickname has been reset.")
+                        return;
+                    }
+
+                    if (nickname.length > 64) {
+                        send("Nickname must be under 64 characters.");
+                        return;
+                    }
+
+                    send("Your nickname has been set to " + nickname)
+
+                    network.send({ nick: nickname });
                     return;
                 }
             }
@@ -3198,7 +3219,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     d.appendChild(f),
                     s.appendChild(d)
             }
-            if (world == clientUsername.toLowerCase()) {
+            if (world.toLowerCase() == clientUsername.toLowerCase()) {
                 var m = worldListElement.appendChild(document.createElement("form"));
                 m.style.display = "flex",
                     m.style.justifyContent = "space-between";
@@ -3312,11 +3333,11 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         window.prsCol = function (title) {
 
             const titles = [
-                "black", "grey", "light grey", "light pink", "red", "orange", "brown", "yellow",
+                "black", "gray", "light gray", "light pink", "red", "orange", "brown", "yellow",
                 "light green", "green", "light blue", "blue", "dark blue", "purple", "dark purple",
                 "dark red", "dark green", "dark teal", "teal", "indigo", "periwinkle", "pink",
                 "dark brown", "burgundy", "pale yellow", "light teal", "lavender", "pale purple",
-                "magenta", "beige", "dark grey"
+                "magenta", "beige", "dark gray"
             ];
 
 
@@ -3435,7 +3456,10 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
         window.writeCharAt = writeCharAt;
         function writeCharAt(char, color, coordX, coordY, decos, doNotAddToUndoBuffer) {
-
+            var cdp = char.codePointAt(0);
+            if (brailleDisabled && (cdp < 0x2800 || cdp > 0x28FF)) {
+                return;
+            }
             var coords = { x: coordX, y: coordY }
             var o = n;
             if (ie(false),
@@ -4470,7 +4494,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             const Pd = a * _20 + r;
             const char = tile.txt[Pd];
             const clr = tile.clr[Pd];
-            const color = clr % 31;
+            const color = Array.isArray(clr) ? clr : (clr % 31);
             return {
                 tileCoords: [e, t, r, a],
                 char: char,
@@ -4619,6 +4643,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     canvasGetContext.fillRect(x, w, r, a)
                 }
                 var anonIdShow = clientOptions.anonIdShow.checked;
+                var displayNameShow = clientOptions.displayNames.checked;
                 if (clientOptions.roundCursors.checked ? (canvasGetContext.fillStyle = be,
                     canvasGetContext.beginPath(),
                     canvasGetContext.lineWidth = 2 * v,
