@@ -37,6 +37,10 @@
 					<label for="tpword">Where would you like to go?</label>
 					<input id="tpword" maxlength="250" type="text">
 					<input type="submit" id="tpwordgo" value="Go">
+					<br><br>
+					<input type="checkbox" id="oldprng">
+					
+					<label for="oldprng">Use Old PRNG</label>
 				</form>
 				<div id="walllist"></div>
 
@@ -232,6 +236,9 @@
 
 						<input type="checkbox" id="roundCursors">
 						<label for="roundCursors">Round cursors</label><br><br>
+
+						<input type="checkbox" id="showTypingStatus">
+						<label for="showTypingStatus">Send typing indicator in chat</label><br><br>
 
 						<!--<input type="checkbox" id="doNotChangeTheme">
 						<label for="doNotChangeTheme">Ignore wall themes</label><br>-->
@@ -639,8 +646,12 @@
 		updatePing();
 		document.getElementById("clearChat").onclick = function () {
 			if (confirm("Are you sure you want to clear all messages?")) {
-				var chatbox = document.getElementById("chatbox");
-				Array.from(chatbox.children).forEach(function (child) {
+				var chatboxW = document.getElementById("chatbox-world");
+				Array.from(chatboxW.children).forEach(function (child) {
+					child.remove();
+				});
+				var chatboxG = document.getElementById("chatbox-global");
+				Array.from(chatboxG.children).forEach(function (child) {
 					child.remove();
 				});
 			}
