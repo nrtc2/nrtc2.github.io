@@ -49,7 +49,7 @@ function ss(illion, c = false) {
     } else {
       const s5 = [];
       let l5 = t5.log10().div("3").floor(), tier6ill = l5;
-      if (l6.gte("1e9")) return getT6(l5);
+      if (l5.gte("1e9")) return getT6(l5);
       for (let i5 = 0; i5 < (l5.gte("1e9") ? 1 : l5.gte("1e3") ? 2 : l5.gte("100") ? 6 : l5.add("1").toNumber()); i5++) {
         let j5 = tier6ill.mul("3");
         let pref5 = getT6(tier6ill);
