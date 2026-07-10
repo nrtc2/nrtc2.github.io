@@ -156,6 +156,7 @@ function ss(illion, c = false) {
   } else {
     const s = [];
     let l = illion.log10().div("3").floor(), tier2ill = l;
+    // idfk how this fixes the problem of the prefix being just blank
     if (l.gte("1e9")) return getT2(l);
     for (let i = 0; i < (l.gte("1e9") ? 1 : l.gte("1e3") ? 2 : l.gte("100") ? 6 : l.add("1").toNumber()); i++) {
       let j = tier2ill.mul("3");
