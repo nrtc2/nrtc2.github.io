@@ -8,16 +8,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <h1>Welcome to NotReiny’s page</h1>
+        <h1 id="w">Welcome to NotReiny’s page</h1>
         <p>Links:</p>
         <dl>
             <dt><a href="/inflo-arbitrary-precision">inflo-arbitrary-precision</a></dt>
             <dd>An open-source big number library that can be precise as you want to be and can reach up to 10^10^1000000+</dd>
             <dt><a href="/tw-copy">Copy of textwall (v2, BROKEN!!!)</a></dt>
             <dd>Contains mapping-decrypted code from tw.2s4.me</dd>
-            <dt><a href="https://cupzzskool.straw.page/">CupzZ’s kool page!!!!</a></dt>
+            <dt><a href="https://cupzkul.straw.page/">CupzZ’s kool page!!!!</a></dt>
             <dd>↑ The owner of this site is a fanfiction addict</dd>
-            <dt><a href="https://epic-fail.carrd.co/">Sage’s pretty page</a></dt>
+            <dt><a href="https://epicsage.carrd.co/">Sage’s pretty page</a></dt>
             <dd>My second best friend’s site</dd>
             <dt><a href="/textwall3">Textwall 3</a></dt>
             <dd>Newer textwall</dd>
@@ -35,5 +35,10 @@
             requestAnimationFrame(thisFunctionSoFuckingAssWhatTheShitManHmmIThinkThisIsAlsoUselessOrMaybeUsefulIGuess)
         }
         requestAnimationFrame(thisFunctionSoFuckingAssWhatTheShitManHmmIThinkThisIsAlsoUselessOrMaybeUsefulIGuess)
+        document.getElementById("w").addEventListener("click", function() {
+            setInterval(function() {
+                document.getElementById("w").style.transform = `rotateX(${Math.random()*360}deg) rotateY(${Math.random()*360}deg) rotateZ(${Math.random()*360}deg)`
+            })
+        })
     </script>
 </html>
