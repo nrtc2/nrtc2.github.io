@@ -28,14 +28,16 @@
         <progress id="idkbro" value="0" max="1000"></progress>
     </body>
     <script>
-        function thisFunctionSoFuckingAssWhatTheShitManHmmIThinkThisIsAlsoUselessOrMaybeUsefulIGuess() {
-            const idkWhatTheFuckDoesThisVariableMeanButIThinkItIsForAdjustingTimeOrSomethingAnywayBackToCoding = new Date;
-            document.getElementById("tiem").innerText = `The current time is ${idkWhatTheFuckDoesThisVariableMeanButIThinkItIsForAdjustingTimeOrSomethingAnywayBackToCoding.getHours()}:${idkWhatTheFuckDoesThisVariableMeanButIThinkItIsForAdjustingTimeOrSomethingAnywayBackToCoding.getMinutes().toString().padStart(2, "0")}:${idkWhatTheFuckDoesThisVariableMeanButIThinkItIsForAdjustingTimeOrSomethingAnywayBackToCoding.getSeconds().toString().padStart(2, "0")}`;
-            document.getElementById("idkbro").value = idkWhatTheFuckDoesThisVariableMeanButIThinkItIsForAdjustingTimeOrSomethingAnywayBackToCoding.getMilliseconds()
-            requestAnimationFrame(thisFunctionSoFuckingAssWhatTheShitManHmmIThinkThisIsAlsoUselessOrMaybeUsefulIGuess)
+        let j = true;
+        function updtime() {
+            const date = j ? new Date : new Date(Math.random()*4294967296000-2147483648000);
+            document.getElementById("tiem").innerText = `The current time is ${date.getHours()}:${date.getMinutes().toString().padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
+            document.getElementById("idkbro").value = date.getMilliseconds()
+            requestAnimationFrame(updtime)
         }
-        requestAnimationFrame(thisFunctionSoFuckingAssWhatTheShitManHmmIThinkThisIsAlsoUselessOrMaybeUsefulIGuess)
+        requestAnimationFrame(updtime)
         document.getElementById("w").addEventListener("click", function() {
+            j = false;
             setInterval(function() {
                 document.getElementById("w").style.transform = `rotateX(${Math.random()*360}deg) rotateY(${Math.random()*360}deg) rotateZ(${Math.random()*360}deg)`
             })
