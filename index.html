@@ -17,7 +17,7 @@
             <dd>Contains mapping-decrypted code from tw.2s4.me</dd>
             <dt><a href="https://cupzkul.straw.page/">CupzZ’s kool page!!!!</a></dt>
             <dd>↑ The owner of this site is a fanfiction addict</dd>
-            <dt><a href="https://epicsage.carrd.co/">Sage’s pretty page</a></dt>
+            <dt><a href="https://epicsage.carrd.co/">Sage’s epic page</a></dt>
             <dd>My second best friend’s site</dd>
             <dt><a href="/textwall3">Textwall 3</a></dt>
             <dd>Newer textwall</dd>
@@ -29,6 +29,7 @@
     </body>
     <script>
         let j = true;
+        let h;
         function updtime() {
             const date = j ? new Date : new Date(Math.random()*4294967296000-2147483648000);
             document.getElementById("tiem").innerText = `The current time is ${date.getHours()}:${date.getMinutes().toString().padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
@@ -37,9 +38,11 @@
         }
         requestAnimationFrame(updtime)
         document.getElementById("w").addEventListener("click", function() {
-            j = false;
-            setInterval(function() {
-                document.getElementById("w").style.transform = `rotateX(${Math.random()*360}deg) rotateY(${Math.random()*360}deg) rotateZ(${Math.random()*360}deg)`
+            j = !j;
+            if (h) clearInterval(h);
+            h = setInterval(function() {
+                if (!j)
+                    document.getElementById("w").style.transform = `rotateX(${Math.random()*360}deg) rotateY(${Math.random()*360}deg) rotateZ(${Math.random()*360}deg)`
             })
         })
     </script>
