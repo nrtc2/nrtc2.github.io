@@ -1,4 +1,4 @@
-function format(e, indent, depth = 0, seen = new WeakSet()) {
+format = function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
         if (!indent) return {
@@ -42,30 +42,30 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
 
             // 2. Maps
             if (e instanceof Map) {
-                if (e.size === 0) return `Map(${e.size}) {}`;
+                if (e.size === 0) return `Map(0)${nl ? ' ' : ''}{}`;
                 const entries = [...e.entries()]
                     .map(([k, v]) => {
                         // Pass primitive keys safely without double-formatting strings
                         const keyStr = typeof k === 'string' ? `'${k}'` : format(k, indent, depth + 1, seen);
-                        return `${keyStr} => ${format(v, indent, depth + 1, seen)}`;
+                        return `${keyStr}${nl ? ' ' : ''}=>${nl ? ' ' : ''}${format(v, indent, depth + 1, seen)}`;
                     })
                     .join(`,${nl}${inner}`);
-                return `Map(${e.size}) {${nl}${inner}${entries}${nl}${base}}`;
+                return `Map(${e.size})${nl ? ' ' : ''}{${nl}${inner}${entries}${nl}${base}}`;
             }
 
             // 3. Sets
             if (e instanceof Set) {
-                if (e.size === 0) return `Set(${e.size}) {}`;
+                if (e.size === 0) return `Set(0)${nl ? ' ' : ''}{}`;
                 const items = [...e]
                     .map(v => format(v, indent, depth + 1, seen))
                     .join(`,${nl}${inner}`);
-                return `Set(${e.size}) {${nl}${inner}${items}${nl}${base}}`;
+                return `Set(${e.size})${nl ? ' ' : ''}{${nl}${inner}${items}${nl}${base}}`;
             }
 
             // 4. Plain & Custom Objects
             const keys = Reflect.ownKeys(e);
             const constructorName = e.constructor?.name;
-            const prefix = constructorName && constructorName !== 'Object' ? `${constructorName} ` : '';
+            const prefix = constructorName && constructorName !== 'Object' ? `${constructorName}${nl ? ' ' : ''}` : '';
 
             if (keys.length === 0) {
                 return `${prefix}{}`;
