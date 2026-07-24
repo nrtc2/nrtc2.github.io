@@ -1,4 +1,4 @@
-format = function format(e, indent, depth = 0, seen = new WeakSet()) {
+function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
         if (!indent) return {
@@ -106,18 +106,18 @@ format = function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (typeof e === 'bigint') return `${e}n`;
 
     if (typeof e === 'string') {
-        return `'${e
-            .replace(/\\/g, '\\\\')
-            .replace(/'/g, "\\'")
-            .replace(/\t/g, '\\t')
-            .replace(/\n/g, '\\n')
-            .replace(/\r/g, '\\r')
-            .replace(/[\x00-\x1f\x7f-\x9f\ud800-\udfff]/g, ch => {
+        return `'${[...e].map(e=>e
+            .replace(/\\/, '\\\\')
+            .replace(/'/, "\\'")
+            .replace(/\t/, '\\t')
+            .replace(/\n/, '\\n')
+            .replace(/\r/, '\\r')
+            .replace(/[\x00-\x1f\x7f-\x9f\ud800-\udfff]/u, ch => {
                 const c = ch.codePointAt(0);
                 return `\\${c < 256 ? 'x' : 'u'}${c
                     .toString(16)
                     .padStart(c < 256 ? 2 : 4, '0')}`;
-            })}'`;
+            })).join("")}'`;
     }
 
     if (typeof e === 'symbol') return `Symbol(${e.description ?? ''})`;
