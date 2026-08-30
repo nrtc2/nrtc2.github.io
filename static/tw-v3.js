@@ -1,18 +1,3 @@
-function loadEruda() { // my ping is so bad it's gonna take a god damn whole minute
-    const loadStart = Date.now()
-    const btn = document.getElementById('erudaBtn');
-    btn.parentNode.removeChild(btn);
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
-    script.onload = () => {
-        eruda.init();
-        const p = document.createElement("p");
-        p.innerText = `Eruda loaded successfully within ${Date.now()-loadStart}ms.`;
-        document.getElementById("misc").appendChild(p);
-    };
-
-    document.body.appendChild(script);
-}
 var e = "undefined" == typeof browser ? browser = {} : browser;
 
 //!function () {
@@ -121,7 +106,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
             , y = true;
         const toastElement = document.getElementById("toast");
-        var p;
+        var toastTimeoutInterval;
         const b = document.getElementById("clipboard")
             , colList = document.getElementById("colourlist")
             , teleportElement = document.getElementById("teleport");
@@ -136,19 +121,19 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             canvasElement.style.height = window.innerHeight + "px",
             canvasGetContext.imageSmoothingEnabled = false;
         var renderChunkAmount = localStorage.getItem("rca") || (rot && rot.value && parseInt(rot.value)) || 100;
-        const S = "#FFFFFF"
-            , I = "#EBEBEB";
-        var C = S
-            , A = I
-            , T = adjustColorBrightness(A, 10);
+        const defaultPrimary = "#FFFFFF"
+            , defaultSecondary = "#EBEBEB";
+        var currentPrimary = defaultPrimary
+            , currentSecondary = defaultSecondary
+            , T = adjustColorBrightness(currentSecondary, 10);
         const primaryColorSelect = document.getElementById("primary")
             , secondaryColorSelect = document.getElementById("secondary")
             , whiteTextCheckBox = document.getElementById("themetext")
-            , L = document.getElementById("thememenu")
+            , themeMenu = document.getElementById("thememenu")
             , customFontInput = document.getElementById("customfont")
             , customFontSizeInput = document.getElementById("customfontsize")
-            , D = document.getElementById("fontmenu");
-        var N = 0;
+            , fontMenu = document.getElementById("fontmenu");
+        var selectedTheme = 0;
         var j = 0
             , U = false
             , world = ""
@@ -159,9 +144,9 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             , worldListElement = document.getElementById("walllist");
         var Y;
         const deleteWorldElement = document.getElementById("deletewall")
-            , u2800 = String.fromCharCode(10240)
-            , x1B = String.fromCharCode(27)
-            , fontProperties = { // [object Object]
+            , u2800 = String.fromCharCode(10240) // "\u2800"
+            , x1B = String.fromCharCode(27) // "\x1B"
+            , fontProperties = {
                 Inconsolata: 18,
                 "IBM Plex Mono": 16,
                 "Roboto Mono": 16,
@@ -256,12 +241,12 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 decorationsElement.style.display = "none"
         }
         function getDecoNumber() {
-            var t = 0;
-            return decorationSetting.bold.enabled && (t |= 8),
-                decorationSetting.italic.enabled && (t |= 4),
-                decorationSetting.underline.enabled && (t |= 2),
-                decorationSetting.strikethrough.enabled && (t |= 1),
-                t
+            var num = 0;
+            return decorationSetting.bold.enabled && (num |= 8),
+                decorationSetting.italic.enabled && (num |= 4),
+                decorationSetting.underline.enabled && (num |= 2),
+                decorationSetting.strikethrough.enabled && (num |= 1),
+                num
         }
         window.cel = getDecoNumber;
         function le(e) {
@@ -270,7 +255,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 br("underline", Boolean(2 & e)),
                 br("strikethrough", Boolean(1 & e))
         }
-        const ue = 192
+        const codePointOffsetColor = 192
             , colorHexs = ["#000000", "#898D90", "#D4D7D9", "#FF99AA", "#FF4500", "#FFA800", "#9C6926", "#FFD635", "#7EED56", "#00CC78", "#51E9F4", "#3690EA", "#2450A4", "#B44AC0", "#811E9F", "#BE0039", "#00A368", "#00756F", "#009EAA", "#493AC1", "#6A5CFF", "#FF3881", "#6D482F", "#6D001A", "#FFF8B8", "#00CCC0", "#94B3FF", "#E4ABFF", "#DE107F", "#FFB470", "#515252"]
             , colorNames = ["black", "gray", "light gray", "light pink", "red", "orange", "brown", "yellow", "light green", "green", "light blue", "blue", "dark blue", "purple", "dark purple", "dark red", "dark green", "dark teal", "teal", "indigo", "periwinkle", "pink", "dark brown", "burgundy", "pale yellow", "light teal", "lavender", "pale purple", "magenta", "beige", "dark gray"];
 
@@ -320,7 +305,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             "soft light green", // [140,220,140]
             "muted tomato"      // [220,100,80]
         ];
-        var me = []; // yes, this is me.
+        var me = [];
         !function () {
             for (ne = 0; ne < colorHexs.length; ne++)
                 try {
@@ -330,7 +315,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 }
             me[colorHexs.length] = "rgba(255, 255, 255, 0.2)"
         }();
-        var he, ye, ge, pe = 0, be = hexToRGBA(colorHexs[pe], .2), xe = false, chunks = new Map, Me = [], ke = [], Ee = new Map, pingWorker = new Worker("/static/ping.js"), Ie = false, cur = {
+        var he, ye, ge, color_ = 0, be = hexToRGBA(colorHexs[color_], .2), xe = false, chunks = new Map, writeBuffer = [], ke = [], Ee = new Map, pingWorker = new Worker("/static/ping.js"), Ie = false, cur = {
             x: 0,
             y: 0,
             rawx: 0,
@@ -347,7 +332,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         }, Te = {
             x: 0,
             y: 0
-        }, Be = [], Fe = [], curs = new Map, Le = true, Oe = true, Re = true, De = false, Ne = [], clientUsername = "", nearby = 0, online = 0, coordsElement = document.getElementById("coords"), nearbyElement = document.getElementById("nearby"), Xe = performance.now(), ze = {
+        }, Be = [], Fe = [], curs = new Map, updateCoords = true, updateColor = true, updateAnonMode = true, De = false, Ne = [], clientUsername = "", nearby = 0, online = 0, coordsElement = document.getElementById("coords"), nearbyElement = document.getElementById("nearby"), Xe = performance.now(), ze = {
             scale: 1,
             offset: {
                 x: 0,
@@ -465,7 +450,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     server.send(serialize_Uint8Array({
                         logout: 0
                     })),
-                    Re = true),
+                    updateAnonMode = true),
                 document.getElementById("login").style.display = "block",
                 document.getElementById("loggedin").style.display = "none",
                 vn(false),
@@ -499,12 +484,12 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             }
             var o = selectedFont
                 , i = fontProperties[selectedFont];
-            "Custom" == selectedFont ? (D.classList.remove("hidden"),
+            "Custom" == selectedFont ? (fontMenu.classList.remove("hidden"),
                 o = customFontInput.value,
                 i = Math.max(Math.min(20, customFontSizeInput.value), 1),
                 localStorage.setItem("customfont", o),
                 localStorage.setItem("customfontsize", i),
-                o = '"' + (o || "monospace") + '"') : D.classList.add("hidden"),
+                o = '"' + (o || "monospace") + '"') : fontMenu.classList.add("hidden"),
                 Q = Math.floor(i * v) + "px " + o + ", monospace, Special",
                 localStorage.setItem("font", selectedFont),
                 document.getElementById("fontselect").value = selectedFont,
@@ -525,7 +510,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         function pt(e, t) {
             var a = chunks.get(e);
             if (a.empty) {
-                canvasGetContext.fillStyle = a.protected ? A : C,
+                canvasGetContext.fillStyle = a.protected ? currentSecondary : currentPrimary,
                     yt(t);
             } else {
                 var o = a.img;
@@ -538,7 +523,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             if (!a.protected && a.textProtected) {
                 var cellW = mt() / 20
                     , cellH = ht() / 10;
-                canvasGetContext.fillStyle = A;
+                canvasGetContext.fillStyle = currentSecondary;
                 for (var idx = 0; idx < 200; idx++)
                     if (a.textProtected[idx] === "1") {
                         var cellX = idx % 20
@@ -725,7 +710,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                             e.imageSmoothingEnabled = false,
                                 e.textBaseline = "alphabetic",
                                 e.textAlign = "left",
-                                e.fillStyle = c.protected ? A : C,
+                                e.fillStyle = c.protected ? currentSecondary : currentPrimary,
                                 e.fillRect(0, 0, t, n);
                             var l, u, s = {}, d = false, f = wt(a), v = f[0] - 20 + "," + f[1];
                             if (chunks.has(v)) {
@@ -759,7 +744,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
                                         var cellProtected = c.textProtected && c.textProtected[x + 20 * b] === "1";
                                         if (cellProtected && !c.protected) {
-                                            e.fillStyle = A;
+                                            e.fillStyle = currentSecondary;
                                             e.fillRect(Math.floor(w), Math.floor(M), Math.ceil(t / 20), Math.ceil(n / 10));
                                         }
                                         if (!Qn(S, T)) {
@@ -899,7 +884,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 }
             }
         }
-        let diejx = false // DIE, JX!!!
+        let optionsOpened = false
         function _t() {
             var e, r = "pathname";
             for (const n of chunks.keys()) {
@@ -1025,12 +1010,12 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                                     if (e.pointerId == Dn) {
                                         nr();
                                         var r = Wn(e);
-                                        if (cur.x == r.x && cur.y == r.y || (Le = true),
+                                        if (cur.x == r.x && cur.y == r.y || (updateCoords = true),
                                             cur.x = r.x,
                                             cur.y = r.y,
                                             cur.start = cur.x,
                                             e.altKey) {
-                                            var a = rr();
+                                            var a = getCharAndColorFromCurrentPosition();
                                             a && (Qn(a[0], Zr(a[1])[1]) ? changeColor(0) : changeColor(Zr(a[1])[0]))
                                         }
                                         Hn()
@@ -1176,7 +1161,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                             writeChar(" ", 0, false, true) ||
                             void nr()) : void (null != e.data && "" != e.data && "insertFromPaste" != e.inputType && (nr(),
                                 Array.from(e.data).length > 1 ? pasteCanvas(e.data) : writeChar(e.data, 1)));
-                    cr()
+                    executeNewLine()
                 }
             }
             )),
@@ -1227,16 +1212,16 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     cur.x = n[0];
                     cur.y = n[1];
 
-                    var r = pe,
+                    var r = color_,
                         a = getDecoNumber(),
                         o = Zr(n[3]);
-                    pe = o[0];
-                    window.color = pe;
+                    color_ = o[0];
+                    window.color = color_;
                     le(o[1]);
 
                     writeChar(n[2], 0, true);
-                    pe = r;
-                    window.color = pe;
+                    color_ = r;
+                    window.color = color_;
                     le(a);
                 }
             },
@@ -1245,15 +1230,15 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     var t = Fe.shift();
                     cur.x = t[0],
                         cur.y = t[1];
-                    var n = pe
+                    var n = color_
                         , a = getDecoNumber()
                         , o = Zr(t[3]);
-                    pe = o[0],
-                        window.color = pe,
+                    color_ = o[0],
+                        window.color = color_,
                         le(o[1]),
                         writeChar(t[2], 1, false),
-                        pe = n,
-                        window.color = pe,
+                        color_ = n,
+                        window.color = color_,
                         le(a)
                 }
             },
@@ -1283,7 +1268,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                                 e.preventDefault());
                             break;
                         case 67: // ALT+C
-                            e.altKey && or(e);
+                            e.altKey && startCopy(e);
                             break;
                         case 71: // CTRL+G
                             e.ctrlKey && (e.preventDefault(),
@@ -1339,7 +1324,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             }
             )),
             textArea.addEventListener("copy", (function (e) {
-                var r = rr();
+                var r = getCharAndColorFromCurrentPosition();
                 if (r) {
                     copy(r[0]),
                         e.preventDefault(),
@@ -1373,9 +1358,9 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             ,
 
             document.getElementById("options_").addEventListener("click", () => {
-                diejx = !diejx;
+                optionsOpened = !optionsOpened;
 
-                if (diejx) {
+                if (optionsOpened) {
                     document.body.classList.add("menu-open");
                     sidemenu.classList.add("open");
 
@@ -1388,7 +1373,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
 
         document.getElementById("home").addEventListener("click", (function () {
-            $n(),
+            pushNullStateToHistory(),
                 teleport(0, 0)
         }
         )),
@@ -1397,7 +1382,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     Cn("textwall", "main") && teleport(0, 0)
             }
             )),
-            document.getElementById("copy").addEventListener("click", or),
+            document.getElementById("copy").addEventListener("click", startCopy),
             document.getElementById("paste").addEventListener("click", (function () {
                 navigator.clipboard.readText().then((function (t) {
                     pasteCanvas(t);
@@ -1471,7 +1456,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                         break;
                     case clientOptions.anonymous:
                         localStorage.setItem("anonymous", r),
-                            Re = true,
+                            updateAnonMode = true,
                             ge = true;
                         break;
                     case clientOptions.anonIdShow:
@@ -1516,7 +1501,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     r = { x: 0, y: 0 };
                 } else {
                     if (document.getElementById("oldprng").checked) {
-                        r = oldLr(t);
+                        r = getOldSeed(t);
                     } else {
                         r = getSeed(t);
                     }
@@ -1552,7 +1537,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     r = { x: 0, y: 0 };
                 } else {
                     if (document.getElementById("oldprng").checked) {
-                        r = oldLr(t);
+                        r = getOldSeed(t);
                     } else {
                         r = getSeed(t);
                     }
@@ -2208,7 +2193,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 Xn(),
                 chunks.clear(),
                 curs.clear(),
-                Me = [],
+                writeBuffer = [],
                 0))
         }
         function disconnect(e) { // textwall servers rn:
@@ -2543,15 +2528,15 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                         $e = {},
                         canvasElement.style.cursor = "text",
                         curs.clear(),
-                        Me = [],
+                        writeBuffer = [],
                         K = false,
                         On(),
                         clientOptions.showchat.checked && chatElement.classList.remove("hidden"),
                         hideChatIfReadOnly(),
                         worldListElement.innerHTML = "",
-                        Le = true,
-                        Oe = true,
-                        Re = true,
+                        updateCoords = true,
+                        updateColor = true,
+                        updateAnonMode = true,
                         setTimeout((function () {
                             connectingElement.style.display = "none"
                         }
@@ -2614,14 +2599,14 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                                     let v = E.clr[f];
                                     if (v.codePointAt(0) !== 91) {
 
-                                        E.clr[f] = v.codePointAt(0) - ue;
+                                        E.clr[f] = v.codePointAt(0) - codePointOffsetColor;
 
                                     } else if (v.codePointAt(0) === 91) {
 
 
                                         let i = 1;
 
-                                        const read = () => v.codePointAt(i++) - ue;
+                                        const read = () => v.codePointAt(i++) - codePointOffsetColor;
 
                                         let r = (read() << 6) | read();
                                         let green = (read() << 6) | read();
@@ -3064,7 +3049,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     }
 
                     vn(false);
-                    Re = true;
+                    updateAnonMode = true;
                     dt(true, true);
 
                     window.w.emit("accbanned", banInfo);
@@ -3090,7 +3075,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                         localStorage.setItem("username", clientUsername),
                         Bn(),
                         ge = true,
-                        Re = true;
+                        updateAnonMode = true;
                     window.w.emit("namechanged", data.namechanged);
                     break;
                 case "passchanged": // password changed
@@ -3101,7 +3086,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 case "accountdeleted": // account has been deleted
                     showToast("Your account has been deleted.", 3e3),
                         vn(false),
-                        Re = true,
+                        updateAnonMode = true,
                         dt(true, true);
                     window.w.emit("accountdeleted", data.accountdeleted);
                     break;
@@ -3120,7 +3105,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                         document.getElementById("loggedin").style.display = "block",
                         Bn(),
                         ge = true,
-                        Re = true;
+                        updateAnonMode = true;
                     window.w.emit("token", clientUsername);
                     break;
                 case "admin": // is this still broken shit?
@@ -3275,7 +3260,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 cur.y + qe.offset.y / v / 20 <= 0 && Mn(qe.offset.x, 20 * -cur.y * v);
             var t = window.innerWidth < 750 ? infoElement.clientHeight : 0;
             cur.y + qe.offset.y / v / 20 >= (window.innerHeight - t) / zoomValue / 20 - 1 && Mn(qe.offset.x, (20 * -cur.y + window.innerHeight / zoomValue - 20 - t / zoomValue) * v),
-                Le = Ae.x != cur.x || Ae.y != cur.y || Le,
+                updateCoords = Ae.x != cur.x || Ae.y != cur.y || updateCoords,
                 Ae.x = cur.x,
                 Ae.y = cur.y,
                 clientOptions.smoothcursors.checked || (cur.rawx = cur.x,
@@ -3549,7 +3534,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     chunk.txt[A] = char,
 
                     chunk.clr[A] = C,
-                    Me.push([chunkX / 20, chunkY / 10, char.codePointAt(), A, C]),
+                    writeBuffer.push([chunkX / 20, chunkY / 10, char.codePointAt(), A, C]),
                     S = 2,
                     It(chunkKey, Dt(A))),
                 Hn(),
@@ -3569,7 +3554,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 !char || zn >= 3)
                 return 0;
             var decos2 = getCurrentDecoration();
-            var chr = prsFmt(pe);
+            var chr = prsFmt(color_);
             var data = {
                 char: char,
                 color: chr.color,
@@ -3636,7 +3621,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     s.txt[A] = char,
 
                     s.clr[A] = C,
-                    Me.push([chunkX / 20, chunkY / 10, char.codePointAt(), A, C]),
+                    writeBuffer.push([chunkX / 20, chunkY / 10, char.codePointAt(), A, C]),
                     S = 2,
                     It(chunkKey, Dt(A))),
                 Hn(),
@@ -3644,10 +3629,10 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 cur.x += t,
                 updateUndoRedoUI()
         }
-        function teleport(e, t) {
+        function teleport(x, y) {
             ie(false),
-                cur.x = e,
-                cur.y = t,
+                cur.x = x,
+                cur.y = y,
                 Mn((10 * -cur.x + window.innerWidth / zoomValue / 2) * v, (20 * -cur.y + window.innerHeight / zoomValue / 2) * v),
                 document.getElementById("tpword").value = "",
                 document.getElementById("tpx").value = 0,
@@ -3657,7 +3642,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 _t()
         }
         window.writeChar = writeChar
-        function $n() {
+        function pushNullStateToHistory() {
             history.pushState({}, null, o)
         }
         function Gn(char) {
@@ -3667,26 +3652,26 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             return Gn(e) && 0 == (2 & t) && 0 == (1 & t)
         }
         var er = false;
-        function rgbTokenize(e) {
+        function rgbTokenize(arr) {
             // e: array
             // ["[", "r", "r", "g", "g", "b", "b", "d", "]", "a"] becomes ["[rrggbbd]", "a"]
             var result = [];
             var i = 0;
-            while (i < e.length) {
-                if (e[i] === "[") {
+            while (i < arr.length) {
+                if (arr[i] === "[") {
                     var token = "[";
                     i++;
-                    while (i < e.length && e[i] !== "]") {
-                        token += e[i];
+                    while (i < arr.length && arr[i] !== "]") {
+                        token += arr[i];
                         i++;
                     }
-                    if (i < e.length && e[i] === "]") {
+                    if (i < arr.length && arr[i] === "]") {
                         token += "]";
                         result.push(token);
                         i++;
                     }
                 } else {
-                    result.push(e[i]);
+                    result.push(arr[i]);
                     i++;
                 }
             }
@@ -3709,11 +3694,11 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             var chars = [], a = [];
 
             if (parts.length === 2) {
-                chars = Array.from(parts[0]);
-                a = rgbTokenize(Array.from(parts[1]));
+                chars = Array.from(parts[0]); // just use [...parts[0]] bradar
+                a = rgbTokenize(Array.from(parts[1])); // same for that one too
             } else {
                 string = string.replace(tabRegExp, "   "); // 3 chars of space
-                chars = Array.from(string); // split characters into individual elements in an array
+                chars = Array.from(string); // split characters into individual elements in an array (handles surrogates properly)
             }
 
             if (chars.length === 1) { // only a single character is typed
@@ -3724,7 +3709,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
             if (!er) {
                 er = true;
-                var savedColor = pe;
+                var savedColor = color_;
                 var savedDeco = getDecoNumber();
 
                 (function loop(nIdx, oIdx) { // oIdx is useless
@@ -3739,7 +3724,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                     var currentChar = chars[nIdx];
 
                     if (currentChar === "\n") {
-                        cr();
+                        executeNewLine();
                         setTimeout(() => loop(nIdx + 1, oIdx), 10);
                         return;
                     }
@@ -3788,7 +3773,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         function nr() {
             Ie = false
         }
-        function rr() {
+        function getCharAndColorFromCurrentPosition() {
             var t = 20 * Math.floor(cur.x / 20)
                 , r = 10 * Math.floor(cur.y / 10)
                 , a = chunks.get(t + "," + r);
@@ -3804,18 +3789,18 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 b.select(),
                 document.execCommand("copy"))
         }
-        function or(_e) {
+        function startCopy(_e) {
             var t = n;
             canvasElement.style.cursor = "crosshair";
             var regionSelection = new RegionSelection();
             regionSelection.onSelection(function (sx, sy, ex, ey) {
-                var l = cur.x
-                    , u = cur.y;
+                var _x = cur.x
+                    , _y = cur.y;
                 cur.x = sx,
                     cur.y = sy;
                 for (var plainText = "", codes = "", f = false, v = false, h = sy; h <= ey; h++) {
                     for (var y = sx; y <= ex; y++) {
-                        var g = rr();
+                        var g = getCharAndColorFromCurrentPosition();
 
                         if (g) {
                             g[0] == x1B ? plainText += " " : plainText += g[0];
@@ -3831,10 +3816,10 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                                     codes += clientOptions.copydecorations.checked ? String.fromCharCode(192 + b) : String.fromCharCode(192);
                                     codes += "]";
                                 } else {
-                                    codes += String.fromCharCode(ue + g[1]);
+                                    codes += String.fromCharCode(codePointOffsetColor + g[1]);
                                 }
                             } else if (clientOptions.copydecorations.checked) {
-                                codes += String.fromCharCode(ue + Vr(0, b));
+                                codes += String.fromCharCode(codePointOffsetColor + Vr(0, b));
                             }
                             Qn(g[0], b) || (0 != b && (v = true),
                                 0 != p && (f = true)),
@@ -3849,15 +3834,14 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 }
                 plainText = plainText.slice(0, -1),
                     codes = codes.slice(0, -1),
-                    plainText.startsWith("http") && (f = v = false),
+                    plainText.startsWith("http") && (f = v = false), // handle copying links
                     clientOptions.copycolour.checked && f || clientOptions.copydecorations.checked && v ? copy(plainText + x1B + codes) : copy(plainText),
-                    cur.x = l,
-                    cur.y = u,
+                    cur.x = _x,
+                    cur.y = _y,
                     showToast("Copied selection.", 1500);
                 var x = document.getElementById("copyico");
                 x.src = "/static/done.svg",
                     setTimeout((function () {
-                        var e = t;
                         x.src = "/static/copy.svg"
                     }
                     ), 1e3)
@@ -3865,16 +3849,16 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             regionSelection.startSelection();
             showToast("Select an area to copy.", 1500);
         }
-        function showToast(e, t) {
-            clearTimeout(p),
-                toastElement.innerText = e,
+        function showToast(text, interval) {
+            clearTimeout(toastTimeoutInterval),
+                toastElement.innerText = text,
                 toastElement.classList.add("toasting"),
-                p = setTimeout((function () {
+                toastTimeoutInterval = setTimeout((function () {
                     toastElement.classList.remove("toasting")
                 }
-                ), t)
+                ), interval)
         }
-        function cr() {
+        function executeNewLine() {
             cur.x = cur.start,
                 cur.y++,
                 Hn()
@@ -4064,52 +4048,52 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 var c = getSeed(e); // generate seed
                 teleport(c.x, c.y),
                     Cn("textwall", "main"),
-                    0 == c.x && 0 == c.y ? $n() : history.pushState({}, null, e)
+                    0 == c.x && 0 == c.y ? pushNullStateToHistory() : history.pushState({}, null, e)
             }
             document.querySelectorAll(".typing-notice").forEach(el => el.innerText = "nobody is typing.");
             teleportElement.classList.remove("open")
         }
 
 
-        function changeColor(e, noSave = false, select = true) {
+        function changeColor(color, noSave = false, select = true) {
             if (colorsDisabled) return;
-            if (clientOptions.disablecolour.checked) { e = 0 };
+            if (clientOptions.disablecolour.checked) { color = 0 }; // does the user have disabled colors?
             let hexColor = null;
             let newEl = null;
 
-            if (typeof e === "string" && (e.startsWith("#") || e.startsWith("0x"))) {
-                let cleanHex = e.startsWith("0x") ? e.slice(2) : e.slice(1);
-                if (cleanHex.length === 3) {
+            if (typeof color === "string" && (color.startsWith("#") || color.startsWith("0x"))) { // custom colors
+                let cleanHex = color.startsWith("0x") ? color.slice(2) : color.slice(1);
+                if (cleanHex.length === 3) { // color hex string length of 3
                     cleanHex = cleanHex.split('').map(char => char + char).join('');
                 }
-                if (/^[0-9A-Fa-f]{6}$/.test(cleanHex)) {
+                if (/^[0-9A-Fa-f]{6}$/.test(cleanHex)) { // test RGB valid format
                     let r = parseInt(cleanHex.substring(0, 2), 16);
                     let g = parseInt(cleanHex.substring(2, 4), 16);
                     let b = parseInt(cleanHex.substring(4, 6), 16);
-                    e = [r, g, b];
+                    color = [r, g, b];
                 }
             }
-            if (typeof e === "string" && e.startsWith("rgb")) {
-                let rgbMatch = e.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+            if (typeof color === "string" && color.startsWith("rgb")) { // rgb(..., ..., ...)
+                let rgbMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
                 if (rgbMatch) {
                     let r = parseInt(rgbMatch[1], 10);
                     let g = parseInt(rgbMatch[2], 10);
                     let b = parseInt(rgbMatch[3], 10);
-                    e = [r, g, b];
+                    color = [r, g, b];
                 }
             }
 
-            if (Array.isArray(e)) {
-                if (e.length >= 3) {
-                    let r = e[0] & 255,
-                        g = e[1] & 255,
-                        b = e[2] & 255;
+            if (Array.isArray(color)) { // array color
+                if (color.length >= 3) {
+                    let r = color[0] & 255,
+                        g = color[1] & 255,
+                        b = color[2] & 255;
                     hexColor = "#" + r.toString(16).padStart(2, "0") +
                         g.toString(16).padStart(2, "0") +
                         b.toString(16).padStart(2, "0");
                 } else return;
-            } else {
-                e = parseInt(e, 10);
+            } else { // pre-built colors
+                color = parseInt(color, 10);
             }
             if (select) {
                 // remove selection from palette swatches
@@ -4120,15 +4104,15 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 const custom = document.querySelector("#customcolour.selected, .customcolour.selected");
                 if (custom) custom.classList.remove("selected");
             }
-            pe = e;
-            window.color = pe;
+            color_ = color;
+            window.color = color_;
 
-            if (typeof e === "number" && !isNaN(e) && e < colorHexs.length) {
-                be = xe && e === 0 ? "rgba(255,255,255,0.6)" : hexToRGBA(colorHexs[e], 0.6);
-                newEl = document.querySelector(`.swatch-p[data-index='${e}']`);
+            if (typeof color === "number" && !isNaN(color) && color < colorHexs.length) {
+                be = xe && color === 0 ? "rgba(255,255,255,0.6)" : hexToRGBA(colorHexs[color], 0.6);
+                newEl = document.querySelector(`.swatch-p[data-index='${color}']`);
             }
-            else if (typeof e === "number" && !isNaN(e) && e >= colorHexs.length) {
-                let addonIndex = e - colorHexs.length;
+            else if (typeof color === "number" && !isNaN(color) && color >= colorHexs.length) {
+                let addonIndex = color - colorHexs.length;
                 let obj = rgbse[addonIndex];
                 if (obj) {
                     be = gst(Array.isArray(obj) ? ("rgb(" + obj[0] + "," + obj[1] + "," + obj[2] + ")") : obj, 0.6);
@@ -4144,8 +4128,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
             if (select && newEl) newEl.classList.add("selected");
 
-            if (!noSave) localStorage.setItem("col", e);
-            Oe = true;
+            if (!noSave) localStorage.setItem("col", color);
+            updateColor = true;
             ge = true;
         }
 
@@ -4175,44 +4159,44 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
             e && changeColor(0);
         }
-        function changeTheme(e, noSave = false) {
-            if (null != e)
-                N = e; // 0 = light, 1 = dark, 2 = custom
+        function changeTheme(themeInput, noSave = false) {
+            if (null != themeInput)
+                selectedTheme = themeInput; // 0 = light, 1 = dark, 2 = custom
             else // cycle through if there's no input
-                switch (N) {
+                switch (selectedTheme) {
                     case 0:
-                        N = 1;
+                        selectedTheme = 1;
                         break;
                     case 1:
-                        N = 2;
+                        selectedTheme = 2;
                         break;
                     case 2:
-                        N = 0
+                        selectedTheme = 0
                 }
-            0 == N && (xe = false,
+            0 == selectedTheme && (xe = false,
                 document.getElementById("themeico").src = "/static/sun.svg",
-                C = S,
-                A = I),
-                1 == N && (xe = true,
+                currentPrimary = defaultPrimary,
+                currentSecondary = defaultSecondary),
+                1 == selectedTheme && (xe = true,
                     document.getElementById("themeico").src = "/static/moon.svg",
-                    C = "#000000",
-                    A = "#141414"),
-                2 == N ? (xe = whiteTextCheckBox.checked,
+                    currentPrimary = "#000000",
+                    currentSecondary = "#141414"),
+                2 == selectedTheme ? (xe = whiteTextCheckBox.checked,
                     document.getElementById("themeico").src = "/static/star.svg",
-                    C = primaryColorSelect.value,
-                    A = secondaryColorSelect.value,
-                    L.classList.remove("hidden")) : L.classList.add("hidden"),
-                T = adjustColorBrightness(A, 10),
-                !noSave && localStorage.setItem("theme", N),
+                    currentPrimary = primaryColorSelect.value,
+                    currentSecondary = secondaryColorSelect.value,
+                    themeMenu.classList.remove("hidden")) : themeMenu.classList.add("hidden"),
+                T = adjustColorBrightness(currentSecondary, 10),
+                !noSave && localStorage.setItem("theme", selectedTheme),
                 ge = true,
                 en(),
-                changeColor(pe),
+                changeColor(color_),
                 Sn()
         }
         function gr(e) {
-            e.target == primaryColorSelect ? (C = primaryColorSelect.value,
-                Sn()) : e.target == secondaryColorSelect && (A = secondaryColorSelect.value,
-                    T = adjustColorBrightness(A, 10),
+            e.target == primaryColorSelect ? (currentPrimary = primaryColorSelect.value,
+                Sn()) : e.target == secondaryColorSelect && (currentSecondary = secondaryColorSelect.value,
+                    T = adjustColorBrightness(currentSecondary, 10),
                     Sn(true)),
                 localStorage.setItem("customtheme", JSON.stringify({
                     primary: primaryColorSelect.value,
@@ -4250,31 +4234,31 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         window.flushAmount = 250
         function flushWrites() {
             if (server && server.readyState == server.OPEN) {
-                if ((Le || Oe || Re || De) && chunks.size !== 0) {
+                if ((updateCoords || updateColor || updateAnonMode || De) && chunks.size !== 0) {
                     var t = {};
-                    Le && (t.l = [cur.x, cur.y]);
-                    Oe && (t.c = pe);
-                    Re && (t.n = clientOptions.anonymous.checked);
+                    updateCoords && (t.l = [cur.x, cur.y]);
+                    updateColor && (t.c = color_);
+                    updateAnonMode && (t.n = clientOptions.anonymous.checked);
                     De && (t.p = [qe.coords.x, qe.coords.y]);
 
                     server.send(serialize_Uint8Array({ ce: t }));
-                    Le = Oe = Re = De = false;
+                    updateCoords = updateColor = updateAnonMode = De = false;
                 }
 
-                if (Me.length > 0) {
-                    var r = Me.splice(0, window.flushAmount),
-                        tA = [];
-                    e: for (var o = 0; o < r.length; o++) {
-                        var [i, c, l, u, s] = r[o];
-                        for (var d = 0; d < tA.length; d++) {
-                            if (tA[d][0] === i && tA[d][1] === c) {
-                                tA[d].push(l, u, s);
-                                continue e;
+                if (writeBuffer.length > 0) {
+                    var spliced = writeBuffer.splice(0, window.flushAmount),
+                        edits = [];
+                    loop: for (var index = 0; index < spliced.length; index++) {
+                        var [i, c, l, u, s] = spliced[index];
+                        for (var d = 0; d < edits.length; d++) {
+                            if (edits[d][0] === i && edits[d][1] === c) {
+                                edits[d].push(l, u, s);
+                                continue loop;
                             }
                         }
-                        tA.push([i, c, l, u, s]);
+                        edits.push([i, c, l, u, s]);
                     }
-                    server.send(serialize_Uint8Array({ e: tA }));
+                    server.send(serialize_Uint8Array({ e: edits }));
                 }
             }
         }
@@ -4293,15 +4277,15 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
 
 
         window.w.setFlushInterval = setFlushInterval;
-        window.w.changeTheme = function (e, noSave = false) {
-            if (e === undefined) { // revert back to light if there's no input
+        window.w.changeTheme = function (themeInput, noSave = false) {
+            if (themeInput === undefined) { // revert back to light if there's no input
                 changeTheme(0)
                 return;
             }
-            if (e == "light") changeTheme(0, noSave);
-            else if (e == "dark") changeTheme(1, noSave);
-            else if (e == "custom") changeTheme(2, noSave);
-            else changeTheme(e, noSave);
+            if (themeInput == "light") changeTheme(0, noSave);
+            else if (themeInput == "dark") changeTheme(1, noSave);
+            else if (themeInput == "custom") changeTheme(2, noSave);
+            else changeTheme(themeInput, noSave);
 
 
         }
@@ -4316,43 +4300,43 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         };
 
         window.Tile = {}
-        window.Tile.get = function (e, t) {
-            if (!chunks.has(e + "," + t))
+        window.Tile.get = function (cx, cy) {
+            if (!chunks.has(cx + "," + cy))
                 return null;
-            var a = chunks.get(e + "," + t);
+            var a = chunks.get(cx + "," + cy);
             return a
         };
-        window.Tile.set = function (e, t, r, a) {
-            if (!chunks.has(e + "," + t))
+        window.Tile.set = function (cx, cy, idx, char) {
+            if (!chunks.has(cx + "," + cy))
                 return false;
-            var i = chunks.get(e + "," + t);
-            return i.txt[r] = a,
+            var i = chunks.get(cx + "," + cy);
+            return i.txt[idx] = char,
                 true
         }
-        window.Tile.exists = function (e, t) {
-            return chunks.has(e + "," + t)
+        window.Tile.exists = function (cx, cy) {
+            return chunks.has(cx + "," + cy)
         }
-        window.Tile.loaded = function (e, t) {
-            return !!Tile.get(e, t)
+        window.Tile.loaded = function (cx, cy) {
+            return !!Tile.get(cx, cy)
         }
-        window.Tile.delete = function (e, t) {
-            if (!chunks.has(e + "," + t))
+        window.Tile.delete = function (cx, cy) {
+            if (!chunks.has(cx + "," + cy))
                 return false;
-            var a = chunks.get(e + "," + t);
-            return a.protected ? false : (chunks.delete(e + "," + t),
+            var a = chunks.get(cx + "," + cy);
+            return a.protected ? false : (chunks.delete(cx + "," + cy),
                 true)
         }
-        window.Tile.visible = function (e, t) {
-            if (!chunks.has(e + "," + t))
+        window.Tile.visible = function (cx, cy) {
+            if (!chunks.has(cx + "," + cy))
                 return false;
-            var a = chunks.get(e + "," + t);
-            return !xt([e, t], bt(20))
+            var a = chunks.get(cx + "," + cy);
+            return !xt([cx, cy], bt(20))
         }
-        window.Tile.empty = function (e, t) {
-            return Tile.exists(e, t) && Tile.get(e, t).empty
+        window.Tile.empty = function (cx, cy) {
+            return Tile.exists(cx, cy) && Tile.get(cx, cy).empty
         }
-        window.Tile.protected = function (e, t) {
-            return Tile.exists(e, t) && Tile.get(e, t).protected
+        window.Tile.protected = function (cx, cy) {
+            return Tile.exists(cx, cy) && Tile.get(cx, cy).protected
         }
         /* window.Tile.textProtected = function (cellX, cellY) {
              var chunkX = Math.floor(cellX / 20);
@@ -4381,10 +4365,10 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
              }
              return true;
          } */
-        window.Tile.saveBlob = function (e, t) {
-            if (!chunks.has(e + "," + t)) return null;
+        window.Tile.saveBlob = function (cx, cy) {
+            if (!chunks.has(cx + "," + cy)) return null;
 
-            var tile = chunks.get(e + "," + t);
+            var tile = chunks.get(cx + "," + cy);
             if (!tile || !tile.img) return null;
 
             var img = tile.img;
@@ -4401,7 +4385,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 var url = URL.createObjectURL(blob);
                 var a = document.createElement('a');
                 a.href = url;
-                a.download = `tile_${e}_${t}.png`;
+                a.download = `tile_${cx}_${cy}.png`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -4414,8 +4398,8 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
         window.w.cursors = curs;
         window.w.redraw = () => ge = true;
         window.w.renderChunkAmount = renderChunkAmount;
-        window.w.setRenderChunkAmount = function (e) { renderChunkAmount = parseInt(e, 0); ge = true };
-        window.w.getTheme = function () { return { mode: N, primary: C, secondary: A, texttheme: whiteTextCheckBox.checked }; };
+        window.w.setRenderChunkAmount = function (newAmount) { renderChunkAmount = parseInt(newAmount, 0); ge = true };
+        window.w.getTheme = function () { return { mode: selectedTheme, primary: currentPrimary, secondary: currentSecondary, texttheme: whiteTextCheckBox.checked }; };
         window.getChar = function (e, t, r = 0, a = 0) {
             if (e === undefined || t === undefined || r === undefined || a === undefined) {
                 [e, t, r, a] = window.cursorCoords;
@@ -4440,7 +4424,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
             return tile.txt[Tp];
         };
 
-window.getCharDecoration = function (e) {
+        window.getCharDecoration = function (e) {
             let Lj = 0;
 
             if (Array.isArray(e)) {
@@ -4552,7 +4536,7 @@ window.getCharDecoration = function (e) {
         var wr = performance.now()
             , Mr = 100
             , kr = performance.now() + 1e3;
-        window.requestAnimationFrame((function e() {
+        window.requestAnimationFrame((function callback() {
             var r = Math.min(Math.ceil(performance.now() - wr), 100);
 
             if (wr = performance.now(),
@@ -4588,33 +4572,33 @@ window.getCharDecoration = function (e) {
             }
             if (ge && (function () {
                 canvasGetContext.setTransform(1, 0, 0, 1, 0, 0),
-                    canvasGetContext.fillStyle = A,
+                    canvasGetContext.fillStyle = currentSecondary,
                     canvasGetContext.fillRect(0, 0, canvasElement.width, canvasElement.height),
                     canvasGetContext.translate(Math.ceil(qe.offset.x), Math.ceil(qe.offset.y));
                 const r = 10 * v
                     , a = 20 * v
                     , o = Math.round(5 * v);
-                var i, l, u, s = bt(20), f = bt(d);
+                var i, chunkKey, chunk, s = bt(20), f = bt(d);
                 for (const t of chunks.keys())
-                    xt(h = wt(t), s) ? xt(h, f) && delete chunks.get(t).img : pt(t, h);
+                    xt(pos = wt(t), s) ? xt(pos, f) && delete chunks.get(t).img : pt(t, pos);
                 if (clientOptions.showothercurs.checked && (!worldSettings.hideCursors.checked || m)) {
                     gt(canvasGetContext);
-                    for (const t of curs.values()) {
-                        var h = t.l;
-                        if (!xt(h, s)) {
-                            var y = Math.round(10 * t.rawx * v)
-                                , g = Math.round(20 * t.rawy * v);
-                            t.highlighted && (canvasGetContext.fillStyle = "rgba(239, 255, 71, 0.5)",
+                    for (const cursor of curs.values()) {
+                        var pos = cursor.l;
+                        if (!xt(pos, s)) {
+                            var y = Math.round(10 * cursor.rawx * v)
+                                , g = Math.round(20 * cursor.rawy * v);
+                            cursor.highlighted && (canvasGetContext.fillStyle = "rgba(239, 255, 71, 0.5)",
                                 canvasGetContext.roundRect(y - 2 * v, g - 2 * v, Math.ceil(r) + 4 * v, Math.round(a) + 4 * v, [2 * v]));
-                            var p = t.c;
+                            var clr = cursor.c;
                             var anonIdShow = clientOptions.anonIdShow.checked;
                             var displayNameShow = clientOptions.displayNames.checked;
-                            clientOptions.disablecolour.checked && (p = 0),
-                                0 == p && xe && (p = colorHexs.length);
-                            if (rgb888(p)) {
-                                canvasGetContext.fillStyle = gst(p);
+                            clientOptions.disablecolour.checked && (clr = 0),
+                                0 == clr && xe && (clr = colorHexs.length);
+                            if (rgb888(clr)) {
+                                canvasGetContext.fillStyle = gst(clr);
                             } else {
-                                canvasGetContext.fillStyle = gst(colorHexs[p], 0.2) || "rgba(255,255,255,0.2)";
+                                canvasGetContext.fillStyle = gst(colorHexs[clr], 0.2) || "rgba(255,255,255,0.2)";
                             };
                             clientOptions.roundCursors.checked ?
                                 (ge = true, canvasGetContext.beginPath(),
@@ -4622,31 +4606,31 @@ window.getCharDecoration = function (e) {
                                     kt(y, g, r, a, 2 * v),
                                     canvasGetContext.fill()) :
                                 (ge = true, kt(y, g, r, a)),
-                                !clientOptions.shownametags.checked || (i = h,
+                                !clientOptions.shownametags.checked || (i = pos,
                                     c = void 0,
-                                    l = void 0,
-                                    u = void 0,
+                                    chunkKey = void 0,
+                                    chunk = void 0,
                                     c = n,
-                                    l = 20 * Math.floor(i[0] / 20) + "," + 10 * Math.floor(i[1] / 10),
+                                    chunkKey = 20 * Math.floor(i[0] / 20) + "," + 10 * Math.floor(i[1] / 10),
 
-                                    (u = chunks.get(l)) && u.protected && 0 == j) || Mt(
-                                        t.n != ""
-                                            ? (displayNameShow ? t.dn : t.n)
-                                            : (anonIdShow ? `(${t.id || 0})` : ""),
+                                    (chunk = chunks.get(chunkKey)) && chunk.protected && 0 == j) || Mt(
+                                        cursor.n != ""
+                                            ? (displayNameShow ? cursor.dn : cursor.n)
+                                            : (anonIdShow ? `(${cursor.id || 0})` : ""),
                                         y, g, o
                                     )
                         }
                     }
                 }
                 for (var b = 0; b < Ne.length; b++) {
-                    0 == (p = Ne[b][3]) && xe && (p = colorHexs.length),
-                        canvasGetContext.fillStyle = rgb888(p) ? gst(p) : me[p];
+                    0 == (clr = Ne[b][3]) && xe && (clr = colorHexs.length),
+                        canvasGetContext.fillStyle = rgb888(clr) ? gst(clr) : me[clr];
                     var x = 10 * Ne[b][0] * v
                         , w = 20 * Ne[b][1] * v;
                     if (clientOptions.showothercurs.checked && m) {
                         var M = curs.get(Ne[b][4]);
                         null != M && M.highlighted && (canvasGetContext.lineWidth = 3 * v,
-                            canvasGetContext.strokeStyle = rgb888(p) ? gst(p) : colorHexs[p],
+                            canvasGetContext.strokeStyle = rgb888(clr) ? gst(clr) : colorHexs[clr],
                             canvasGetContext.beginPath(),
                             canvasGetContext.moveTo(Math.round(10 * M.rawx * v + r / 2), Math.round(20 * M.rawy * v + a)),
                             canvasGetContext.lineTo(Math.round(x + r / 2), Math.round(w + a)),
@@ -4705,7 +4689,7 @@ window.getCharDecoration = function (e) {
                 }
                 ge = true
             }
-            window.requestAnimationFrame(e)
+            window.requestAnimationFrame(callback)
         }
         )),
             null != localStorage.getItem("x") && (cur.x = parseInt(localStorage.getItem("x"))),
@@ -4745,7 +4729,7 @@ window.getCharDecoration = function (e) {
         }
         if (null != localStorage.getItem("theme")) {
             var themeId = localStorage.getItem("theme");
-            changeTheme(0 == themeId || 1 == themeId || 2 == themeId ? Number(themeId) : N)
+            changeTheme(0 == themeId || 1 == themeId || 2 == themeId ? Number(themeId) : selectedTheme)
         }
         var Tr, Br = (Tr = {},
             window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (function (e, t, n) {
@@ -4847,7 +4831,7 @@ window.getCharDecoration = function (e) {
             };
         }
 
-        function oldLr(input) {
+        function getOldSeed(input) {
             let normalized = decodeURI((input || "").toLowerCase());
             if (normalized === "" || normalized === "~main") {
                 return { x: 0, y: 0 };
@@ -4931,7 +4915,7 @@ window.getCharDecoration = function (e) {
             };
         }
         window.w.generateCoords = getSeed;
-        window.w.generateCoordsOld = oldLr;
+        window.w.generateCoordsOld = getOldSeed;
         null != Br.x && (cur.x = parseInt(Br.x),
             Fr = true),
             null != Br.y && (cur.y = -1 * parseInt(Br.y),
@@ -4963,13 +4947,13 @@ window.getCharDecoration = function (e) {
                     connectingElement.onclick = void 0
             }
         }
-        function adjustColorBrightness(e, t) {
-            var R = parseInt(e.substring(1, 3), 16)
-                , G = parseInt(e.substring(3, 5), 16)
-                , B = parseInt(e.substring(5, 7), 16);
-            return R += t,
-                G += t,
-                B += t,
+        function adjustColorBrightness(hexCode, amount) {
+            var R = parseInt(hexCode.substring(1, 3), 16)
+                , G = parseInt(hexCode.substring(3, 5), 16)
+                , B = parseInt(hexCode.substring(5, 7), 16);
+            return R += amount,
+                G += amount,
+                B += amount,
                 R = Math.min(R, 255),
                 G = Math.min(G, 255),
                 B = Math.min(B, 255),
@@ -4984,8 +4968,8 @@ window.getCharDecoration = function (e) {
                 e = "0" + e;
             return e
         }
-        function isCodePointBraille(e) {
-            return e >= 10240 && e <= 10495
+        function isCodePointBraille(codePoint) {
+            return codePoint >= 10240 && codePoint <= 10495
         }
         function hexToRGBA(e, t) {
 
@@ -5010,11 +4994,11 @@ window.getCharDecoration = function (e) {
             return t ? "rgba(" + R + ", " + G + ", " + B + ", " + t + ")" : "rgb(" + R + ", " + G + ", " + B + ")"
 
         }
-        function squareNum(e) {
-            return e * e
+        function squareNum(num) {
+            return num * num
         }
-        function Vr(e, t) {
-            return 31 * e + t
+        function Vr(deco, clr) {
+            return 31 * deco + clr
         }
 
         function getCurrentDecoration() {
@@ -5054,17 +5038,17 @@ window.getCharDecoration = function (e) {
             teleport(cur.x, cur.y),
             null != localStorage.getItem("zoom") && setZoom(JSON.parse(localStorage.getItem("zoom")), false),
             connect(),
-            serialize_Uint8Array = function (e, r) {
+            serialize_Uint8Array = function (input, options) {
                 var a = n;
-                if (r && r.bdtiple && !Array.isArray(e))
+                if (options && options.bdtiple && !Array.isArray(input))
                     throw new Error;
                 const o = 4294967296;
                 let i, c, l = new Uint8Array(128), u = 0;
-                if (r && r.bdtiple)
-                    for (let t = 0; t < e.length; t++)
-                        s(e[t]);
+                if (options && options.bdtiple)
+                    for (let t = 0; t < input.length; t++)
+                        s(input[t]);
                 else
-                    s(e);
+                    s(input);
                 return v(129),
                     l.subarray(0, u);
                 function s(e, n) {
@@ -5184,9 +5168,9 @@ window.getCharDecoration = function (e) {
                             }(e);
                             break;
                         default:
-                            if (n || !r || !r.invalidTypeReplacement)
+                            if (n || !options || !options.invalidTypeReplacement)
                                 throw new Error;
-                            "function" == typeof r.invalidTypeReplacement ? s(r.invalidTypeReplacement(e), true) : s(r.invalidTypeReplacement, true)
+                            "function" == typeof options.invalidTypeReplacement ? s(options.invalidTypeReplacement(e), true) : s(options.invalidTypeReplacement, true)
                     }
                 }
                 function d(e) {
@@ -5234,23 +5218,23 @@ window.getCharDecoration = function (e) {
                 }
             }
             ,
-            deserialize_Uint8Array = function (e, r) {
+            deserialize_Uint8Array = function (typedArray, options) {
                 var a = n;
                 let o, i = 0;
-                if (e instanceof ArrayBuffer && (e = new Uint8Array(e)),
-                    "object" != typeof e || void 0 === e.length)
+                if (typedArray instanceof ArrayBuffer && (typedArray = new Uint8Array(typedArray)),
+                    "object" != typeof typedArray || void 0 === typedArray.length)
                     throw new Error;
-                if (!e.length)
+                if (!typedArray.length)
                     throw new Error;
-                if (e instanceof Uint8Array || (e = new Uint8Array(e)),
-                    r && r.bdtiple)
-                    for (o = []; i < e.length;)
+                if (typedArray instanceof Uint8Array || (typedArray = new Uint8Array(typedArray)),
+                    options && options.bdtiple)
+                    for (o = []; i < typedArray.length;)
                         o.push(c());
                 else
                     o = c();
                 return o;
                 function c() {
-                    const t = e[i++];
+                    const t = typedArray[i++];
                     if (t >= 0 && t <= 127)
                         return t;
                     if (t >= 128 && t <= 143)
@@ -5325,7 +5309,7 @@ window.getCharDecoration = function (e) {
                         return f(-1, 4);
                     if (t >= 224 && t <= 255)
                         return t - 256;
-                    throw console.debug("msgpack array:", e),
+                    throw console.debug("msgpack array:", typedArray),
                     new Error
                 }
                 function l(t) {
@@ -5333,32 +5317,32 @@ window.getCharDecoration = function (e) {
                         , r = true;
                     for (; t-- > 0;)
                         if (r) {
-                            let t = e[i++];
+                            let t = typedArray[i++];
                             n += 127 & t,
                                 128 & t && (n -= 128),
                                 r = false
                         } else
                             n *= 256,
-                                n += e[i++];
+                                n += typedArray[i++];
                     return n
                 }
                 function u(t) {
                     let n = 0;
                     for (; t-- > 0;)
                         n *= 256,
-                            n += e[i++];
+                            n += typedArray[i++];
                     return n
                 }
                 function s(t) {
                     var n = a;
-                    let r = new DataView(e.buffer, i + e.byteOffset, t);
+                    let r = new DataView(typedArray.buffer, i + typedArray.byteOffset, t);
                     return i += t,
                         4 === t ? r.getFloat32(0, false) : 8 === t ? r.getFloat64(0, false) : void 0
                 }
                 function d(t, n) {
                     var r = a;
                     t < 0 && (t = u(n));
-                    let o = e.subarray(i, i + t);
+                    let o = typedArray.subarray(i, i + t);
                     return i += t,
                         o
                 }
@@ -5414,7 +5398,7 @@ window.getCharDecoration = function (e) {
                                 }
                             }
                             return i
-                        }(e, a, n)
+                        }(typedArray, a, n)
                 }
                 function h(e, n) {
                     e < 0 && (e = u(n));
@@ -5617,15 +5601,15 @@ window.getCharDecoration = function (e) {
             if ("textwall" == world && "main" == subworld && !clientOptions.disablecolour.checked)
                 for (var t = 0; t < activateRange.length; t++) {
                     var r = activateRange[t]
-                        , a = chunks.get(r);
-                    if (null != a && null != a.txt) {
+                        , chunk = chunks.get(r);
+                    if (null != chunk && null != chunk.txt) {
                         for (var o = 0; o < 200; o++)
-                            switch (a.txt[o]) {
+                            switch (chunk.txt[o]) {
                                 case "$":
                                 case "^":
                                 case ".":
                                 case "'":
-                                    a.clr[o] = christmasColors[Math.floor(4 * Math.random())]
+                                    chunk.clr[o] = christmasColors[Math.floor(4 * Math.random())]
                             }
                         St(r, false)
                     }
@@ -5784,7 +5768,7 @@ window.getCharDecoration = function (e) {
                 this.onSelection=func => {
                     this.onSelectionEvents.push(func);
                 };
-                this.getSelected=rr;
+                this.getSelected=getCharAndColorFromCurrentPosition;
             }
         }
         window.RegionSelection = RegionSelection;
