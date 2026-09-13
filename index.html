@@ -7,7 +7,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
-    <body>
+    <body id="a">
         <h1 id="w">Welcome to NotReiny’s page</h1>
         <h4>HelloWorld("print")</h4>
         <p>Links:</p>
@@ -46,5 +46,11 @@
                     document.getElementById("w").style.transform = `rotateX(${Math.random()*360}deg) rotateY(${Math.random()*360}deg) rotateZ(${Math.random()*360}deg)`
             })
         })
+        let dm = matchMedia("(prefers-color-scheme: dark)");
+
+        if (dm.matches) {
+            document.getElementById("a").style.backgroundColor = "#000";
+            document.getElementById("a").style.color = "#fff"
+        }
     </script>
 </html>
