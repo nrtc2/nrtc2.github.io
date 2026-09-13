@@ -469,13 +469,13 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 if (null == a) {
                     switch (selectedFont) { // reserved for .hex fonts
                         case "Unifont":
-                            a = new fontRender("/static/fonts/unifont-15.0.01.hex", Sn);
+                            a = new fontRender("/tw-copy/fonts/unifont-15.0.01.hex", Sn);
                             break;
                         case "Terminus":
-                            a = new fontRender("/static/fonts/terminus.hex", Sn);
+                            a = new fontRender("/tw-copy/fonts/terminus.hex", Sn);
                             break;
                         default:
-                            a = new fontRender("/static/fonts/fixed.hex", Sn)
+                            a = new fontRender("/tw-copy/fonts/fixed.hex", Sn)
                     }
                     a.forceSharpPixels = true,
                         specialFonts.set(selectedFont, a)
