@@ -469,7 +469,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                 if (null == a) {
                     switch (selectedFont) { // reserved for .hex fonts
                         case "Unifont":
-                            a = new fontRender("/tw-copy/fonts/unifont-15.0.01.hex", Sn);
+                            a = new fontRender("/tw-copy/fonts/unifont_all-17.0.05.hex", Sn);
                             break;
                         case "Terminus":
                             a = new fontRender("/tw-copy/fonts/terminus.hex", Sn);
@@ -765,7 +765,7 @@ var e = "undefined" == typeof browser ? browser = {} : browser;
                                                     e.fillText(S, Math.round(w), Math.floor(M + 15 * y));
                                             else {
                                                 var O = false;
-                                                (B >= 65536 /* render as emojis for unicode range U+10000–U+1FFFF */ && extendedPictographicRegExp) && extendedPictographicRegExp.test(S) && (O = true,
+                                                (B >= 65536 && selectedFont != "Unifont" && /* render as emojis for unicode range U+10000–U+1FFFF */ && extendedPictographicRegExp) && extendedPictographicRegExp.test(S) && (O = true,
                                                     e.font = Nt(y)),
                                                     null != g && g.charMap.has(B) ? (g.bold = P,
                                                         g.italic = L,
