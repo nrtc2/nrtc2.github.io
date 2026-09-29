@@ -123,9 +123,9 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (typeof e === 'symbol') return `Symbol(${e.description ?? ''})`;
     if (typeof e === 'number') return (1 / e === -Infinity && e === 0) ? '-0' : String(e);
     if (typeof e === 'function') {
-        const functionType = e.constructor.name;
-        const functionName = e.name;
-        return `[${functionType}: ${functionName}]`
+        const fType = e.constructor.name;
+        const fName = e.name;
+        return `[${fType}${fName ? ':' : ''} ${fName}]`
     }
 
     return String(e);
