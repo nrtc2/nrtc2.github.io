@@ -1,6 +1,6 @@
-function format(e, indent, maxEntities, depth = 0, seen = new WeakSet()) {
+function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
-    function getSpacing() {
+    const getSpacing = () => {
         if (!indent) return {
             base: '',
             inner: '',
@@ -43,7 +43,7 @@ function format(e, indent, maxEntities, depth = 0, seen = new WeakSet()) {
             // 2. Maps
             if (e instanceof Map) {
                 if (e.size === 0) return `Map(0)${nl ? ' ' : ''}{}`;
-                const entries = e.entries().take(maxEntities ?? e.size).toArray()
+                const entries = [...e.entries()]
                     .map(([k, v]) => {
                         // Pass primitive keys safely without double-formatting strings
                         const keyStr = typeof k === 'string' ? `'${k}'` : format(k, indent, depth + 1, seen);
@@ -56,7 +56,7 @@ function format(e, indent, maxEntities, depth = 0, seen = new WeakSet()) {
             // 3. Sets
             if (e instanceof Set) {
                 if (e.size === 0) return `Set(0)${nl ? ' ' : ''}{}`;
-                const items = e.take(maxEntities ?? e.size).toArray()
+                const items = [...e]
                     .map(v => format(v, indent, depth + 1, seen))
                     .join(`,${nl}${inner}`);
                 return `Set(${e.size})${nl ? ' ' : ''}{${nl}${inner}${items}${nl}${base}}`;
@@ -122,7 +122,11 @@ function format(e, indent, maxEntities, depth = 0, seen = new WeakSet()) {
 
     if (typeof e === 'symbol') return `Symbol(${e.description ?? ''})`;
     if (typeof e === 'number') return (1 / e === -Infinity && e === 0) ? '-0' : String(e);
-    if (typeof e === 'function') return `[${e.constructor.name}${e.name ? ':' : ''} ${e.name || '(anonymous)'}]`
+    if (typeof e === 'function') {
+        const functionType = e.constructor.name;
+        const functionName = e.name;
+        return `[${functionType}: ${functionName}]`
+    }
 
     return String(e);
 }
