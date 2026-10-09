@@ -72,16 +72,17 @@
                 video.play().then(function () {
                     document.getElementById('l').style.display = 'none';
                     setTimeout(function () {
-                        document.getElementById('vid01').style.display = 'none'
-                    }, 15000);
-                    setTimeout(function () {
-                        document.getElementById('vid01').pause()
+                        document.getElementById('vid01').style.display = 'none';
                         document.getElementById('f').textContent = '...';
                         document.getElementById('f').style.color = 'white';
                         document.getElementById('f').style.fontSize = '50px';
                         document.getElementById('l').style.display = 'flex';
-                        document.body.style.backgroundColor = 'black';
-                    }, 16000)
+                        document.body.style.backgroundColor = 'black'
+                    }, 14800);
+
+                    setTimeout(function () {
+                        document.getElementById('vid01').pause()
+                    }, 15500)
                 }).catch(err => {
                     console.log(`video error: ${err}`);
                 });
