@@ -33,7 +33,7 @@
             <b><pre id="f" style="text-align: center;"></pre></b>
         </div>
         <div class="media-wrap">
-            <video id="vid01" src="K-fee Commercial #1 - Matthew Benson (360p, h264).mp4" preload="none"></video>
+            <video id="vid01" src="K-fee Commercial %231 - Matthew Benson (360p, h264).mp4" preload="none"></video>
         </div>
     </body>
     <script>
@@ -75,14 +75,14 @@
                     console.log(`video error: ${err}`);
                 });
 
-                audio.addEventListener('ended', function () {
+                setTimeout(function () {
                     document.getElementById('vid01').style.display = 'none';
                     document.getElementById('f').textContent = '...';
                     document.getElementById('f').style.color = 'white';
                     document.getElementById('f').style.fontSize = '50px';
                     document.getElementById('l').style.display = 'flex';
                     document.body.style.backgroundColor = 'black';
-                })
+                }, 14500)
             }
             if (j) {
                 document.getElementById('f').textContent = e < 0 ? 'Time\'s up!' : `Time left: ${Math.floor(e / 60000).toString().padStart(2, "0")}:${(Math.floor(e / 1000) % 60).toString().padStart(2, "0")}`
