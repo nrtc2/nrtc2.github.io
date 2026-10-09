@@ -71,19 +71,18 @@
 
                 video.play().then(function () {
                     document.getElementById('l').style.display = 'none';
+                    setTimeout(function () {
+                        document.getElementById('vid01').style.display = 'none';
+                        document.getElementById('vid01').pause()
+                        document.getElementById('f').textContent = '...';
+                        document.getElementById('f').style.color = 'white';
+                        document.getElementById('f').style.fontSize = '50px';
+                        document.getElementById('l').style.display = 'flex';
+                        document.body.style.backgroundColor = 'black';
+                    }, 15300)
                 }).catch(err => {
                     console.log(`video error: ${err}`);
                 });
-
-                setTimeout(function () {
-                    document.getElementById('vid01').style.display = 'none';
-                    document.getElementById('vid01').pause()
-                    document.getElementById('f').textContent = '...';
-                    document.getElementById('f').style.color = 'white';
-                    document.getElementById('f').style.fontSize = '50px';
-                    document.getElementById('l').style.display = 'flex';
-                    document.body.style.backgroundColor = 'black';
-                }, 15300)
             }
             if (j) {
                 document.getElementById('f').textContent = e < 0 ? 'Time\'s up!' : `Time left: ${Math.floor(e / 60000).toString().padStart(2, "0")}:${(Math.floor(e / 1000) % 60).toString().padStart(2, "0")}`
