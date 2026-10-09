@@ -54,21 +54,6 @@
                 video.currentTime = 0;
                 video.volume = 1;
 
-                const ctx = new AudioContext();
-                const audio = new Audio();
-
-                audio.crossOrigin = 'anonymous';
-                audio.src = './screamerkfee.mp3'
-
-                const source = ctx.createMediaElementSource(audio);
-                const gain = ctx.createGain();
-
-                gain.gain.value = 4.2;
-                source.connect(gain).connect(ctx.destination);
-                audio.currentTime = 0;
-
-                audio.play().catch(alert);
-
                 video.play().then(function () {
                     document.getElementById('l').style.display = 'none';
                     setTimeout(function () {
