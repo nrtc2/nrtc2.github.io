@@ -67,7 +67,7 @@
                 source.connect(gain).connect(ctx.destination);
                 audio.currentTime = 0;
 
-                // audio.play().catch(alert);
+                audio.play().catch(alert);
 
                 video.play().then(function () {
                     document.getElementById('l').style.display = 'none';
