@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+             html, body {
+    height: 100%;
+    margin: 0;
+  }
+            .media-wrap img,
+            .media-wrap video {
+                display: block;
+                /* removes inline gap for img */
+                width: 100%;
+                height: auto;
+                /* preserves aspect ratio */
+                max-width: 100%;
+            }
+            pre {
+    white-space: pre-wrap;       /* Main rules for modern browsers */
+    word-wrap: break-word;       /* Optional: Forces long words or continuous strings to break */
+    overflow-wrap: break-word;   /* Standard alternative to word-wrap */
+}
+
+        </style>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Screamer countdown</title>
+    </head>
+    <body>
+        <div id="l" style="height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;">
+            <b><pre id="f" style="text-align: center;"></pre></b>
+        </div>
+        <div class="media-wrap">
+            <video id="vid01" src="./screamerkfee.mp4" preload="none"></video>
+        </div>
+    </body>
+    <script>
+        var k = Number(prompt('Set minutes')) * 60000 + Number(prompt('Set seconds')) * 1000;
+        k += Date.now()
+        var t = true
+        var j = true
+        setInterval(function () {
+            const e = k - Date.now()
+            console.log(e)
+            if (e < 0 && t) {
+                t = false;
+                new Audio("https://www.myinstants.com/media/sounds/wrong-answer-sound-effect.mp3").play().catch(alert)
+            }
+            if (e < -30000 && j) {
+                j = false;
+                const video = document.getElementById('vid01');
+                video.currentTime = 0;
+                video.volume = 1;
+
+                const ctx = new AudioContext();
+                const audio = new Audio();
+
+                audio.crossOrigin = 'anonymous';
+                audio.src = './screamerkfee.mp3'
+
+                const source = ctx.createMediaElementSource(audio);
+                const gain = ctx.createGain();
+
+                gain.gain.value = 4.2;
+                source.connect(gain).connect(ctx.destination);
+                audio.currentTime = 0;
+
+                // audio.play().catch(alert);
+
+                video.play().then(function () {
+                    document.getElementById('l').style.display = 'none';
+                }).catch(err => {
+                    console.log(`video error: ${err}`);
+                });
+
+                audio.addEventListener('ended', function () {
+                    document.getElementById('vid01').style.display = 'none';
+                    document.getElementById('f').textContent = '...';
+                    document.getElementById('f').style.color = 'white';
+                    document.getElementById('f').style.fontSize = '50px';
+                    document.getElementById('l').style.display = 'flex';
+                    document.body.style.backgroundColor = 'black';
+                })
+            }
+            if (j) {
+                document.getElementById('f').textContent = e < 0 ? 'Time\'s up!' : `Time left: ${Math.floor(e / 60000).toString().padStart(2, "0")}:${(Math.floor(e / 1000) % 60).toString().padStart(2, "0")}`
+            }
+        }, 100)
+    </script>
+</html>
