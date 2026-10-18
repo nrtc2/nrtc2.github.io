@@ -136,5 +136,5 @@ function changeText(g) {
 }
 
 document.getElementById("f").addEventListener("click", function(e) {
-    navigator.clipboard.read().then(alert).catch(e => changeText(e.stack))
+    navigator.clipboard.read().then(e => changeText(format(e))).catch(e => changeText(e.stack))
 })
