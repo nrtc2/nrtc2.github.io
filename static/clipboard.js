@@ -137,6 +137,11 @@ function changeText(g, color) {
     l.style.color = color ?? ""
 }
 
+function clearText() {
+    const l = document.getElementById("f");
+    l.textContent = ""
+}
+
 function appendText(g, newLine, color) {
     const l = document.getElementById("f");
     l.textContent += String(g) + newLine ? "\n" : "";
@@ -144,11 +149,16 @@ function appendText(g, newLine, color) {
 }
 
 document.getElementById("f").addEventListener("click", async function() {
+    resolve0 = Date.now();
     try {
         const c = await navigator.clipboard.read();
-        for (let f of c[0].types)
-            appendText(`${f} ${format(await c[0].getType(f))}`)
+        clearText()
+        for (let f of c[0].types) {
+            appendText(`${f} -> ${format(await c[0].getType(f))}`, true)
+        }
     } catch (e) {
         changeText(e.stack, "red")
+    } finally {
+        appendText(`Promise time: ${Date.now() - resolve0}ms`)
     }
 })
