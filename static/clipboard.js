@@ -146,7 +146,7 @@ function appendText(g, newLine, color) {
 document.getElementById("f").addEventListener("click", async function() {
     try {
         const c = await navigator.clipboard.read();
-        for (let f of clipboard[0].types)
+        for (let f of c[0].types)
             appendText(`${f} ${format(await c.getType(f))}`)
     } catch (e) {
         changeText(e.stack, "red")
