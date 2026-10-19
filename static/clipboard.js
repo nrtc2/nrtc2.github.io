@@ -144,7 +144,7 @@ function clearText() {
 
 function appendText(g, newLine, color) {
     const l = document.getElementById("f");
-    l.textContent += String(g) + newLine ? "\n" : "";
+    l.textContent += String(g) + (newLine ? "\n" : "");
     l.style.color = color ?? ""
 }
 
