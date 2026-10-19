@@ -152,13 +152,12 @@ document.getElementById("f").addEventListener("click", async function() {
     resolve0 = Date.now();
     try {
         const c = await navigator.clipboard.read();
-        clearText()
         for (let f of c[0].types) {
-            appendText(`${f} -> ${format(await c[0].getType(f))}`, true)
+            console.log(`${f} -> ${[...await (await c[0].getType(f)).bytes()].map(e => e.toString(16).toUpperCase().padStart(2, "0")).join(" ")}`)
         }
     } catch (e) {
-        changeText(e.stack, "red")
+        console.error(e.stack)
     } finally {
-        appendText(`Promise time: ${Date.now() - resolve0}ms`)
+        console.log(`Promise time: ${Date.now() - resolve0}ms`)
     }
 })
