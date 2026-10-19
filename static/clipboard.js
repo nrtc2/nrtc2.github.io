@@ -148,13 +148,16 @@ function appendText(g, newLine, color) {
     l.style.color = color ?? ""
 }
 
+let a = confirm("Click OK to use text, otherwise render as hexadecimal.")
+
 document.getElementById("f").addEventListener("click", async function() {
     resolve0 = Date.now();
     clearText();
     try {
         const c = await navigator.clipboard.read();
         for (let f of c[0].types) {
-            appendText(`${f} -> ${[...await (await c[0].getType(f)).bytes()].map(e => e.toString(16).toUpperCase().padStart(2, "0")).join(" ")}`, true)
+            const b = await c[0].getType(f);
+            appendText(`${f} -> ${a ? await b.text() : [...await (b).bytes()].map(e => e.toString(16).toUpperCase().padStart(2, "0")).join(" ")}`, true)
         }
     } catch (e) {
         changeText(e.stack, "#AA0000")
