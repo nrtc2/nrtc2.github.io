@@ -7,7 +7,7 @@ function changeText(g, color) {
 document.getElementById("f").addEventListener("click", async function() {
     try {
         const clipboard = await navigator.clipboard.read();
-        changeText(clipboard.types.join("\n"))
+        changeText(clipboard[0].types.join("\n"))
     } catch (e) {
         changeText(e.stack, "red")
     }
