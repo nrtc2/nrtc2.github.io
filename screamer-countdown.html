@@ -33,10 +33,12 @@
             <b><pre id="f" style="text-align: center;"></pre></b>
         </div>
         <div class="media-wrap">
-            <video id="vid01" src="K-fee Commercial %231 - Matthew Benson (360p, h264).mp4" preload="auto"></video>
+            <video id="vid01" src preload="auto"></video>
         </div>
     </body>
     <script>
+        const d = ["K-fee Commercial %231 - Matthew Benson (360p, h264).mp4", "OMG!!! Amazing Dancer!!!(WATCH FULLSCREEN)REALLY FUNNY - Bav K (360p, h264).mp4"];
+        var q = Math.floor(Math.random() * d.length);
         var k = Number(prompt('Set minutes')) * 60000 + Number(prompt('Set seconds')) * 1000;
         k += Date.now()
         var t = true
@@ -51,6 +53,7 @@
             if (e < -30000 && j) {
                 j = false;
                 const video = document.getElementById('vid01');
+                video.src = d[q];
                 video.currentTime = 0;
                 video.volume = 1;
 
@@ -63,9 +66,9 @@
                         document.getElementById('f').style.fontSize = '50px';
                         document.getElementById('l').style.display = 'flex';
                         document.body.style.backgroundColor = 'black'
-                    }, 14800);
+                    }, q == 0 ? 14800 : vid01.duration * 1000);
 
-                    setTimeout(function () {
+                    if (q == 0) setTimeout(function () {
                         document.getElementById('vid01').pause()
                     }, 15500)
                 }).catch(err => {
