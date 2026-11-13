@@ -125,7 +125,7 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (typeof e === 'function') {
         const fType = e.constructor.name;
         const fName = e.name;
-        return `[${fType}${fName ? ':' : ''} ${fName}]`
+        return `[${/^class/.test(e.toString()) ? 'class' : fType}${fName ? ':' : ''} ${fName || '(anonymous)'}]`
     }
 
     return String(e);
