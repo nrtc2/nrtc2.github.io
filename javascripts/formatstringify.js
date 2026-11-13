@@ -1,4 +1,4 @@
-function format(e, indent, depth = 0, seen = new WeakSet()) {
+efunction format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
         if (!indent) return {
@@ -79,7 +79,7 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
                 if (typeof key === 'symbol') {
                     keyStr = `[Symbol(${key.description ?? ''})]`;
                 } else {
-                    keyStr = /^[a-z$_][0-9a-z$_]*$/i.test(key) ? key : `'${key.replace(/'/g, "\\'")}'`;
+                    keyStr = /^[a-z$_][0-9a-z$_]*$/i.test(key) ? key : format(key);
                 }
 
                 // Getters / Setters
@@ -87,7 +87,7 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
                     const parts = [];
                     if (desc.get) parts.push('Getter');
                     if (desc.set) parts.push('Setter');
-                    return `${key}:${nl ? ' ' : ''}[${parts.join('/')}]`;
+                    return `${keyStr}:${nl ? ' ' : ''}[${parts.join('/')}]`;
                 }
 
                 // Normal property value
