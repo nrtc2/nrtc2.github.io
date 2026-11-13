@@ -1,4 +1,4 @@
-const format = function format(e, indent, depth = 0, seen = new WeakSet()) {
+function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
         if (!indent) return {
@@ -130,5 +130,3 @@ const format = function format(e, indent, depth = 0, seen = new WeakSet()) {
 
     return String(e);
 }
-
-alert(format(new Map, 4))
