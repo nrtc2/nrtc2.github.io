@@ -46,7 +46,7 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
                 const entries = [...e.entries()]
                     .map(([k, v]) => {
                         // Pass primitive keys safely without double-formatting strings
-                        const keyStr = typeof k === 'string' ? `'${k}'` : format(k, indent, depth + 1, seen);
+                        const keyStr = format(k, indent, depth + 1, seen);
                         return `${keyStr}${nl ? ' ' : ''}=>${nl ? ' ' : ''}${format(v, indent, depth + 1, seen)}`;
                     })
                     .join(`,${nl}${inner}`);
