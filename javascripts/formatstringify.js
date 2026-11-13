@@ -1,4 +1,4 @@
-efunction format(e, indent, depth = 0, seen = new WeakSet()) {
+function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
         if (!indent) return {
@@ -20,7 +20,7 @@ efunction format(e, indent, depth = 0, seen = new WeakSet()) {
 
         try {
             if (e instanceof RegExp) return e.toString();
-            if (e instanceof Date) return !Number.isNaN(e.valueOf()) ? typeof e.toJSON === 'function' ? e.toJSON() : (new Date(e)).toJSON() : "Invalid Date";
+            if (e instanceof Date) return !Number.isNaN(e.valueOf()) ? e.toJSON() : "Invalid Date";
             if (e instanceof Error) return `${e.name}: ${e.message}`;
 
 
