@@ -1,4 +1,4 @@
-function format(e, indent, depth = 0, seen = new WeakSet()) {
+const format = function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
         if (!indent) return {
@@ -64,7 +64,7 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
 
             // 4. Plain & Custom Objects
             const keys = Reflect.ownKeys(e);
-            const constructorName = e.constructor?.name;
+            const constructorName = e.__proto__.constructor?.name;
             const prefix = constructorName && constructorName !== 'Object' ? `${constructorName}${nl ? ' ' : ''}` : '';
 
             if (keys.length === 0) {
@@ -130,3 +130,5 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
 
     return String(e);
 }
+
+alert(format(new Map, 4))
