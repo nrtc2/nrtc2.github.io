@@ -1,3 +1,4 @@
+// this shit's prone to proxies
 function format(e, indent, depth = 0, seen = new WeakSet()) {
     if (!(seen instanceof WeakSet) && !(seen instanceof Set)) throw TypeError("'seen' argument is not a WeakSet or a Set")
     const getSpacing = () => {
@@ -20,12 +21,12 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
 
         try {
             if (e instanceof RegExp) return e.toString();
-            if (e instanceof Date) return !Number.isNaN(e.valueOf()) ? e.toJSON() : "Invalid Date";
+            if (e instanceof Date) return !Number.isNaN(e.valueOf()) ? e.toJSON() : "[Date: Invalid Date]";
             if (e instanceof Error) return `${e.name}: ${e.message}`;
 
 
-            if (e instanceof WeakSet) return 'WeakSet { <items unknown> }';
-            if (e instanceof WeakMap) return 'WeakMap { <items unknown> }';
+            if (e instanceof WeakSet) return `WeakSet${nl ? ' ' : ''}{ <items unknown> }`;
+            if (e instanceof WeakMap) return `WeakMap${nl ? ' ' : ''}{ <items unknown> }`;
 
             const {
                 base,
@@ -64,8 +65,9 @@ function format(e, indent, depth = 0, seen = new WeakSet()) {
 
             // 4. Plain & Custom Objects
             const keys = Reflect.ownKeys(e);
-            const constructorName = e.__proto__.constructor?.name;
-            const prefix = constructorName && constructorName !== 'Object' ? `${constructorName}${nl ? ' ' : ''}` : '';
+            const prototypeOf = Object.getPrototypeOf(e)
+            const constructorName = prototypeOf?.constructor?.name;
+            const prefix = prototypeOf !== null ? constructorName !== 'Object' ? `${constructorName}${nl ? ' ' : ''}` : '' : `[null prototype]${nl ? ' ' : ''}`;
 
             if (keys.length === 0) {
                 return `${prefix}{}`;
